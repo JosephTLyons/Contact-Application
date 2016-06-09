@@ -3,17 +3,12 @@
 
 using namespace std;
 
-const short int FirstNameArraySize   = 20;
-const short int LastNameArraySize    = 20;
-const short int AddressArraySize     = 50;
-const short int PhoneNumberArraySize = 20;
-
 struct PersonalInformation
 {
-    char FirstName[FirstNameArraySize];
-    char LastName[LastNameArraySize];
-    char Address[AddressArraySize];
-    char PhoneNumber[PhoneNumberArraySize];
+    vector<char> FirstNameVector;
+    vector<char> LastNameVector;
+    vector<char> AddressVector;
+    vector<char> PhoneNumberVector;
     
     int Age;
 };
@@ -21,7 +16,7 @@ struct PersonalInformation
 void MainMenu();
 void SortVector(vector<PersonalInformation> &CV);
 void AddContact(vector<PersonalInformation> &CV);
-bool NamesInOrder(const char LastName1[], const char LastName2[], const char FirstName1[], const char FirstName2[]);
+bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector<char> FirstNameVect1, vector<char> FirstNameVect2);
 
 int main()
 {
@@ -39,37 +34,77 @@ void MainMenu()
 
 void AddContact(vector<PersonalInformation> &CV)
 {
-    PersonalInformation X;//temporary holding spot for input, used to store in vector
+    PersonalInformation Temp;//temporary holding spot for input, used to store in vector
+    char Insert = '\0';//used for inserting characters into individual struct vectors
     char UserChoice;
     
     while (UserChoice != 'n' && UserChoice != 'N')
     {
         cout << "Enter First Name:   ";
-        cin.getline(X.FirstName, FirstNameArraySize);
-        X.FirstName[0] = toupper(X.FirstName[0]);//always capitalize first letter of first name
+        while (Insert != '\n')
+        {
+            cin.get(Insert);//using cin.get, and not cin >>, so it stores the newline in Insert - allows to break out of loop
+            
+            Temp.FirstNameVector.push_back(Insert);
+        }
+        Temp.FirstNameVector[0] = toupper(Temp.FirstNameVector[0]);//always capitalize first letter of first name
+        Insert = '\0';//reset insert so we enter next while loop without skipping it
+        
+        
         
         cout << "Enter Last Name:    ";
-        cin.getline(X.LastName, LastNameArraySize);
-        X.LastName[0] = toupper(X.LastName[0]);//always capitalize first letter of last name
+        while (Insert != '\n')
+        {
+            cin.get(Insert);//using cin.get so it stores the newline in Insert - allows to break out of loop
+            
+            Temp.LastNameVector.push_back(Insert);
+        }
+        Temp.LastNameVector[0] = toupper(Temp.LastNameVector[0]);//always capitalize first letter of last name
+        Insert = '\0';//reset insert so we enter next while loop without skipping it
+        
+        
         
         cout << "Enter Address:      ";
-        cin.getline(X.Address, AddressArraySize);
+        while (Insert != '\n')
+        {
+            cin.get(Insert);//using cin.get so it stores the newline in Insert - allows to break out of loop
+            
+            Temp.AddressVector.push_back(Insert);
+        }
+        Insert = '\0';//reset insert so we enter next while loop without skipping it
+        
+        
         
         cout << "Enter Phone Number: ";
-        cin.getline(X.PhoneNumber, PhoneNumberArraySize);
+        while (Insert != '\n')
+        {
+            cin.get(Insert);//using cin.get so it stores the newline in Insert - allows to break out of loop
+            
+            Temp.PhoneNumberVector.push_back(Insert);
+        }
+        Insert = '\0';//reset insert so we enter next while loop without skipping it
+        
+        
         
         cout << "Enter Age:          ";
-        cin >> X.Age;
+        cin >> Temp.Age;
         
-        CV.push_back(X);
+        
+        
+        CV.push_back(Temp);//store Temp in ContactVector Vector
+        
+        Temp.FirstNameVector.clear();//clear out all vectors of temporary storage to get ready for next
+        Temp.LastNameVector.clear();
+        Temp.AddressVector.clear();
+        Temp.PhoneNumberVector.clear();
+        
+        if (CV.size() > 1)//don't go into sort function if only one name is in vector
+            SortVector(CV);
         
         cout << "\nAdd another contact? Y/N: ";
         cin >> UserChoice;
         cin.ignore();//removes newline left in input buffer after last cin >> statement
         cout << "\n";
-        
-        if (CV.size() > 1)
-            SortVector(CV);
     }
 }
 
@@ -81,9 +116,9 @@ void SortVector(vector<PersonalInformation> &CV)//not my code - bubble sort
     {
         SwapsMade = false;
         
-        for (size_t i = 0; i < CV.size()-1; i++)
+        for (size_t i = 0; i < CV.size()-1; i++)//research what size_t is
         {
-            if (!NamesInOrder(CV[i].LastName, CV[i+1].LastName, CV[i].FirstName, CV[i+1].FirstName))
+            if (!NamesInOrder(CV[i].LastNameVector, CV[i+1].LastNameVector, CV[i].FirstNameVector, CV[i+1].FirstNameVector))
             {
                 swap(CV[i], CV[i+1]);
                 
@@ -93,27 +128,28 @@ void SortVector(vector<PersonalInformation> &CV)//not my code - bubble sort
     }
 }
 
-bool NamesInOrder(const char LastName1[], const char LastName2[], const char FirstName1[], const char FirstName2[])
+bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector<char> FirstNameVect1, vector<char> FirstNameVect2)
 {
     //checks to see which last name comes first, if both last names are the same, it then uses the first name
     
-    for (int i = 0; LastName1[i] || LastName2[i]; ++i)//go until you get to the end of the larger name
+    for (int i = 0; LastNameVect1[i] || LastNameVect2[i]; ++i)//go until you get to the end of the larger name
     {
-        if(toupper(LastName1[i]) < toupper(LastName2[i]))
+        if(toupper(LastNameVect1[i]) < toupper(LastNameVect2[i]))
             return true;
         
-        if(toupper(LastName1[i]) > toupper(LastName2[i]))
+        if(toupper(LastNameVect1[i]) > toupper(LastNameVect2[i]))
             return false;
     }
     
-    for (int i = 0; FirstName1[i] || FirstName2[i]; ++i)//go until you get to the end of the larger name
+    for (int i = 0; FirstNameVect1[i] || FirstNameVect2[i]; ++i)//go until you get to the end of the larger name
     {
-        if(toupper(FirstName1[i]) < toupper(FirstName2[i]))
+        if(toupper(FirstNameVect1[i]) < toupper(FirstNameVect2[i]))
             return true;
         
-        if(toupper(FirstName1[i]) > toupper(FirstName2[i]))
+        if(toupper(FirstNameVect1[i]) > toupper(FirstNameVect2[i]))
             return false;
     }
     
-    return true;//this will only be used if same last name and first name
+    return true;//if both names are identical, return true
+                //no swap will be made back in SortVector() function
 }
