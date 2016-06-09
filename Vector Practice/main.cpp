@@ -16,6 +16,7 @@ struct PersonalInformation
 void MainMenu();
 void SortVector(vector<PersonalInformation> &CV);
 void AddContact(vector<PersonalInformation> &CV);
+void InsertStringInStructDataVector(vector<char> &Vector);
 bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector<char> FirstNameVect1, vector<char> FirstNameVect2);
 
 int main()
@@ -35,61 +36,24 @@ void MainMenu()
 void AddContact(vector<PersonalInformation> &CV)
 {
     PersonalInformation Temp;//temporary holding spot for input, used to store in vector
-    char Insert = '\0';//used for inserting characters into individual struct vectors
     char UserChoice;
     
     while (UserChoice != 'n' && UserChoice != 'N')
     {
         cout << "Enter First Name:   ";
-        while (Insert != '\n')
-        {
-            cin.get(Insert);//using cin.get, and not cin >>, so it stores the newline in Insert - allows to break out of loop
-            
-            Temp.FirstNameVector.push_back(Insert);
-        }
-        Temp.FirstNameVector[0] = toupper(Temp.FirstNameVector[0]);//always capitalize first letter of first name
-        Insert = '\0';//reset insert so we enter next while loop without skipping it
-        
-        
+        InsertStringInStructDataVector(Temp.FirstNameVector);
         
         cout << "Enter Last Name:    ";
-        while (Insert != '\n')
-        {
-            cin.get(Insert);//using cin.get so it stores the newline in Insert - allows to break out of loop
-            
-            Temp.LastNameVector.push_back(Insert);
-        }
-        Temp.LastNameVector[0] = toupper(Temp.LastNameVector[0]);//always capitalize first letter of last name
-        Insert = '\0';//reset insert so we enter next while loop without skipping it
-        
-        
+        InsertStringInStructDataVector(Temp.LastNameVector);
         
         cout << "Enter Address:      ";
-        while (Insert != '\n')
-        {
-            cin.get(Insert);//using cin.get so it stores the newline in Insert - allows to break out of loop
-            
-            Temp.AddressVector.push_back(Insert);
-        }
-        Insert = '\0';//reset insert so we enter next while loop without skipping it
-        
-        
+        InsertStringInStructDataVector(Temp.AddressVector);
         
         cout << "Enter Phone Number: ";
-        while (Insert != '\n')
-        {
-            cin.get(Insert);//using cin.get so it stores the newline in Insert - allows to break out of loop
-            
-            Temp.PhoneNumberVector.push_back(Insert);
-        }
-        Insert = '\0';//reset insert so we enter next while loop without skipping it
-        
-        
+        InsertStringInStructDataVector(Temp.PhoneNumberVector);
         
         cout << "Enter Age:          ";
         cin >> Temp.Age;
-        
-        
         
         CV.push_back(Temp);//store Temp in ContactVector Vector
         
@@ -106,6 +70,22 @@ void AddContact(vector<PersonalInformation> &CV)
         cin.ignore();//removes newline left in input buffer after last cin >> statement
         cout << "\n";
     }
+}
+
+void InsertStringInStructDataVector(vector<char> &Vector)
+{
+    char Insert = 0;//used for inserting characters into individual struct vectors
+                       //initialized at 0 to allow while loop to execute
+    
+    while (Insert != '\n')
+    {
+        cin.get(Insert);//using cin.get, and not cin >>, so it stores the newline in Insert - allows to break out of loop
+        
+        Vector.push_back(Insert);
+    }
+    
+    if (!isnumber(Vector[0]))
+        (Vector[0] = toupper(Vector[0]));//if not a number, always capitalize (for first name and last names)
 }
 
 void SortVector(vector<PersonalInformation> &CV)//not my code - bubble sort
