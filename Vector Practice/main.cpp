@@ -18,58 +18,102 @@ struct PersonalInformation
     int Age;
 };
 
-void SortVector(vector<int> &VN);
+void MainMenu();
+void SortVector(vector<PersonalInformation> &CV);
+void AddContact(vector<PersonalInformation> &CV);
+bool NamesInOrder(const char LastName1[], const char LastName2[], const char FirstName1[], const char FirstName2[]);
 
 int main()
 {
-    PersonalInformation X;//temporary holding spot for input;
+    MainMenu();
+}
+
+void MainMenu()
+{
     vector<PersonalInformation> ContactVector;
     
-    
-    cout << "Enter First Name: ";
-    cin.getline(X.FirstName, FirstNameArraySize);
-    
-    cout << "Enter Last Name: ";
-    cin.getline(X.LastName, LastNameArraySize);
-    
-    cout << "Enter Address: ";
-    cin.getline(X.Address, AddressArraySize);
-    
-    cout << "Enter Phone Number: ";
-    cin.getline(X.PhoneNumber, PhoneNumberArraySize);
-    
-    cout << "Enter Age: ";
-    cin >> X.Age;
-    
-    ContactVector.push_back(X);
-    
-    //SortVector(VectorNumber);
+    AddContact(ContactVector);
     
     cout << "Stop";
 }
 
-void SortVector(vector<int> &VN)//not my code
+void AddContact(vector<PersonalInformation> &CV)
 {
-    //cout << VN.size();//returns number of elements in vector
+    PersonalInformation X;//temporary holding spot for input, used to store in vector
+    char UserChoice;
     
-    bool swapp = true;
-    
-    while(swapp)
+    while (UserChoice != 'n' && UserChoice != 'N')
     {
-        swapp = false;
+        cout << "Enter First Name:   ";
+        cin.getline(X.FirstName, FirstNameArraySize);
+        X.FirstName[0] = toupper(X.FirstName[0]);//always capitalize first letter of first name
         
-        for (size_t i = 0; i < VN.size()-1; i++)
+        cout << "Enter Last Name:    ";
+        cin.getline(X.LastName, LastNameArraySize);
+        X.LastName[0] = toupper(X.LastName[0]);//always capitalize first letter of last name
+        
+        cout << "Enter Address:      ";
+        cin.getline(X.Address, AddressArraySize);
+        
+        cout << "Enter Phone Number: ";
+        cin.getline(X.PhoneNumber, PhoneNumberArraySize);
+        
+        cout << "Enter Age:          ";
+        cin >> X.Age;
+        
+        CV.push_back(X);
+        
+        cout << "\nAdd another contact? Y/N: ";
+        cin >> UserChoice;
+        cin.ignore();//removes newline left in input buffer after last cin >> statement
+        cout << "\n";
+        
+        if (CV.size() > 1)
+            SortVector(CV);
+    }
+}
+
+void SortVector(vector<PersonalInformation> &CV)//not my code - bubble sort
+{
+    bool SwapsMade = true;
+    
+    while(SwapsMade)
+    {
+        SwapsMade = false;
+        
+        for (size_t i = 0; i < CV.size()-1; i++)
         {
-            if (VN[i] > VN[i+1])
+            if (!NamesInOrder(CV[i].LastName, CV[i+1].LastName, CV[i].FirstName, CV[i+1].FirstName))
             {
-                VN[i] += VN[i+1];
+                swap(CV[i], CV[i+1]);
                 
-                VN[i+1] = VN[i] - VN[i+1];
-                
-                VN[i] -= VN[i+1];
-                
-                swapp = true;
+                SwapsMade = true;
             }
         }
     }
+}
+
+bool NamesInOrder(const char LastName1[], const char LastName2[], const char FirstName1[], const char FirstName2[])
+{
+    //checks to see which last name comes first, if both last names are the same, it then uses the first name
+    
+    for (int i = 0; LastName1[i] || LastName2[i]; ++i)//go until you get to the end of the larger name
+    {
+        if(toupper(LastName1[i]) < toupper(LastName2[i]))
+            return true;
+        
+        if(toupper(LastName1[i]) > toupper(LastName2[i]))
+            return false;
+    }
+    
+    for (int i = 0; FirstName1[i] || FirstName2[i]; ++i)//go until you get to the end of the larger name
+    {
+        if(toupper(FirstName1[i]) < toupper(FirstName2[i]))
+            return true;
+        
+        if(toupper(FirstName1[i]) > toupper(FirstName2[i]))
+            return false;
+    }
+    
+    return true;//this will only be used if same last name and first name
 }
