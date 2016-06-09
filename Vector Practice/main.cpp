@@ -14,23 +14,105 @@ struct PersonalInformation
 };
 
 void MainMenu();
-void SortVector(vector<PersonalInformation> &CV);
+void DisplayContacts(const vector<PersonalInformation> &CV);
 void AddContact(vector<PersonalInformation> &CV);
 void InsertStringInStructDataVector(vector<char> &Vector);
+void SortVector(vector<PersonalInformation> &CV);
 bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector<char> FirstNameVect1, vector<char> FirstNameVect2);
 
 int main()
 {
+    //load list into vector from file
     MainMenu();
+    //save list to file from vector
 }
 
 void MainMenu()
 {
     vector<PersonalInformation> ContactVector;
+    int Choice;
     
-    AddContact(ContactVector);
+    do
+    {
+        cout << "(1) Display List";
+        
+        cout << "\n(2) Add Contact";
+        
+        cout << "\n(3) Delete Contact";
+        
+        cout << "\n(4) Exit";
+        
+        cout << "\n\nChoice: ";
+        
+        cin >> Choice;
+        
+        cout << "\n";
+        
+        switch (Choice)
+        {
+            case 1:
+                DisplayContacts(ContactVector);
+                
+                break;
+                
+            case 2:
+            {
+                cin.ignore();//remove newline before jumping into AddContact(), or it won't work properly
+                AddContact(ContactVector);
+            }
+                
+                break;
+                
+            case 3:
+                cout << "Something";
+                
+                break;
+                
+            default:
+                break;
+        }
+        
+        
+    }
+    while (Choice != 4);
+}
+
+void DisplayContacts(const vector<PersonalInformation> &CV)
+{
+    for (int ForLoopOneCounter = 0; ForLoopOneCounter < CV.size(); ForLoopOneCounter++)
+    {
+        
+        cout << "First Name:   ";
+        for (int j = 0; j < CV[ForLoopOneCounter].FirstNameVector.size(); j++)
+        {
+            cout << CV[ForLoopOneCounter].FirstNameVector[j];
+        }
+        
+        cout << "Last Name:    ";
+        for (int j = 0; j < CV[ForLoopOneCounter].LastNameVector.size(); j++)
+        {
+            cout << CV[ForLoopOneCounter].LastNameVector[j];
+        }
+        
+        cout << "Address:      ";
+        for (int j = 0; j < CV[ForLoopOneCounter].AddressVector.size(); j++)
+        {
+            cout << CV[ForLoopOneCounter].AddressVector[j];
+        }
+        
+        cout << "Phone Number: ";
+        for (int j = 0; j < CV[ForLoopOneCounter].PhoneNumberVector.size(); j++)
+        {
+            cout << CV[ForLoopOneCounter].PhoneNumberVector[j];
+        }
+        
+        cout << "Age:          ";
+        cout << CV[ForLoopOneCounter].Age;
+        
+        cout << "\n\n";
+    }
     
-    cout << "Stop";
+    //use code to slow down output
 }
 
 void AddContact(vector<PersonalInformation> &CV)
