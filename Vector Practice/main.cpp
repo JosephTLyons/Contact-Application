@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <ctype.h>//for toupper function
+#include <fstream>//for reading from and saving to files
 #include <unistd.h>//for usleep function
 #include <vector>
 
@@ -8,24 +9,27 @@ using namespace std;
 
 struct PersonalInformation
 {
-    vector<char> FirstNameVector;
-    vector<char> LastNameVector;
-    vector<char> AddressVector;
-    vector<char> PhoneNumberVector;
+    vector <char> FirstNameVector;
+    vector <char> LastNameVector;
+    vector <char> AddressVector;
+    vector <char> PhoneNumberVector;
     
     short int Age;
 };
 
+void RebuildContactBook();
 void MainMenu();
 void DisplayContacts(const vector<PersonalInformation> &CV);
-void PrintStringInStructDataVector(const vector<char> &Vector);
+void PrintStringInStructDataVectorToScreen(const vector<char> &Vector);
 void AddContact(vector<PersonalInformation> &CV);
 void InsertStringInStructDataVector(vector<char> &Vector);
 void DeleteContact(vector<PersonalInformation> &CV);
 void SortVector(vector<PersonalInformation> &CV);
 bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector<char> FirstNameVect1, vector<char>
                   FirstNameVect2);
-bool NamesSame(vector<char> LastNameVect1, vector<char> LastNameVect2, vector<char> FirstNameVect1, vector<char>);
+void SaveContactBook(vector<PersonalInformation> &CV);
+void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut, const char *Path);
+string Date();
 
 //function to edit existing contact
 //save and read from files
@@ -34,15 +38,15 @@ bool NamesSame(vector<char> LastNameVect1, vector<char> LastNameVect2, vector<ch
 
 int main()
 {
-    //load list into vector from file
     MainMenu();
-    //save list to file from vector
 }
 
 void MainMenu()
 {
     vector<PersonalInformation> ContactVector;
     int Choice;
+    
+    //load list into vector from file
     
     do
     {
@@ -90,26 +94,28 @@ void MainMenu()
         
     }
     while (Choice != 4);
+    
+    //SaveContactBook(ContactVector); remove later if program works without it
 }
 
 void DisplayContacts(const vector<PersonalInformation> &CV)
 {
     for (int i = 0; i < CV.size(); i++)
     {
+        cout << "Contact Number: " << i+1;
+        cout << "\nFirst Name:     ";
+        PrintStringInStructDataVectorToScreen(CV[i].FirstNameVector);
         
-        cout << "First Name:   ";
-        PrintStringInStructDataVector(CV[i].FirstNameVector);
+        cout << "Last Name:      ";
+        PrintStringInStructDataVectorToScreen(CV[i].LastNameVector);
         
-        cout << "Last Name:    ";
-        PrintStringInStructDataVector(CV[i].LastNameVector);
+        cout << "Address:        ";
+        PrintStringInStructDataVectorToScreen(CV[i].AddressVector);
         
-        cout << "Address:      ";
-        PrintStringInStructDataVector(CV[i].AddressVector);
+        cout << "Phone Number:   ";
+        PrintStringInStructDataVectorToScreen(CV[i].PhoneNumberVector);
         
-        cout << "Phone Number: ";
-        PrintStringInStructDataVector(CV[i].PhoneNumberVector);
-        
-        cout << "Age:          ";
+        cout << "Age:            ";
         cout << CV[i].Age;
         
         cout << "\n\n";
@@ -118,7 +124,7 @@ void DisplayContacts(const vector<PersonalInformation> &CV)
     }
 }
 
-void PrintStringInStructDataVector(const vector<char> &Vector)
+void PrintStringInStructDataVectorToScreen(const vector<char> &Vector)
 {
     for (int i = 0; i < Vector.size(); i++)
     {
@@ -163,6 +169,8 @@ void AddContact(vector<PersonalInformation> &CV)
         cin.ignore();//removes newline left in input buffer after last cin >> statement
         cout << "\n";
     }
+    
+    SaveContactBook(CV);//save settings after adding a contact and sorting
 }
 
 void InsertStringInStructDataVector(vector<char> &Vector)
@@ -173,9 +181,10 @@ void InsertStringInStructDataVector(vector<char> &Vector)
     while (Insert != '\n')
     {
         cin.get(Insert);//using cin.get, and not cin >>, so it stores the newline in Insert - allows to break out of loop
+    
+        //figure out way to remove leading whitespace
         
-        if (Insert != ' ')//only place character in vector if it is not a space - in case of accidental space
-            Vector.push_back(Insert);
+        Vector.push_back(Insert);
     }
     
     if (!isnumber(Vector[0]))
@@ -184,51 +193,20 @@ void InsertStringInStructDataVector(vector<char> &Vector)
 
 void DeleteContact(vector<PersonalInformation> &CV)
 {
-    vector<char> LastNameToDeleted;
-    vector<char> FirstNameToDeleted;
-    bool NameFound = false;
+    int ContactNumberToDelete;
+    //char ConfirmDelete;
     
     DisplayContacts(CV);//display list again
     
-    cout << "Type in the last name of the contact you wish to delete";
-    cout << "\nLast name: ";
+    cout << "Enter number of contact you wish to delete: ";
+    cin >> ContactNumberToDelete;
     
-    InsertStringInStructDataVector(LastNameToDeleted);
+    //print this contact and ask if they want to delete it for sure
     
-    cout << "\nType in the first name of the contact you wish to delete";
-    cout << "\nLast name: ";
+    if (ContactNumberToDelete-1 <= CV.size())//error will occur if tries to erase number outside of vector bound
+        CV.erase(CV.begin() + (ContactNumberToDelete-1));
     
-    InsertStringInStructDataVector(FirstNameToDeleted);
-    
-    for (int i = 0; i<CV.size() && NameFound == false; i++)//find position of name
-    {
-        if (NamesSame(CV[i].LastNameVector, LastNameToDeleted, CV[i].FirstNameVector, FirstNameToDeleted))
-        {
-            NameFound = true;
-            
-            //print this contact and ask if they want to delete it for sure
-            
-            CV.erase(CV.begin() + i);
-        }
-    }
-    
-    if (NameFound == false)
-    {
-        cout << "\n";
-        PrintStringInStructDataVector(FirstNameToDeleted);
-        cout << " ";
-        PrintStringInStructDataVector(LastNameToDeleted);
-        cout << " was not found.";
-    }
-    
-    else
-    {
-        cout << "\n";
-        PrintStringInStructDataVector(FirstNameToDeleted);
-        cout << " ";
-        PrintStringInStructDataVector(LastNameToDeleted);
-        cout << " was deleted.";
-    }
+    SaveContactBook(CV);//save settings after deleting a contact
 }
 
 void SortVector(vector<PersonalInformation> &CV)//not my code - bubble sort
@@ -279,21 +257,52 @@ bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector
                 //no swap will be made back in SortVector() function
 }
 
-bool NamesSame(vector<char> LastNameVect1, vector<char> LastNameVect2, vector<char> FirstNameVect1, vector<char> FirstNameVect2)
+void SaveContactBook(vector<PersonalInformation> &CV)
 {
-    //code copied from NamesInOrder and modified
+    ofstream FileOut;
+    const char *Path = "/Users/josephlyons/Library/Application Support/The Lyons' Den Labs/TheLyons'DenContactInformation2.txt";//code variable for username
     
-    for (int i = 0; LastNameVect1[i] || LastNameVect2[i]; ++i)//go until you get to the end of the larger name
+    FileOut.open(Path);
+    
+    for (int i = 0; i < CV.size(); i++)
     {
-        if(toupper(LastNameVect1[i]) == toupper(LastNameVect2[i]))//make all uppercase to check for order
-        {
-            for (int i = 0; FirstNameVect1[i] || FirstNameVect2[i]; ++i)//go until you get to the end of the larger name
-            {
-                if(toupper(FirstNameVect1[i]) == toupper(FirstNameVect2[i]))
-                    return true;//if first and last name are the same, then return true
-            }
-        }
+        FileOut << "\nFirst Name:     ";
+        PrintStringInStructDataVectorToFile(CV[i].FirstNameVector, FileOut, Path);
+        
+        FileOut << "Last Name:      ";
+        PrintStringInStructDataVectorToFile(CV[i].LastNameVector, FileOut, Path);
+        
+        FileOut << "Address:        ";
+        PrintStringInStructDataVectorToFile(CV[i].AddressVector, FileOut, Path);
+        
+        FileOut << "Phone Number:   ";
+        PrintStringInStructDataVectorToFile(CV[i].PhoneNumberVector, FileOut, Path);
+        
+        FileOut << "Age:            ";
+        FileOut << CV[i].Age;
+        
+        FileOut << "\n\n";
     }
 
-    return false;
+    FileOut << (char) 0 << endl;
+    
+    FileOut << "Contacts Last Altered: " << Date() << endl;
+    
+    FileOut.close();
+}
+
+void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut, const char *Path)
+{
+    for (int i = 0; i < Vector.size(); i++)
+    {
+        FileOut << Vector[i];
+    }
+}
+
+string Date()//not my code here - just modified it to read easier
+{
+    char Time[50];
+    time_t now = time(NULL);
+    strftime(Time, 50, "%b, %d, %Y", localtime(&now)); //short month name
+    return string(Time);
 }
