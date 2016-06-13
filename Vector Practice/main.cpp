@@ -17,24 +17,38 @@ struct PersonalInformation
     short int Age;
 };
 
-void RebuildContactBook();
+void RebuildContactBook(vector<PersonalInformation> &CV);
+bool EmptyFileChecker();
+bool EndOfFileChecker(ifstream &FileIn);
 void MainMenu();
 void DisplayContacts(const vector<PersonalInformation> &CV);
 void PrintStringInStructDataVectorToScreen(const vector<char> &Vector);
 void AddContact(vector<PersonalInformation> &CV);
-void InsertStringInStructDataVector(vector<char> &Vector);
+void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector);
+void InsertStringInStructDataVectorFromFile(vector<char> &Vector, ifstream &FileIn);
 void DeleteContact(vector<PersonalInformation> &CV);
 void SortVector(vector<PersonalInformation> &CV);
 bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector<char> FirstNameVect1, vector<char>
                   FirstNameVect2);
 void SaveContactBook(vector<PersonalInformation> &CV);
-void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut, const char *Path);
+void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut);
 string Date();
 
 //function to edit existing contact
 //save and read from files
 
 //reorganize functions in order and reflect that order in function prototypes
+//add lines between functions for visual organization and cin.ignore statements to pause befor returning to menu
+
+//find bug that occurs when entering multiple names in a row in (5+ names)
+//bug that doesn't allow you to enter add contact function again after leaving the add function once
+
+//in save function, store "no data entered" in blank fields, or a non-printable character, and use that when reading in
+//from the file so that program knows to skip that field
+
+//code function that reads from file to work with blank spaces
+
+//consider making clearPersonalinformationStructure function - used twice
 
 int main()
 {
@@ -44,18 +58,17 @@ int main()
 void MainMenu()
 {
     vector<PersonalInformation> ContactVector;
+    
     int Choice;
     
-    //load list into vector from file
+    if(EmptyFileChecker())
+        RebuildContactBook(ContactVector);
     
     do
     {
         cout << "(1) Display List";
-        
         cout << "\n(2) Add Contact";
-        
         cout << "\n(3) Delete Contact";
-        
         cout << "\n(4) Exit";
         
         cout << "\n\nChoice: ";
@@ -94,8 +107,110 @@ void MainMenu()
         
     }
     while (Choice != 4);
+}
+
+bool EmptyFileChecker()//shouldn't be declaring a new variable, should be passing it in, but that would call for a major rewrite of the menu function and all the function parameters
+{
+    ifstream FileIn;
     
-    //SaveContactBook(ContactVector); remove later if program works without it
+    const char *Path = "/Users/josephlyons/Library/Application Support/The Lyons' Den Labs/TheLyons'DenContactInformation2.txt";//code variable for username
+    
+    FileIn.open(Path);
+    
+    if (FileIn.fail())
+    {
+        FileIn.close();
+        return false;
+    }
+    
+    else if (FileIn.eof())//return false if file doesnt exist or if file is empty//replace with EndOfFile custom funct??
+    {
+        FileIn.close();
+        return false;
+    }
+    
+    else
+    {   FileIn.close();
+        return true;
+    }
+}
+
+
+void RebuildContactBook(vector<PersonalInformation> &CV)
+{
+    PersonalInformation Temporary;
+    bool EndOfFile;
+    
+    ifstream FileIn;
+    
+    const char *Path = "/Users/josephlyons/Library/Application Support/The Lyons' Den Labs/TheLyons'DenContactInformation2.txt";//code variable for username
+    
+    FileIn.open(Path);
+    
+    if (FileIn.fail())//check to see if file opened
+        cout << "Couldn't Open File\n";
+    
+    for (int i = 0; EndOfFile == false; i++)//2 is temporary - fix condition here to work with getting ALL contacts
+    {
+        InsertStringInStructDataVectorFromFile(Temporary.FirstNameVector, FileIn);
+        
+        InsertStringInStructDataVectorFromFile(Temporary.LastNameVector, FileIn);
+        
+        InsertStringInStructDataVectorFromFile(Temporary.AddressVector, FileIn);
+        
+        InsertStringInStructDataVectorFromFile(Temporary.PhoneNumberVector, FileIn);
+        
+        FileIn >> Temporary.Age;
+        
+        CV.push_back(Temporary);
+        
+        Temporary.FirstNameVector.clear();//clear out all vectors of temporary storage to get ready for next
+        Temporary.LastNameVector.clear();
+        Temporary.AddressVector.clear();
+        Temporary.PhoneNumberVector.clear();
+        
+        EndOfFile = EndOfFileChecker(FileIn);
+    }
+    
+    FileIn.close();
+}
+
+bool EndOfFileChecker(ifstream &FileIn)//remove superfluous newlines between contacts and after last contactnew
+                                       //check for end of file (I used 0)
+{
+    char Temporary;
+    
+    do
+    {
+        FileIn.get(Temporary);
+        
+        if (Temporary == 0)
+            return true;
+        
+        if (Temporary != '\n' && Temporary != 0)//this if statement is used to place back first letter
+                                                //otherwise, you risk losing first letter if not EndOfFile
+            FileIn.putback(Temporary);
+    }
+    while (Temporary == '\n');
+    
+    return false;
+}
+
+void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &FileIn)
+{
+    char Insert = 1;//used for inserting characters into individual struct vectors
+    //initialized at 1 to allow while loop to execute
+    
+    while (Insert != '\n' && Insert != 0)//this character is inserted at the end of the text file
+    {
+        FileIn.get(Insert);
+        
+        //figure out way to remove leading whitespace
+        
+        //if (Insert != '\n')//dont store newlines in text
+        
+        Vector.push_back(Insert);
+    }
 }
 
 void DisplayContacts(const vector<PersonalInformation> &CV)
@@ -120,7 +235,7 @@ void DisplayContacts(const vector<PersonalInformation> &CV)
         
         cout << "\n\n";
         
-        usleep(75000);
+        usleep(90000);//fine tune this maybe
     }
 }
 
@@ -137,19 +252,19 @@ void AddContact(vector<PersonalInformation> &CV)
     PersonalInformation Temp;//temporary holding spot for input, used to store in vector
     char UserChoice;
     
-    while (UserChoice != 'n' && UserChoice != 'N')
+    while (toupper(UserChoice) != 'N')
     {
         cout << "Enter First Name:   ";
-        InsertStringInStructDataVector(Temp.FirstNameVector);
+        InsertStringInStructDataVectorFromKeyboard(Temp.FirstNameVector);
         
         cout << "Enter Last Name:    ";
-        InsertStringInStructDataVector(Temp.LastNameVector);
+        InsertStringInStructDataVectorFromKeyboard(Temp.LastNameVector);
         
         cout << "Enter Address:      ";
-        InsertStringInStructDataVector(Temp.AddressVector);
+        InsertStringInStructDataVectorFromKeyboard(Temp.AddressVector);
         
         cout << "Enter Phone Number: ";
-        InsertStringInStructDataVector(Temp.PhoneNumberVector);
+        InsertStringInStructDataVectorFromKeyboard(Temp.PhoneNumberVector);
         
         cout << "Enter Age:          ";
         cin >> Temp.Age;
@@ -164,16 +279,16 @@ void AddContact(vector<PersonalInformation> &CV)
         if (CV.size() > 1)//don't go into sort function if only one name is in vector
             SortVector(CV);
         
+        SaveContactBook(CV);//save settings after adding a contact and sorting
+        
         cout << "\nAdd another contact? Y/N: ";
         cin >> UserChoice;
         cin.ignore();//removes newline left in input buffer after last cin >> statement
         cout << "\n";
     }
-    
-    SaveContactBook(CV);//save settings after adding a contact and sorting
 }
 
-void InsertStringInStructDataVector(vector<char> &Vector)
+void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector)
 {
     char Insert = 0;//used for inserting characters into individual struct vectors
                     //initialized at 0 to allow while loop to execute
@@ -194,22 +309,40 @@ void InsertStringInStructDataVector(vector<char> &Vector)
 void DeleteContact(vector<PersonalInformation> &CV)
 {
     int ContactNumberToDelete;
-    //char ConfirmDelete;
+    char ConfirmDelete;
     
     DisplayContacts(CV);//display list again
     
     cout << "Enter number of contact you wish to delete: ";
     cin >> ContactNumberToDelete;
+    ContactNumberToDelete--;//decrement value here to work with vector/array notation
     
-    //print this contact and ask if they want to delete it for sure
+    cout << "You are trying to delete: \n\n";
     
-    if (ContactNumberToDelete-1 <= CV.size())//error will occur if tries to erase number outside of vector bound
-        CV.erase(CV.begin() + (ContactNumberToDelete-1));
+    PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].FirstNameVector);
+    PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].LastNameVector);
+    PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].AddressVector);
+    PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].PhoneNumberVector);
+    cout << CV[ContactNumberToDelete].Age << "\n";
+    
+    cout << "\nAre you sure you want to delete this contact? Y/N: ";
+    cin >> ConfirmDelete;
+    
+    if (ContactNumberToDelete <= CV.size())//error will occur if tries to erase number outside of vector bound
+    {
+        if (toupper(ConfirmDelete) == 'Y')
+            CV.erase(CV.begin() + ContactNumberToDelete);
+    }
+    
+    if (toupper(ConfirmDelete) != 'Y')
+        cout << "Contact wasn't deleted.";//if user chooses to not delete the contact
+    
+    cout << "\n\n";
     
     SaveContactBook(CV);//save settings after deleting a contact
 }
 
-void SortVector(vector<PersonalInformation> &CV)//not my code - bubble sort
+void SortVector(vector<PersonalInformation> &CV)//my modified bubble sort code I found online
 {
     bool SwapsMade = true;
     
@@ -233,7 +366,7 @@ bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector
 {
     //checks to see which last name comes first
     
-    for (int i = 0; LastNameVect1[i] || LastNameVect2[i]; ++i)//go until you get to the end of the larger name
+    for (int i = 0; LastNameVect1[i] && LastNameVect2[i]; ++i)//go until you get to the end of the larger name
     {
         if(toupper(LastNameVect1[i]) < toupper(LastNameVect2[i]))//make all uppercase to check for order
             return true;
@@ -244,7 +377,7 @@ bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector
     
     //if both last names are the same, it then uses the first name
     
-    for (int i = 0; FirstNameVect1[i] || FirstNameVect2[i]; ++i)//go until you get to the end of the larger name
+    for (int i = 0; FirstNameVect1[i] && FirstNameVect2[i]; ++i)//go until you get to the end of the larger name
     {
         if(toupper(FirstNameVect1[i]) < toupper(FirstNameVect2[i]))
             return true;
@@ -264,34 +397,32 @@ void SaveContactBook(vector<PersonalInformation> &CV)
     
     FileOut.open(Path);
     
+    if (FileOut.fail())//check to see if file opened
+        cout << "Couldn't Open File\n";
+    
     for (int i = 0; i < CV.size(); i++)
     {
-        FileOut << "\nFirst Name:     ";
-        PrintStringInStructDataVectorToFile(CV[i].FirstNameVector, FileOut, Path);
+        PrintStringInStructDataVectorToFile(CV[i].FirstNameVector, FileOut);
         
-        FileOut << "Last Name:      ";
-        PrintStringInStructDataVectorToFile(CV[i].LastNameVector, FileOut, Path);
+        PrintStringInStructDataVectorToFile(CV[i].LastNameVector, FileOut);
         
-        FileOut << "Address:        ";
-        PrintStringInStructDataVectorToFile(CV[i].AddressVector, FileOut, Path);
+        PrintStringInStructDataVectorToFile(CV[i].AddressVector, FileOut);
         
-        FileOut << "Phone Number:   ";
-        PrintStringInStructDataVectorToFile(CV[i].PhoneNumberVector, FileOut, Path);
-        
-        FileOut << "Age:            ";
+        PrintStringInStructDataVectorToFile(CV[i].PhoneNumberVector, FileOut);
+
         FileOut << CV[i].Age;
         
         FileOut << "\n\n";
     }
 
-    FileOut << (char) 0 << endl;
+    FileOut << (char) 0 << endl;//used as a way to mark the end of the document, using 0 because user can type it
     
     FileOut << "Contacts Last Altered: " << Date() << endl;
     
     FileOut.close();
 }
 
-void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut, const char *Path)
+void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut)
 {
     for (int i = 0; i < Vector.size(); i++)
     {
