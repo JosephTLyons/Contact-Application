@@ -17,6 +17,8 @@ struct PersonalInformation
     short int Age;
 };
 
+const char *Path = "/Users/josephlyons/Library/Application Support/The Lyons' Den Labs/TheLyons'DenContactInformation2.txt";//made a global constant for convenience - code variable for username
+
 void RebuildContactBook(vector<PersonalInformation> &CV);
 void ClearDataVectorsFromStructure(PersonalInformation &X);
 bool EmptyFileChecker();
@@ -33,22 +35,19 @@ bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector
                   FirstNameVect2);
 void SaveContactBook(vector<PersonalInformation> &CV);
 void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut);
+void DeleteAllContacts(vector <PersonalInformation> &Vector);
 string Date();
 
-//function to edit existing contact
-
 //reorganize functions in order and reflect that order in function prototypes
-//add lines between functions for visual organization and cin.ignore statements to pause befor returning to menu
 
 //find bug that occurs when entering multiple names in a row in (5+ names)
 //bug that doesn't allow you to enter add contact function again after leaving the add function once
 
-//in save function, store "no data entered" in blank fields, or a non-printable character, and use that when reading in
-//from the file so that program knows to skip that field
+//double check to see if cin.ignores are needed before each menufunction call in the switch case
+//now that the cin.ignore(10...) has been implemented
 
-//code function that reads from file to work with blank spaces
-
-//function to delete all contacts
+//function to edit existing contact
+//dynamic birthdays?  Enter in birthday and display current age?
 
 int main()
 {
@@ -58,7 +57,7 @@ int main()
 void MainMenu()
 {
     vector<PersonalInformation> ContactVector;
-    
+    static int MainMenuCounter = 0;
     int Choice;
     
     if(EmptyFileChecker())
@@ -66,10 +65,19 @@ void MainMenu()
     
     do
     {
+        if (MainMenuCounter++ > 0)//skip this set of commands for the first time in the menu, enter every time after
+        {
+            cin.ignore(10, '\n');//clear everything in buffer up until a newline
+            cout << "Press enter to go back to main menu: ";
+            cin.ignore();//pause the program, wait for user to press enter
+            cout << "\n";
+        }
+        
         cout << "(1) Display List";
         cout << "\n(2) Add Contact";
         cout << "\n(3) Delete Contact";
-        cout << "\n(4) Exit";
+        cout << "\n(4) Delete All Contacts";
+        cout << "\n(5) Exit";
         
         cout << "\n\nChoice: ";
         
@@ -96,6 +104,14 @@ void MainMenu()
             {
                 cin.ignore();//remove newline before jumping into DisplayContacts(), or it won't work properly
                 DeleteContact(ContactVector);
+                break;
+            }
+                
+            case 4:
+            {
+                cin.ignore();//remove newline before jumping into DisplayContacts(), or it won't work properly
+                DeleteAllContacts(ContactVector);
+                break;
             }
                 
                 break;
@@ -106,14 +122,44 @@ void MainMenu()
         
         
     }
-    while (Choice != 4);
+    while (Choice != 5);
+}
+
+void DeleteAllContacts(vector <PersonalInformation> &Vector)
+{
+    vector <char> UserChoice;
+    char Insert;
+    
+    cout << "Are you sure you'd like to delete all contacts? Type \"YES\" to confirm (Must be a capital YES): ";
+    
+    do
+    {
+        cin.get(Insert);
+        UserChoice.push_back(Insert);
+    }
+    while (Insert != '\n');
+    
+    if (UserChoice[0] == 'Y')
+    {
+        if (UserChoice[1] == 'E')
+        {
+            if (UserChoice[2] == 'S')
+            {
+                Vector.clear();
+                SaveContactBook(Vector);
+                
+                cout << "\nAll contacts have been deleted.\n\n";
+            }
+        }
+    }
+    
+    else
+        cout << "\nContacts were not deleted.\n\n";
 }
 
 bool EmptyFileChecker()//shouldn't be declaring a new variable, should be passing it in, but that would call for a major rewrite of the menu function and all the function parameters
 {
     ifstream FileIn;
-    
-    const char *Path = "/Users/josephlyons/Library/Application Support/The Lyons' Den Labs/TheLyons'DenContactInformation2.txt";//code variable for username
     
     FileIn.open(Path);
     
@@ -141,8 +187,6 @@ void RebuildContactBook(vector<PersonalInformation> &CV)
     bool EndOfFile;
     
     ifstream FileIn;
-    
-    const char *Path = "/Users/josephlyons/Library/Application Support/The Lyons' Den Labs/TheLyons'DenContactInformation2.txt";//code variable for username
     
     FileIn.open(Path);
     
@@ -209,8 +253,6 @@ void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &Fil
     {
         FileIn.get(Insert);
         
-        //figure out way to remove leading whitespace
-        
         //if (Insert != '\n')//dont store newlines in text
         
         Vector.push_back(Insert);
@@ -219,6 +261,8 @@ void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &Fil
 
 void DisplayContacts(const vector<PersonalInformation> &CV)
 {
+    cout << "======================\n\n";
+    
     for (int i = 0; i < CV.size(); i++)
     {
         cout << "Contact Number: " << i+1;
@@ -239,15 +283,10 @@ void DisplayContacts(const vector<PersonalInformation> &CV)
         
         cout << "\n\n";
         
-        if (CV.size() <= 5)
-            usleep(70000);//fine tune this maybe
-        
-        if (CV.size() > 5 && CV.size() <= 50)
-            usleep(70000);//fine tune this maybe
-        
-        if (CV.size() > 50)
-            usleep(40000);//fine tune this maybe
+        usleep(115000);//fine tune this maybe
     }
+    
+    cout << "======================\n\n";
 }
 
 void PrintStringInStructDataVectorToScreen(const vector<char> &Vector)
@@ -301,14 +340,27 @@ void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector)
     char Insert = 0;//used for inserting characters into individual struct vectors
                     //initialized at 0 to allow while loop to execute
     
+    char NameOfEmptyField[] = {"Unknown\n"};
+    
     while (Insert != '\n')
     {
         cin.get(Insert);//using cin.get, and not cin >>, so it stores the newline in Insert - allows to break out of loop
-    
-        //figure out way to remove leading whitespace
         
         Vector.push_back(Insert);
     }
+    
+    if (Vector.size() <= 1)//if theres nothing in vector or just a newline, add "unknown" text in field
+    {
+        Vector.erase(Vector.begin());//erase newline stored
+        
+        for (int i = 0; NameOfEmptyField[i] != 0; i++)
+        {
+            Vector.push_back(NameOfEmptyField[i]);//insert text for "unknown"
+        }
+    }
+    
+    while (Vector[0] == ' ')//remove any leading whitespace from vector
+        Vector.erase(Vector.begin());//while first element is zero, delete first element
     
     if (!isnumber(Vector[0]))
         (Vector[0] = toupper(Vector[0]));//if not a number, always capitalize (for first name and last names)
@@ -325,25 +377,42 @@ void DeleteContact(vector<PersonalInformation> &CV)
     cin >> ContactNumberToDelete;
     ContactNumberToDelete--;//decrement value here to work with vector/array notation
     
-    cout << "You are trying to delete: \n\n";
-    
-    PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].FirstNameVector);
-    PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].LastNameVector);
-    PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].AddressVector);
-    PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].PhoneNumberVector);
-    cout << CV[ContactNumberToDelete].Age << "\n";
-    
-    cout << "\nAre you sure you want to delete this contact? Y/N: ";
-    cin >> ConfirmDelete;
-    
     if (ContactNumberToDelete <= CV.size())//error will occur if tries to erase number outside of vector bound
     {
+        cout << "You are trying to delete: \n\n";
+        
+        cout << "======================\n\n";
+        
+        cout << "First Name:   ";
+        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].FirstNameVector);
+        
+        cout << "Last Name:    ";
+        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].LastNameVector);
+        
+        cout << "Address:      ";
+        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].AddressVector);
+        
+        cout << "Phone Number: ";
+        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].PhoneNumberVector);
+        
+        cout << "Age:          ";
+        cout << CV[ContactNumberToDelete].Age;
+        
+        cout << "\n\n======================\n\n";
+
+        
+        cout << "\nAre you sure you want to delete this contact? Y/N: ";
+        cin >> ConfirmDelete;
+        
         if (toupper(ConfirmDelete) == 'Y')
             CV.erase(CV.begin() + ContactNumberToDelete);
     }
     
-    if (toupper(ConfirmDelete) != 'Y')
-        cout << "Contact wasn't deleted.";//if user chooses to not delete the contact
+    if (ContactNumberToDelete > CV.size())
+        cout << "\nNo contact located at this number";
+    
+    if (toupper(ConfirmDelete) == 'N' && ContactNumberToDelete > CV.size())
+        cout << "No contact deleted.";//if user chooses to not delete the contact
     
     cout << "\n\n";
     
@@ -401,8 +470,6 @@ bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector
 void SaveContactBook(vector<PersonalInformation> &CV)
 {
     ofstream FileOut;
-    
-    const char *Path = "/Users/josephlyons/Library/Application Support/The Lyons' Den Labs/TheLyons'DenContactInformation2.txt";//code variable for username
     
     FileOut.open(Path);
     
