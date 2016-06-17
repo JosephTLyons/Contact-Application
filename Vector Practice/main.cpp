@@ -1,6 +1,7 @@
 #include <iostream>
 
 #include <ctype.h>//for toupper function
+#include <ctime>//for time and date functions
 #include <fstream>//for reading from and saving to files
 #include <unistd.h>//for usleep function
 #include <vector>
@@ -50,6 +51,10 @@ string Date();
 
 //fix up editing contacts function
 //dynamic birthdays?  Enter in birthday and display current age?
+
+//fix bug where one can't hit enter on age without any numbers
+
+//add an hour stamp on the Date function, change name to PrintDateAndTimeToFile
 
 int main()
 {
@@ -402,6 +407,9 @@ void DisplayContacts(const vector<PersonalInformation> &CV)
         usleep(115000);//fine tune this maybe
     }
     
+    if (CV.size() == 0)
+        cout << "Contact Book is empty.\n\n";
+    
     cout << "======================\n\n";
 }
 
@@ -446,7 +454,7 @@ void AddContact(vector<PersonalInformation> &CV)
         
         cout << "\nAdd another contact? Y/N: ";
         cin >> UserChoice;
-        cin.ignore();//removes newline left in input buffer after last cin >> statement
+        cin.ignore();//clear newline from cin >> statement above
         cout << "\n";
     }
 }
@@ -476,7 +484,7 @@ void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector)
     }
     
     while (Vector[0] == ' ')//remove any leading whitespace from vector
-        Vector.erase(Vector.begin());//while first element is zero, delete first element
+        Vector.erase(Vector.begin());//while first element is a space, delete first element
     
     if (!isnumber(Vector[0]))
         (Vector[0] = toupper(Vector[0]));//if not a number, always capitalize (for first name and last names)
@@ -494,11 +502,10 @@ void DeleteContact(vector<PersonalInformation> &CV)
     ContactNumberToDelete--;//decrement value here to work with vector/array notation
     
     if (ContactNumberToDelete < CV.size())//error will occur if tries to erase number outside of vector bound
-                                             // cv.size()-1 because size is number starting from 1, not 0
     {
-        cout << "You are trying to delete: \n\n";
+        cout << "\nYou are trying to delete: ";
         
-        cout << "======================\n\n";
+        cout << "\n\n======================\n\n";
         
         cout << "First Name:   ";
         PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].FirstNameVector);
@@ -518,14 +525,23 @@ void DeleteContact(vector<PersonalInformation> &CV)
         cout << "\n\n======================\n\n";
 
         
-        cout << "\nAre you sure you want to delete this contact? Y/N: ";
+        cout << "\nAre you sure you want to ";
+        
+        for (int i = 0; CV[ContactNumberToDelete].FirstNameVector[i] != '\n'; i++)//display name of contact being deleted
+        {
+            cout << CV[ContactNumberToDelete].FirstNameVector[i];
+        }
+        
+        cout << "? Y/N: ";
         cin >> ConfirmDelete;
+        
+        
         
         if (toupper(ConfirmDelete) == 'Y')
             CV.erase(CV.begin() + ContactNumberToDelete);
     }
     
-    if (ContactNumberToDelete >= CV.size())
+    if (ContactNumberToDelete > CV.size())
         cout << "\nNo contact located at this number";
     
     if (toupper(ConfirmDelete) == 'N' && ContactNumberToDelete > CV.size())
@@ -626,7 +642,9 @@ void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &F
 string Date()//not my code here - just modified it to read easier
 {
     char Time[50];
+    
     time_t now = time(NULL);
-    strftime(Time, 50, "%b, %d, %Y", localtime(&now)); //short month name
+    strftime(Time, 50, "%D, %I:%M %p", localtime(&now));
+    
     return string(Time);
 }
