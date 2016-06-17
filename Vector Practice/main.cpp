@@ -36,17 +36,19 @@ bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector
 void SaveContactBook(vector<PersonalInformation> &CV);
 void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut);
 void DeleteAllContacts(vector <PersonalInformation> &Vector);
+void EditExistingContact(vector <PersonalInformation> &Vector);
 string Date();
 
 //reorganize functions in order and reflect that order in function prototypes
 
 //find bug that occurs when entering multiple names in a row in (5+ names)
+//fix cin.ignore() bugs that cause the main to require extra enters
 //bug that doesn't allow you to enter add contact function again after leaving the add function once
 
 //double check to see if cin.ignores are needed before each menufunction call in the switch case
 //now that the cin.ignore(10...) has been implemented
 
-//function to edit existing contact
+//fix up editing contacts function
 //dynamic birthdays?  Enter in birthday and display current age?
 
 int main()
@@ -76,8 +78,9 @@ void MainMenu()
         cout << "(1) Display List";
         cout << "\n(2) Add Contact";
         cout << "\n(3) Delete Contact";
-        cout << "\n(4) Delete All Contacts";
-        cout << "\n(5) Exit";
+        cout << "\n(4) Edit Existing Contact";
+        cout << "\n(5) Delete All Contacts";
+        cout << "\n(6) Exit";
         
         cout << "\n\nChoice: ";
         
@@ -88,17 +91,17 @@ void MainMenu()
         switch (Choice)
         {
             case 1:
+            {
                 DisplayContacts(ContactVector);
-                
                 break;
+            }
                 
             case 2:
             {
                 cin.ignore();//remove newline before jumping into AddContact(), or it won't work properly
                 AddContact(ContactVector);
-            }
-                
                 break;
+            }
                 
             case 3:
             {
@@ -109,12 +112,17 @@ void MainMenu()
                 
             case 4:
             {
+                cin.ignore();//remove newline before jumping into AddContact(), or it won't work properly
+                EditExistingContact(ContactVector);
+                break;
+            }
+                
+            case 5:
+            {
                 cin.ignore();//remove newline before jumping into DisplayContacts(), or it won't work properly
                 DeleteAllContacts(ContactVector);
                 break;
             }
-                
-                break;
                 
             default:
                 break;
@@ -122,7 +130,115 @@ void MainMenu()
         
         
     }
-    while (Choice != 5);
+    while (Choice != 6);
+}
+
+void EditExistingContact(vector <PersonalInformation> &Vector)
+{
+    int ContactNumberToEdit;
+    char FieldToEdit = 0;
+    
+    DisplayContacts(Vector);
+    
+    cout << "Which contact would you like to edit: ";
+    cin >> ContactNumberToEdit;
+    cin.ignore();//remove newline left over from cin >> statement above
+
+    ContactNumberToEdit--;//decrement value here to work with vector/array notation
+    
+    if (ContactNumberToEdit < Vector.size())//error will occur if tries to erase number outside of vector bound
+    {
+        cout << "\n\nContact you wish to edit: ";
+        
+        cout << "\nPress enter to skip editing a field.";
+        cout << "\nPress \"E\" + enter to edit a field.";
+        
+        cout << "\n\n======================\n\n";
+        
+        cout << "Edit First Name:   ";
+        PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].FirstNameVector);
+        cin.get(FieldToEdit);//using cin.get() so that newlines are stored
+        
+        if (toupper(FieldToEdit) == 'E')
+        {
+            cin.ignore();//clear left over newline in input buffer
+            
+            Vector[ContactNumberToEdit].FirstNameVector.clear();
+            
+            cout << "\nEnter new first name: ";
+            InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].FirstNameVector);
+            
+            FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
+        }
+        
+        
+        cout << "Edit Last Name:    ";
+        PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].LastNameVector);
+        cin.get(FieldToEdit);//using cin.get() so that newlines are stored
+        
+        if (toupper(FieldToEdit) == 'E')
+        {
+            cin.ignore();//clear left over newline in input buffer
+            
+            Vector[ContactNumberToEdit].LastNameVector.clear();
+            
+            cout << "\nEnter new last name: ";
+            InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].LastNameVector);
+            
+            FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
+        }
+        
+        cout << "Edit Address:      ";
+        PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].AddressVector);
+        cin.get(FieldToEdit);//using cin.get() so that newlines are stored
+        
+        if (toupper(FieldToEdit) == 'E')
+        {
+            cin.ignore();//clear left over newline in input buffer
+            
+            Vector[ContactNumberToEdit].AddressVector.clear();
+            
+            cout << "\nEnter new address: ";
+            InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].AddressVector);
+            
+            FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
+        }
+        
+        cout << "Edit Phone Number: ";
+        PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].PhoneNumberVector);
+        cin.get(FieldToEdit);//using cin.get() so that newlines are stored
+        
+        if (toupper(FieldToEdit) == 'E')
+        {
+            cin.ignore();//clear left over newline in input buffer
+            
+            Vector[ContactNumberToEdit].PhoneNumberVector.clear();
+            
+            cout << "\nEnter new phone number: ";
+            InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].PhoneNumberVector);
+            
+            FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
+        }
+        
+        cout << "Edit Age:          ";
+        cout << Vector[ContactNumberToEdit].Age;
+        cin.get(FieldToEdit);//using cin.get() so that newlines are stored
+        
+        if (toupper(FieldToEdit) == 'E')
+        {
+            cin.ignore();//clear left over newline in input buffer
+            
+            cout << "\nEnter new age: ";
+            cin >> Vector[ContactNumberToEdit].Age;
+            
+            FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
+        }
+        
+        cout << "\n\n======================\n\n";
+    }
+    
+    SortVector(Vector);
+    SaveContactBook(Vector);
 }
 
 void DeleteAllContacts(vector <PersonalInformation> &Vector)
@@ -377,7 +493,8 @@ void DeleteContact(vector<PersonalInformation> &CV)
     cin >> ContactNumberToDelete;
     ContactNumberToDelete--;//decrement value here to work with vector/array notation
     
-    if (ContactNumberToDelete <= CV.size())//error will occur if tries to erase number outside of vector bound
+    if (ContactNumberToDelete < CV.size())//error will occur if tries to erase number outside of vector bound
+                                             // cv.size()-1 because size is number starting from 1, not 0
     {
         cout << "You are trying to delete: \n\n";
         
@@ -408,7 +525,7 @@ void DeleteContact(vector<PersonalInformation> &CV)
             CV.erase(CV.begin() + ContactNumberToDelete);
     }
     
-    if (ContactNumberToDelete > CV.size())
+    if (ContactNumberToDelete >= CV.size())
         cout << "\nNo contact located at this number";
     
     if (toupper(ConfirmDelete) == 'N' && ContactNumberToDelete > CV.size())
