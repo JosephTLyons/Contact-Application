@@ -1,10 +1,12 @@
-#include <iostream>
+#include <iostream>   //for input/output stream
 
-#include <ctype.h>//for toupper function
-#include <ctime>//for time and date functions
-#include <fstream>//for reading from and saving to files
-#include <unistd.h>//for usleep function
-#include <vector>
+#include <ctype.h>    //for toupper function
+#include <ctime>      //for time and date functions
+#include <fstream>    //for reading from and saving to files
+#include <string.h>   //for strcat function in pathway commands
+#include <sys/stat.h> //for mkdir functions
+#include <unistd.h>   //for usleep functions
+#include <vector>     //for vector files
 
 using namespace std;
 
@@ -18,26 +20,24 @@ struct PersonalInformation
     short int Age;
 };
 
-const char *Path = "/Users/josephlyons/Library/Application Support/The Lyons' Den Labs/TheLyons'DenContactInformation2.txt";//made a global constant for convenience - code variable for username
-
-void RebuildContactBook(vector<PersonalInformation> &CV);
+void RebuildContactBook(vector<PersonalInformation> &CV, const char Path[]);
 void ClearDataVectorsFromStructure(PersonalInformation &X);
-bool EmptyFileChecker();
+bool EmptyFileChecker(const char Path[]);
 bool EndOfFileChecker(ifstream &FileIn);
 void MainMenu();
 void DisplayContacts(const vector<PersonalInformation> &CV);
 void PrintStringInStructDataVectorToScreen(const vector<char> &Vector);
-void AddContact(vector<PersonalInformation> &CV);
+void AddContact(vector<PersonalInformation> &CV, const char Path[]);
 void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector);
 void InsertStringInStructDataVectorFromFile(vector<char> &Vector, ifstream &FileIn);
-void DeleteContact(vector<PersonalInformation> &CV);
+void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[]);
 void SortVector(vector<PersonalInformation> &CV);
 bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector<char> FirstNameVect1, vector<char>
                   FirstNameVect2);
-void SaveContactBook(vector<PersonalInformation> &CV);
+void SaveContactBook(vector<PersonalInformation> &CV, const char Path[]);
 void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut);
-void DeleteAllContacts(vector <PersonalInformation> &Vector);
-void EditExistingContact(vector <PersonalInformation> &Vector);
+void DeleteContact(vector<PersonalInformation> &CV, const char Path[]);
+void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]);
 string Date();
 
 //reorganize functions in order and reflect that order in function prototypes
@@ -54,7 +54,9 @@ string Date();
 
 //fix bug where one can't hit enter on age without any numbers
 
-//add an hour stamp on the Date function, change name to PrintDateAndTimeToFile
+//how big to make array holding pathway?
+
+//loop in delete contact function?
 
 int main()
 {
@@ -67,8 +69,24 @@ void MainMenu()
     static int MainMenuCounter = 0;
     int Choice;
     
-    if(EmptyFileChecker())
-        RebuildContactBook(ContactVector);
+    //optaining pathway on mac / making my custom folder - consider another implementation that uses vector?
+    
+    char FullPath[180] = {0};
+    const char *HomeAndUserNamePath = getenv("HOME");//get home/username path - finds username
+    const char *MorePath = "/Library/Application Support/The Lyons' Den Labs";
+    const char *RestOfPath = "/TheLyons'DenContactInformation2.txt";
+    
+    strcat(FullPath, HomeAndUserNamePath);
+    strcat(FullPath, MorePath);
+    
+    mkdir(FullPath, ACCESSPERMS);
+    
+    strcat(FullPath, RestOfPath);
+    
+    //done making folder and obtaining pathway
+    
+    if(EmptyFileChecker(FullPath))
+        RebuildContactBook(ContactVector, FullPath);
     
     do
     {
@@ -104,28 +122,28 @@ void MainMenu()
             case 2:
             {
                 cin.ignore();//remove newline before jumping into AddContact(), or it won't work properly
-                AddContact(ContactVector);
+                AddContact(ContactVector, FullPath);
                 break;
             }
                 
             case 3:
             {
                 cin.ignore();//remove newline before jumping into DisplayContacts(), or it won't work properly
-                DeleteContact(ContactVector);
+                DeleteContact(ContactVector, FullPath);
                 break;
             }
                 
             case 4:
             {
                 cin.ignore();//remove newline before jumping into AddContact(), or it won't work properly
-                EditExistingContact(ContactVector);
+                EditExistingContact(ContactVector, FullPath);
                 break;
             }
                 
             case 5:
             {
                 cin.ignore();//remove newline before jumping into DisplayContacts(), or it won't work properly
-                DeleteAllContacts(ContactVector);
+                DeleteAllContacts(ContactVector, FullPath);
                 break;
             }
                 
@@ -138,7 +156,7 @@ void MainMenu()
     while (Choice != 6);
 }
 
-void EditExistingContact(vector <PersonalInformation> &Vector)
+void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[])
 {
     int ContactNumberToEdit;
     char FieldToEdit = 0;
@@ -243,10 +261,10 @@ void EditExistingContact(vector <PersonalInformation> &Vector)
     }
     
     SortVector(Vector);
-    SaveContactBook(Vector);
+    SaveContactBook(Vector, Path);
 }
 
-void DeleteAllContacts(vector <PersonalInformation> &Vector)
+void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[])
 {
     vector <char> UserChoice;
     char Insert;
@@ -267,7 +285,7 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector)
             if (UserChoice[2] == 'S')
             {
                 Vector.clear();
-                SaveContactBook(Vector);
+                SaveContactBook(Vector, Path);
                 
                 cout << "\nAll contacts have been deleted.\n\n";
             }
@@ -278,7 +296,7 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector)
         cout << "\nContacts were not deleted.\n\n";
 }
 
-bool EmptyFileChecker()//shouldn't be declaring a new variable, should be passing it in, but that would call for a major rewrite of the menu function and all the function parameters
+bool EmptyFileChecker(const char Path[])//shouldn't be declaring a new variable, should be passing it in, but that would call for a major rewrite of the menu function and all the function parameters
 {
     ifstream FileIn;
     
@@ -302,7 +320,7 @@ bool EmptyFileChecker()//shouldn't be declaring a new variable, should be passin
     }
 }
 
-void RebuildContactBook(vector<PersonalInformation> &CV)
+void RebuildContactBook(vector<PersonalInformation> &CV, const char Path[])
 {
     PersonalInformation Temporary;
     bool EndOfFile;
@@ -421,7 +439,7 @@ void PrintStringInStructDataVectorToScreen(const vector<char> &Vector)
     }
 }
 
-void AddContact(vector<PersonalInformation> &CV)
+void AddContact(vector<PersonalInformation> &CV, const char Path[])
 {
     PersonalInformation Temporary;//temporary holding spot for input, used to store in vector
     char UserChoice;
@@ -450,7 +468,7 @@ void AddContact(vector<PersonalInformation> &CV)
         if (CV.size() > 1)//don't go into sort function if only one name is in vector
             SortVector(CV);
         
-        SaveContactBook(CV);//save settings after adding a contact and sorting
+        SaveContactBook(CV, Path);//save settings after adding a contact and sorting
         
         cout << "\nAdd another contact? Y/N: ";
         cin >> UserChoice;
@@ -490,7 +508,7 @@ void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector)
         (Vector[0] = toupper(Vector[0]));//if not a number, always capitalize (for first name and last names)
 }
 
-void DeleteContact(vector<PersonalInformation> &CV)
+void DeleteContact(vector<PersonalInformation> &CV, const char Path[])
 {
     int ContactNumberToDelete;
     char ConfirmDelete;
@@ -549,7 +567,7 @@ void DeleteContact(vector<PersonalInformation> &CV)
     
     cout << "\n\n";
     
-    SaveContactBook(CV);//save settings after deleting a contact
+    SaveContactBook(CV, Path);//save settings after deleting a contact
 }
 
 void SortVector(vector<PersonalInformation> &CV)//my modified bubble sort code I found online
@@ -600,7 +618,7 @@ bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector
                 //no swap will be made back in SortVector() function
 }
 
-void SaveContactBook(vector<PersonalInformation> &CV)
+void SaveContactBook(vector<PersonalInformation> &CV, const char Path[])
 {
     ofstream FileOut;
     
