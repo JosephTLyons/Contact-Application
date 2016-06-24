@@ -22,35 +22,29 @@ struct PersonalInformation
 
 void MainMenu();
 
-void CreateFolder(char FullPath[]);
-bool EmptyFileChecker(const char Path[]);
-void RebuildContactBook(vector<PersonalInformation> &CV, const char Path[]);
-
-void DisplayContacts(const vector<PersonalInformation> &CV);
+void DisplayContacts(const vector<PersonalInformation> &CV);//main menu functions
 void AddContact(vector<PersonalInformation> &CV, const char Path[]);
 void DeleteContact(vector<PersonalInformation> &CV, const char Path[]);
 void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]);
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[]);
 
-
-void ClearDataVectorsFromStructure(PersonalInformation &X);
-
-
-bool EndOfFileChecker(ifstream &FileIn);
-
-void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut);
+void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut);//functions for reading/writing from keyboard/files
 void PrintStringInStructDataVectorToScreen(const vector<char> &Vector);
-void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector);
 void InsertStringInStructDataVectorFromFile(vector<char> &Vector, ifstream &FileIn);
+void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector);
 
-void SortVector(vector<PersonalInformation> &CV);
+void SortVector(vector<PersonalInformation> &CV);//sorting functions
 bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector<char> FirstNameVect1, vector<char>
                   FirstNameVect2);
-void SaveContactBook(vector<PersonalInformation> &CV, const char Path[]);
 
+void RebuildContactBook(vector<PersonalInformation> &CV, const char Path[]);//misc functions
+void CreateFolder(char FullPath[]);
+bool EmptyFileChecker(const char Path[]);
+bool EndOfFileChecker(ifstream &FileIn);
+void ClearDataVectorsFromStructure(PersonalInformation &X);
+
+void SaveContactBook(vector<PersonalInformation> &CV, const char Path[]);//functions for saving
 string Date();
-
-//reorganize functions in order and reflect that order in function prototypes
 
 //how to make ?? appear for age if no age is entered
 
@@ -65,11 +59,14 @@ string Date();
 
 //fix bug where one can't hit enter on age without any numbers
 
-//how big to make array holding pathway?
+//how big to make array holding pathway? - any way to use vector for this field?
 
 //loop in delete contact function?
+//support to type in multiple numbers, separated by spaces, to delete a bunch at once
 
 //fix output when user selects vector element outside of vector size bounds - usually just +1 larger than last element in vector
+
+//ways to exit functions - type "Q" to leave - then if statement with "return/break"
 
 int main()
 {
@@ -156,22 +153,140 @@ void MainMenu()
     while (Choice != 6);
 }
 
-void CreateFolder(char FullPath[])
+void DisplayContacts(const vector<PersonalInformation> &CV)
 {
-    //optaining pathway on mac / making my custom folder - consider another implementation that uses vector?
+    cout << "======================\n\n";
     
-    const char *HomeAndUserNamePath = getenv("HOME");//get home/username path - finds username
-    const char *MorePath = "/Library/Application Support/The Lyons' Den Labs";
-    const char *RestOfPath = "/TheLyons'DenContactInformation2.txt";
+    for (int i = 0; i < CV.size(); i++)
+    {
+        cout << "Contact Number: " << i+1;
+        cout << "\nFirst Name:     ";
+        PrintStringInStructDataVectorToScreen(CV[i].FirstNameVector);
+        
+        cout << "Last Name:      ";
+        PrintStringInStructDataVectorToScreen(CV[i].LastNameVector);
+        
+        cout << "Address:        ";
+        PrintStringInStructDataVectorToScreen(CV[i].AddressVector);
+        
+        cout << "Phone Number:   ";
+        PrintStringInStructDataVectorToScreen(CV[i].PhoneNumberVector);
+        
+        cout << "Age:            ";
+        cout << CV[i].Age;
+        
+        cout << "\n\n";
+        
+        usleep(115000);//fine tune this maybe
+    }
     
-    strcat(FullPath, HomeAndUserNamePath);
-    strcat(FullPath, MorePath);
+    if (CV.size() == 0)
+        cout << "Contact Book is empty.\n\n";
     
-    mkdir(FullPath, ACCESSPERMS);//make The Lyons' Den Labs folder
+    cout << "======================\n\n";
+}
+
+void AddContact(vector<PersonalInformation> &CV, const char Path[])
+{
+    PersonalInformation Temporary;//temporary holding spot for input, used to store in vector
+    char UserChoice;
     
-    strcat(FullPath, RestOfPath);
+    while (toupper(UserChoice) != 'N')
+    {
+        cout << "Enter First Name:   ";
+        InsertStringInStructDataVectorFromKeyboard(Temporary.FirstNameVector);
+        
+        cout << "Enter Last Name:    ";
+        InsertStringInStructDataVectorFromKeyboard(Temporary.LastNameVector);
+        
+        cout << "Enter Address:      ";
+        InsertStringInStructDataVectorFromKeyboard(Temporary.AddressVector);
+        
+        cout << "Enter Phone Number: ";
+        InsertStringInStructDataVectorFromKeyboard(Temporary.PhoneNumberVector);
+        
+        cout << "Enter Age:          ";
+        cin >> Temporary.Age;
+        
+        CV.push_back(Temporary);//store Temp in ContactVector Vector
+        
+        ClearDataVectorsFromStructure(Temporary);
+        
+        if (CV.size() > 1)//don't go into sort function if only one name is in vector
+            SortVector(CV);
+        
+        SaveContactBook(CV, Path);//save settings after adding a contact and sorting
+        
+        cout << "\nAdd another contact? Y/N: ";
+        cin >> UserChoice;
+        
+        if (toupper(UserChoice) == 'Y')//dont cin.ignore() if user doesn't repeat loop, used to keep main from pausing too many times
+            cin.ignore();//clear newline from cin >> statement above
+        
+        cout << "\n";
+    }
+}
+
+void DeleteContact(vector<PersonalInformation> &CV, const char Path[])
+{
+    int ContactNumberToDelete;
+    char ConfirmDelete;
     
-    //done making folder and obtaining pathway
+    DisplayContacts(CV);//display list again
+    
+    cout << "Enter number of contact you wish to delete: ";
+    cin >> ContactNumberToDelete;
+    ContactNumberToDelete--;//decrement value here to work with vector/array notation
+    
+    if (ContactNumberToDelete < CV.size())//error will occur if tries to erase number outside of vector bound
+    {
+        cout << "\nYou are trying to delete: ";
+        
+        cout << "\n\n======================\n\n";
+        
+        cout << "First Name:   ";
+        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].FirstNameVector);
+        
+        cout << "Last Name:    ";
+        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].LastNameVector);
+        
+        cout << "Address:      ";
+        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].AddressVector);
+        
+        cout << "Phone Number: ";
+        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].PhoneNumberVector);
+        
+        cout << "Age:          ";
+        cout << CV[ContactNumberToDelete].Age;
+        
+        cout << "\n\n======================\n\n";
+        
+        
+        cout << "\nAre you sure you want to ";
+        
+        for (int i = 0; CV[ContactNumberToDelete].FirstNameVector[i] != '\n'; i++)//display name of contact being deleted
+        {
+            cout << CV[ContactNumberToDelete].FirstNameVector[i];
+        }
+        
+        cout << "? Y/N: ";
+        cin >> ConfirmDelete;
+        
+        
+        
+        if (toupper(ConfirmDelete) == 'Y')
+            CV.erase(CV.begin() + ContactNumberToDelete);
+    }
+    
+    if (ContactNumberToDelete > CV.size())
+        cout << "\nNo contact located at this number";
+    
+    if (toupper(ConfirmDelete) == 'N' && ContactNumberToDelete > CV.size())
+        cout << "No contact deleted.";//if user chooses to not delete the contact
+    
+    cout << "\n\n";
+    
+    SaveContactBook(CV, Path);//save settings after deleting a contact
 }
 
 void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[])
@@ -184,7 +299,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
     cout << "Which contact would you like to edit: ";
     cin >> ContactNumberToEdit;
     cin.ignore();//remove newline left over from cin >> statement above
-
+    
     ContactNumberToEdit--;//decrement value here to work with vector/array notation
     
     if (ContactNumberToEdit < Vector.size())//error will occur if tries to erase number outside of vector bound
@@ -211,7 +326,6 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
-        
         
         cout << "Edit Last Name:    ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].LastNameVector);
@@ -279,8 +393,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
     }
     
     SortVector(Vector);
-    SaveContactBook(Vector, Path);
-}
+    SaveContactBook(Vector, Path);}
 
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[])
 {
@@ -314,91 +427,20 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[])
         cout << "\nContacts were not deleted.\n\n";
 }
 
-bool EmptyFileChecker(const char Path[])//shouldn't be declaring a new variable, should be passing it in, but that would call for a major rewrite of the menu function and all the function parameters
+void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut)
 {
-    ifstream FileIn;
-    
-    FileIn.open(Path);
-    
-    if (FileIn.fail())
+    for (int i = 0; i < Vector.size(); i++)
     {
-        FileIn.close();
-        return false;
-    }
-    
-    else if (FileIn.eof())//return false if file doesnt exist or if file is empty//replace with EndOfFile custom funct??
-    {
-        FileIn.close();
-        return false;
-    }
-    
-    else
-    {   FileIn.close();
-        return true;
+        FileOut << Vector[i];
     }
 }
 
-void RebuildContactBook(vector<PersonalInformation> &CV, const char Path[])
+void PrintStringInStructDataVectorToScreen(const vector<char> &Vector)
 {
-    PersonalInformation Temporary;
-    bool EndOfFile;
-    
-    ifstream FileIn;
-    
-    FileIn.open(Path);
-    
-    if (FileIn.fail())//check to see if file opened
-        cout << "Couldn't Open File\n";
-    
-    for (int i = 0; EndOfFile == false; i++)//2 is temporary - fix condition here to work with getting ALL contacts
+    for (int i = 0; i < Vector.size(); i++)
     {
-        InsertStringInStructDataVectorFromFile(Temporary.FirstNameVector, FileIn);
-        
-        InsertStringInStructDataVectorFromFile(Temporary.LastNameVector, FileIn);
-        
-        InsertStringInStructDataVectorFromFile(Temporary.AddressVector, FileIn);
-        
-        InsertStringInStructDataVectorFromFile(Temporary.PhoneNumberVector, FileIn);
-        
-        FileIn >> Temporary.Age;
-        
-        CV.push_back(Temporary);
-        
-        ClearDataVectorsFromStructure(Temporary);
-        
-        EndOfFile = EndOfFileChecker(FileIn);
+        cout << Vector[i];
     }
-    
-    FileIn.close();
-}
-
-void ClearDataVectorsFromStructure(PersonalInformation &X)
-{
-    X.FirstNameVector.clear();//clear out all vectors of temporary storage to get ready for next
-    X.LastNameVector.clear();
-    X.AddressVector.clear();
-    X.PhoneNumberVector.clear();
-}
-
-bool EndOfFileChecker(ifstream &FileIn)//remove superfluous newlines between contacts and after last contactnew
-                                       //check for end of file (I used 0)
-{
-    char Temporary;
-    
-    do
-    {
-        FileIn.get(Temporary);
-        
-        if (Temporary == 0)
-            return true;
-        
-        if (Temporary != '\n' && Temporary != 0)//this if statement is used to place back first letter
-                                                //otherwise, you risk losing first letter if not EndOfFile
-            FileIn.putback(Temporary);
-    }
-    while (Temporary == '\n');
-    
-    return false;
 }
 
 void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &FileIn)
@@ -416,92 +458,10 @@ void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &Fil
     }
 }
 
-void DisplayContacts(const vector<PersonalInformation> &CV)
-{
-    cout << "======================\n\n";
-    
-    for (int i = 0; i < CV.size(); i++)
-    {
-        cout << "Contact Number: " << i+1;
-        cout << "\nFirst Name:     ";
-        PrintStringInStructDataVectorToScreen(CV[i].FirstNameVector);
-        
-        cout << "Last Name:      ";
-        PrintStringInStructDataVectorToScreen(CV[i].LastNameVector);
-        
-        cout << "Address:        ";
-        PrintStringInStructDataVectorToScreen(CV[i].AddressVector);
-        
-        cout << "Phone Number:   ";
-        PrintStringInStructDataVectorToScreen(CV[i].PhoneNumberVector);
-        
-        cout << "Age:            ";
-        cout << CV[i].Age;
-        
-        cout << "\n\n";
-        
-        usleep(115000);//fine tune this maybe
-    }
-    
-    if (CV.size() == 0)
-        cout << "Contact Book is empty.\n\n";
-    
-    cout << "======================\n\n";
-}
-
-void PrintStringInStructDataVectorToScreen(const vector<char> &Vector)
-{
-    for (int i = 0; i < Vector.size(); i++)
-    {
-        cout << Vector[i];
-    }
-}
-
-void AddContact(vector<PersonalInformation> &CV, const char Path[])
-{
-    PersonalInformation Temporary;//temporary holding spot for input, used to store in vector
-    char UserChoice;
-    
-    while (toupper(UserChoice) != 'N')
-    {
-        cout << "Enter First Name:   ";
-        InsertStringInStructDataVectorFromKeyboard(Temporary.FirstNameVector);
-        
-        cout << "Enter Last Name:    ";
-        InsertStringInStructDataVectorFromKeyboard(Temporary.LastNameVector);
-        
-        cout << "Enter Address:      ";
-        InsertStringInStructDataVectorFromKeyboard(Temporary.AddressVector);
-        
-        cout << "Enter Phone Number: ";
-        InsertStringInStructDataVectorFromKeyboard(Temporary.PhoneNumberVector);
-        
-        cout << "Enter Age:          ";
-        cin >> Temporary.Age;
-        
-        CV.push_back(Temporary);//store Temp in ContactVector Vector
-        
-        ClearDataVectorsFromStructure(Temporary);
-        
-        if (CV.size() > 1)//don't go into sort function if only one name is in vector
-            SortVector(CV);
-        
-        SaveContactBook(CV, Path);//save settings after adding a contact and sorting
-        
-        cout << "\nAdd another contact? Y/N: ";
-        cin >> UserChoice;
-        
-        if (toupper(UserChoice) == 'Y')//dont cin.ignore() if user doesn't repeat loop, used to keep main from pausing too many times
-            cin.ignore();//clear newline from cin >> statement above
-        
-        cout << "\n";
-    }
-}
-
 void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector)
 {
     char Insert = 0;//used for inserting characters into individual struct vectors
-                    //initialized at 0 to allow while loop to execute
+    //initialized at 0 to allow while loop to execute
     
     char NameOfEmptyField[] = {"N/A\n"};
     
@@ -527,68 +487,6 @@ void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector)
     
     if (!isnumber(Vector[0]))
         (Vector[0] = toupper(Vector[0]));//if not a number, always capitalize (for first name and last names)
-}
-
-void DeleteContact(vector<PersonalInformation> &CV, const char Path[])
-{
-    int ContactNumberToDelete;
-    char ConfirmDelete;
-    
-    DisplayContacts(CV);//display list again
-    
-    cout << "Enter number of contact you wish to delete: ";
-    cin >> ContactNumberToDelete;
-    ContactNumberToDelete--;//decrement value here to work with vector/array notation
-    
-    if (ContactNumberToDelete < CV.size())//error will occur if tries to erase number outside of vector bound
-    {
-        cout << "\nYou are trying to delete: ";
-        
-        cout << "\n\n======================\n\n";
-        
-        cout << "First Name:   ";
-        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].FirstNameVector);
-        
-        cout << "Last Name:    ";
-        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].LastNameVector);
-        
-        cout << "Address:      ";
-        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].AddressVector);
-        
-        cout << "Phone Number: ";
-        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].PhoneNumberVector);
-        
-        cout << "Age:          ";
-        cout << CV[ContactNumberToDelete].Age;
-        
-        cout << "\n\n======================\n\n";
-
-        
-        cout << "\nAre you sure you want to ";
-        
-        for (int i = 0; CV[ContactNumberToDelete].FirstNameVector[i] != '\n'; i++)//display name of contact being deleted
-        {
-            cout << CV[ContactNumberToDelete].FirstNameVector[i];
-        }
-        
-        cout << "? Y/N: ";
-        cin >> ConfirmDelete;
-        
-        
-        
-        if (toupper(ConfirmDelete) == 'Y')
-            CV.erase(CV.begin() + ContactNumberToDelete);
-    }
-    
-    if (ContactNumberToDelete > CV.size())
-        cout << "\nNo contact located at this number";
-    
-    if (toupper(ConfirmDelete) == 'N' && ContactNumberToDelete > CV.size())
-        cout << "No contact deleted.";//if user chooses to not delete the contact
-    
-    cout << "\n\n";
-    
-    SaveContactBook(CV, Path);//save settings after deleting a contact
 }
 
 void SortVector(vector<PersonalInformation> &CV)//my modified bubble sort code I found online
@@ -636,7 +534,112 @@ bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector
     }
     
     return true;//if both names are identical, return true
-                //no swap will be made back in SortVector() function
+    //no swap will be made back in SortVector() function
+}
+
+void RebuildContactBook(vector<PersonalInformation> &CV, const char Path[])
+{
+    PersonalInformation Temporary;
+    bool EndOfFile;
+    
+    ifstream FileIn;
+    
+    FileIn.open(Path);
+    
+    if (FileIn.fail())//check to see if file opened
+        cout << "Couldn't Open File\n";
+    
+    for (int i = 0; EndOfFile == false; i++)//2 is temporary - fix condition here to work with getting ALL contacts
+    {
+        InsertStringInStructDataVectorFromFile(Temporary.FirstNameVector, FileIn);
+        
+        InsertStringInStructDataVectorFromFile(Temporary.LastNameVector, FileIn);
+        
+        InsertStringInStructDataVectorFromFile(Temporary.AddressVector, FileIn);
+        
+        InsertStringInStructDataVectorFromFile(Temporary.PhoneNumberVector, FileIn);
+        
+        FileIn >> Temporary.Age;
+        
+        CV.push_back(Temporary);
+        
+        ClearDataVectorsFromStructure(Temporary);
+        
+        EndOfFile = EndOfFileChecker(FileIn);
+    }
+    
+    FileIn.close();
+}
+
+void CreateFolder(char FullPath[])
+{
+    //optaining pathway on mac / making my custom folder - consider another implementation that uses vector?
+    
+    const char *HomeAndUserNamePath = getenv("HOME");//get home/username path - finds username
+    const char *MorePath = "/Library/Application Support/The Lyons' Den Labs";
+    const char *RestOfPath = "/TheLyons'DenContactInformation2.txt";
+    
+    strcat(FullPath, HomeAndUserNamePath);
+    strcat(FullPath, MorePath);
+    
+    mkdir(FullPath, ACCESSPERMS);//make The Lyons' Den Labs folder
+    
+    strcat(FullPath, RestOfPath);
+    
+    //done making folder and obtaining pathway
+}
+
+bool EmptyFileChecker(const char Path[])//shouldn't be declaring a new variable, should be passing it in, but that would call for a major rewrite of the menu function and all the function parameters
+{
+    ifstream FileIn;
+    
+    FileIn.open(Path);
+    
+    if (FileIn.fail())
+    {
+        FileIn.close();
+        return false;
+    }
+    
+    else if (FileIn.eof())//return false if file doesnt exist or if file is empty//replace with EndOfFile custom funct??
+    {
+        FileIn.close();
+        return false;
+    }
+    
+    else
+    {   FileIn.close();
+        return true;
+    }
+}
+
+bool EndOfFileChecker(ifstream &FileIn)//remove superfluous newlines between contacts and after last contactnew
+//check for end of file (I used 0)
+{
+    char Temporary;
+    
+    do
+    {
+        FileIn.get(Temporary);
+        
+        if (Temporary == 0)
+            return true;
+        
+        if (Temporary != '\n' && Temporary != 0)//this if statement is used to place back first letter
+            //otherwise, you risk losing first letter if not EndOfFile
+            FileIn.putback(Temporary);
+    }
+    while (Temporary == '\n');
+    
+    return false;
+}
+
+void ClearDataVectorsFromStructure(PersonalInformation &X)
+{
+    X.FirstNameVector.clear();//clear out all vectors of temporary storage to get ready for next
+    X.LastNameVector.clear();
+    X.AddressVector.clear();
+    X.PhoneNumberVector.clear();
 }
 
 void SaveContactBook(vector<PersonalInformation> &CV, const char Path[])
@@ -668,14 +671,6 @@ void SaveContactBook(vector<PersonalInformation> &CV, const char Path[])
     FileOut << "Contacts Last Altered: " << Date() << endl;
     
     FileOut.close();
-}
-
-void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut)
-{
-    for (int i = 0; i < Vector.size(); i++)
-    {
-        FileOut << Vector[i];
-    }
 }
 
 string Date()//not my code here - just modified it to read easier
