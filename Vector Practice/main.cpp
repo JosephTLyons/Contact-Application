@@ -6,7 +6,7 @@
 #include <string.h>   //for strcat function in pathway commands
 #include <sys/stat.h> //for mkdir functions
 #include <unistd.h>   //for usleep functions
-#include <vector>     //for vector files
+#include <vector>     //for using vectors
 
 using namespace std;
 
@@ -20,30 +20,41 @@ struct PersonalInformation
     short int Age;
 };
 
-void RebuildContactBook(vector<PersonalInformation> &CV, const char Path[]);
-void ClearDataVectorsFromStructure(PersonalInformation &X);
-bool EmptyFileChecker(const char Path[]);
-bool EndOfFileChecker(ifstream &FileIn);
 void MainMenu();
+
+void CreateFolder(char FullPath[]);
+bool EmptyFileChecker(const char Path[]);
+void RebuildContactBook(vector<PersonalInformation> &CV, const char Path[]);
+
 void DisplayContacts(const vector<PersonalInformation> &CV);
-void PrintStringInStructDataVectorToScreen(const vector<char> &Vector);
 void AddContact(vector<PersonalInformation> &CV, const char Path[]);
+void DeleteContact(vector<PersonalInformation> &CV, const char Path[]);
+void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]);
+void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[]);
+
+
+void ClearDataVectorsFromStructure(PersonalInformation &X);
+
+
+bool EndOfFileChecker(ifstream &FileIn);
+
+void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut);
+void PrintStringInStructDataVectorToScreen(const vector<char> &Vector);
 void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector);
 void InsertStringInStructDataVectorFromFile(vector<char> &Vector, ifstream &FileIn);
-void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[]);
+
 void SortVector(vector<PersonalInformation> &CV);
 bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector<char> FirstNameVect1, vector<char>
                   FirstNameVect2);
 void SaveContactBook(vector<PersonalInformation> &CV, const char Path[]);
-void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut);
-void DeleteContact(vector<PersonalInformation> &CV, const char Path[]);
-void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]);
+
 string Date();
 
 //reorganize functions in order and reflect that order in function prototypes
 
+//how to make ?? appear for age if no age is entered
+
 //find bug that occurs when entering multiple names in a row in (5+ names)
-//fix cin.ignore() bugs that cause the main to require extra enters
 //bug that doesn't allow you to enter add contact function again after leaving the add function once
 
 //double check to see if cin.ignores are needed before each menufunction call in the switch case
@@ -58,6 +69,8 @@ string Date();
 
 //loop in delete contact function?
 
+//fix output when user selects vector element outside of vector size bounds - usually just +1 larger than last element in vector
+
 int main()
 {
     MainMenu();
@@ -68,22 +81,9 @@ void MainMenu()
     vector<PersonalInformation> ContactVector;
     static int MainMenuCounter = 0;
     int Choice;
-    
-    //optaining pathway on mac / making my custom folder - consider another implementation that uses vector?
-    
     char FullPath[180] = {0};
-    const char *HomeAndUserNamePath = getenv("HOME");//get home/username path - finds username
-    const char *MorePath = "/Library/Application Support/The Lyons' Den Labs";
-    const char *RestOfPath = "/TheLyons'DenContactInformation2.txt";
     
-    strcat(FullPath, HomeAndUserNamePath);
-    strcat(FullPath, MorePath);
-    
-    mkdir(FullPath, ACCESSPERMS);
-    
-    strcat(FullPath, RestOfPath);
-    
-    //done making folder and obtaining pathway
+    CreateFolder(FullPath);//creates The Lyons' Den Labs folder in Application Support folder in Library
     
     if(EmptyFileChecker(FullPath))
         RebuildContactBook(ContactVector, FullPath);
@@ -154,6 +154,24 @@ void MainMenu()
         
     }
     while (Choice != 6);
+}
+
+void CreateFolder(char FullPath[])
+{
+    //optaining pathway on mac / making my custom folder - consider another implementation that uses vector?
+    
+    const char *HomeAndUserNamePath = getenv("HOME");//get home/username path - finds username
+    const char *MorePath = "/Library/Application Support/The Lyons' Den Labs";
+    const char *RestOfPath = "/TheLyons'DenContactInformation2.txt";
+    
+    strcat(FullPath, HomeAndUserNamePath);
+    strcat(FullPath, MorePath);
+    
+    mkdir(FullPath, ACCESSPERMS);//make The Lyons' Den Labs folder
+    
+    strcat(FullPath, RestOfPath);
+    
+    //done making folder and obtaining pathway
 }
 
 void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[])
@@ -472,7 +490,10 @@ void AddContact(vector<PersonalInformation> &CV, const char Path[])
         
         cout << "\nAdd another contact? Y/N: ";
         cin >> UserChoice;
-        cin.ignore();//clear newline from cin >> statement above
+        
+        if (toupper(UserChoice) == 'Y')//dont cin.ignore() if user doesn't repeat loop, used to keep main from pausing too many times
+            cin.ignore();//clear newline from cin >> statement above
+        
         cout << "\n";
     }
 }
@@ -482,7 +503,7 @@ void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector)
     char Insert = 0;//used for inserting characters into individual struct vectors
                     //initialized at 0 to allow while loop to execute
     
-    char NameOfEmptyField[] = {"Unknown\n"};
+    char NameOfEmptyField[] = {"N/A\n"};
     
     while (Insert != '\n')
     {
@@ -491,13 +512,13 @@ void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector)
         Vector.push_back(Insert);
     }
     
-    if (Vector.size() <= 1)//if theres nothing in vector or just a newline, add "unknown" text in field
+    if (Vector.size() <= 1)//if theres nothing in vector or just a newline, add "N/A" text in field
     {
         Vector.erase(Vector.begin());//erase newline stored
         
         for (int i = 0; NameOfEmptyField[i] != 0; i++)
         {
-            Vector.push_back(NameOfEmptyField[i]);//insert text for "unknown"
+            Vector.push_back(NameOfEmptyField[i]);//insert text for "N/A"
         }
     }
     
