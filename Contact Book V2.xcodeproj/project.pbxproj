@@ -41,7 +41,7 @@
 		99AF77D61CF9531F005B8FE5 = {
 			isa = PBXGroup;
 			children = (
-				99AF77E11CF9531F005B8FE5 /* Vector Practice */,
+				99AF77E11CF9531F005B8FE5 /* Contact Book V2 */,
 				99AF77E01CF9531F005B8FE5 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -54,11 +54,12 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
-		99AF77E11CF9531F005B8FE5 /* Vector Practice */ = {
+		99AF77E11CF9531F005B8FE5 /* Contact Book V2 */ = {
 			isa = PBXGroup;
 			children = (
 				99AF77E21CF9531F005B8FE5 /* main.cpp */,
 			);
+			name = "Contact Book V2";
 			path = "Vector Practice";
 			sourceTree = "<group>";
 		};
