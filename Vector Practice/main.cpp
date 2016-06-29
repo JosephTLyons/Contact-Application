@@ -45,7 +45,7 @@ void ClearDataVectorsFromStructure(PersonalInformation &X);
 void SaveContactBook(vector<PersonalInformation> &CV, const char Path[]);//functions for saving
 string Date();
 
-//fix spacing issue on output between contacts
+//fix up delete all contacts function - to many enters required near the end
 
 //find bug that occurs when entering multiple names in a row in (5+ names)
 //bug that doesn't allow you to enter add contact function again after leaving the add function once
@@ -53,7 +53,7 @@ string Date();
 //double check to see if cin.ignores are needed before each menufunction call in the switch case
 //now that the cin.ignore(10...) has been implemented
 
-//fix up editing contacts function
+//fix up editing contacts function - how it looks when doing the editing
 //fix need for using multiple enters at the end of the editing contacts function prior to returning back to main.
 
 //dynamic birthdays?  Enter in birthday and display current age?
@@ -264,7 +264,7 @@ void DeleteContact(vector<PersonalInformation> &CV, const char Path[])
         cout << "\n\n======================\n\n";
         
         
-        cout << "\nAre you sure you want to ";
+        cout << "\nAre you sure you want to delete ";
         
         for (int i = 0; CV[ContactNumberToDelete].FirstNameVector[i] != '\n'; i++)//display name of contact being deleted
         {
@@ -646,6 +646,7 @@ void ClearDataVectorsFromStructure(PersonalInformation &X)
     X.LastNameVector.clear();
     X.AddressVector.clear();
     X.PhoneNumberVector.clear();
+    X.Age.clear();
 }
 
 void SaveContactBook(vector<PersonalInformation> &CV, const char Path[])
