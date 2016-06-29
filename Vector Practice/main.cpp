@@ -16,8 +16,7 @@ struct PersonalInformation
     vector <char> LastNameVector;
     vector <char> AddressVector;
     vector <char> PhoneNumberVector;
-    
-    short int Age;
+    vector <char> Age;
 };
 
 void MainMenu();
@@ -46,7 +45,7 @@ void ClearDataVectorsFromStructure(PersonalInformation &X);
 void SaveContactBook(vector<PersonalInformation> &CV, const char Path[]);//functions for saving
 string Date();
 
-//how to make ?? appear for age if no age is entered
+//fix spacing issue on output between contacts
 
 //find bug that occurs when entering multiple names in a row in (5+ names)
 //bug that doesn't allow you to enter add contact function again after leaving the add function once
@@ -175,7 +174,7 @@ void DisplayContacts(const vector<PersonalInformation> &CV)
         PrintStringInStructDataVectorToScreen(CV[i].PhoneNumberVector);
         
         cout << "Age:            ";
-        cout << CV[i].Age;
+        PrintStringInStructDataVectorToScreen(CV[i].Age);
         
         cout << "\n\n";
         
@@ -208,7 +207,7 @@ void AddContact(vector<PersonalInformation> &CV, const char Path[])
         InsertStringInStructDataVectorFromKeyboard(Temporary.PhoneNumberVector);
         
         cout << "Enter Age:          ";
-        cin >> Temporary.Age;
+        InsertStringInStructDataVectorFromKeyboard(Temporary.Age);
         
         CV.push_back(Temporary);//store Temp in ContactVector Vector
         
@@ -260,7 +259,7 @@ void DeleteContact(vector<PersonalInformation> &CV, const char Path[])
         PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].PhoneNumberVector);
         
         cout << "Age:          ";
-        cout << CV[ContactNumberToDelete].Age;
+        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].Age);
         
         cout << "\n\n======================\n\n";
         
@@ -379,15 +378,17 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
         }
         
         cout << "Edit Age:          ";
-        cout << Vector[ContactNumberToEdit].Age;
+        PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].Age);
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
         
         if (toupper(FieldToEdit) == 'E')
         {
             cin.ignore();//clear left over newline in input buffer
             
-            cout << "\nEnter new age: ";
-            cin >> Vector[ContactNumberToEdit].Age;
+            Vector[ContactNumberToEdit].Age.clear();
+            
+            cout << "\nEnter age: ";
+            InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].Age);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
@@ -563,7 +564,8 @@ void RebuildContactBook(vector<PersonalInformation> &CV, const char Path[])
         
         InsertStringInStructDataVectorFromFile(Temporary.PhoneNumberVector, FileIn);
         
-        FileIn >> Temporary.Age;
+        InsertStringInStructDataVectorFromFile(Temporary.Age, FileIn);
+    
         
         CV.push_back(Temporary);
         
@@ -665,7 +667,8 @@ void SaveContactBook(vector<PersonalInformation> &CV, const char Path[])
         
         PrintStringInStructDataVectorToFile(CV[i].PhoneNumberVector, FileOut);
 
-        FileOut << CV[i].Age;
+        PrintStringInStructDataVectorToFile(CV[i].Age, FileOut);
+        
         
         FileOut << "\n\n";
     }
