@@ -38,7 +38,7 @@ bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector
                   FirstNameVect2);
 
 void RebuildContactBook(vector<PersonalInformation> &CV, const char Path[]);//misc functions
-void CreateFolder(char FullPath[]);
+void CreateFolderAndTextFile(char FullPath[]);
 bool EmptyFileChecker(const char Path[]);
 bool EndOfFileChecker(ifstream &FileIn);
 void ClearDataVectorsFromStructure(PersonalInformation &X);
@@ -55,6 +55,8 @@ string Date();
 //now that the cin.ignore(10...) has been implemented
 
 //fix up editing contacts function
+//fix need for using multiple enters at the end of the editing contacts function prior to returning back to main.
+
 //dynamic birthdays?  Enter in birthday and display current age?
 
 //fix bug where one can't hit enter on age without any numbers
@@ -80,7 +82,7 @@ void MainMenu()
     int Choice;
     char FullPath[180] = {0};
     
-    CreateFolder(FullPath);//creates The Lyons' Den Labs folder in Application Support folder in Library
+    CreateFolderAndTextFile(FullPath);//creates The Lyons' Den Labs folder in Application Support folder in Library
     
     if(EmptyFileChecker(FullPath))
         RebuildContactBook(ContactVector, FullPath);
@@ -191,7 +193,7 @@ void AddContact(vector<PersonalInformation> &CV, const char Path[])
     PersonalInformation Temporary;//temporary holding spot for input, used to store in vector
     char UserChoice;
     
-    while (toupper(UserChoice) != 'N')
+    while (toupper(UserChoice) != 'N' && toupper(UserChoice) != 'Q')
     {
         cout << "Enter First Name:   ";
         InsertStringInStructDataVectorFromKeyboard(Temporary.FirstNameVector);
@@ -234,9 +236,10 @@ void DeleteContact(vector<PersonalInformation> &CV, const char Path[])
     
     DisplayContacts(CV);//display list again
     
-    cout << "Enter number of contact you wish to delete: ";
+    cout << "Type in the number of the contact you wish to delete: ";
     cin >> ContactNumberToDelete;
-    ContactNumberToDelete--;//decrement value here to work with vector/array notation
+    
+    ContactNumberToDelete--;//decrement to work with vector/array notation
     
     if (ContactNumberToDelete < CV.size())//error will occur if tries to erase number outside of vector bound
     {
@@ -272,8 +275,6 @@ void DeleteContact(vector<PersonalInformation> &CV, const char Path[])
         cout << "? Y/N: ";
         cin >> ConfirmDelete;
         
-        
-        
         if (toupper(ConfirmDelete) == 'Y')
             CV.erase(CV.begin() + ContactNumberToDelete);
     }
@@ -306,12 +307,14 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
     {
         cout << "\n\nContact you wish to edit: ";
         
+        PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].FirstNameVector);
+        
         cout << "\nPress enter to skip editing a field.";
         cout << "\nPress \"E\" + enter to edit a field.";
         
         cout << "\n\n======================\n\n";
         
-        cout << "Edit First Name:   ";
+        cout << "Original First Name:   ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].FirstNameVector);
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
         
@@ -393,7 +396,8 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
     }
     
     SortVector(Vector);
-    SaveContactBook(Vector, Path);}
+    SaveContactBook(Vector, Path);
+}
 
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[])
 {
@@ -571,7 +575,7 @@ void RebuildContactBook(vector<PersonalInformation> &CV, const char Path[])
     FileIn.close();
 }
 
-void CreateFolder(char FullPath[])
+void CreateFolderAndTextFile(char FullPath[])
 {
     //optaining pathway on mac / making my custom folder - consider another implementation that uses vector?
     
