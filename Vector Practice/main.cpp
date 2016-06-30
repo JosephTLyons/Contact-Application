@@ -47,9 +47,6 @@ string Date();
 
 //fix up delete all contacts function - to many enters required near the end
 
-//find bug that occurs when entering multiple names in a row in (5+ names)
-//bug that doesn't allow you to enter add contact function again after leaving the add function once
-
 //double check to see if cin.ignores are needed before each menufunction call in the switch case
 //now that the cin.ignore(10...) has been implemented
 
@@ -98,8 +95,8 @@ void MainMenu()
         
         cout << "(1) Display List";
         cout << "\n(2) Add Contact";
-        cout << "\n(3) Delete Contact";
-        cout << "\n(4) Edit Existing Contact";
+        cout << "\n(3) Edit Existing Contact";
+        cout << "\n(4) Delete Contact";
         cout << "\n(5) Delete All Contacts";
         cout << "\n(6) Exit";
         
@@ -126,15 +123,15 @@ void MainMenu()
                 
             case 3:
             {
-                cin.ignore();//remove newline before jumping into DisplayContacts(), or it won't work properly
-                DeleteContact(ContactVector, FullPath);
+                cin.ignore();//remove newline before jumping into AddContact(), or it won't work properly
+                EditExistingContact(ContactVector, FullPath);
                 break;
             }
                 
             case 4:
             {
-                cin.ignore();//remove newline before jumping into AddContact(), or it won't work properly
-                EditExistingContact(ContactVector, FullPath);
+                cin.ignore();//remove newline before jumping into DisplayContacts(), or it won't work properly
+                DeleteContact(ContactVector, FullPath);
                 break;
             }
                 
@@ -674,7 +671,7 @@ void SaveContactBook(vector<PersonalInformation> &CV, const char Path[])
         FileOut << "\n\n";
     }
 
-    FileOut << (char) 0 << endl;//used as a way to mark the end of the document, using 0 because user can type it
+    FileOut << (char) 0 << endl;//used as a way to mark the end of the document, using 0 because user can't type it
     
     FileOut << "Contacts Last Altered: " << Date() << endl;
     
