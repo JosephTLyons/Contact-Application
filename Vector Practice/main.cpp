@@ -326,7 +326,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
-        cout << "Edit Last Name:    ";
+        cout << "Original Last Name:    ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].LastNameVector);
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
         
@@ -342,7 +342,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
-        cout << "Edit Address:      ";
+        cout << "Original Address:      ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].AddressVector);
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
         
@@ -358,7 +358,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
-        cout << "Edit Phone Number: ";
+        cout << "Original Phone Number: ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].PhoneNumberVector);
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
         
@@ -374,7 +374,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
-        cout << "Edit Age:          ";
+        cout << "Original Age:          ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].Age);
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
         
