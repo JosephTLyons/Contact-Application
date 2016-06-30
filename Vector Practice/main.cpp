@@ -21,50 +21,54 @@ struct PersonalInformation
 
 void MainMenu();
 
-void DisplayContacts(const vector<PersonalInformation> &CV);//main menu functions
+/* Main Menu Functions */
+
+void DisplayContacts(const vector<PersonalInformation> &CV);
 void AddContact(vector<PersonalInformation> &CV, const char Path[]);
-void DeleteContact(vector<PersonalInformation> &CV, const char Path[]);
 void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]);
+void DeleteContact(vector<PersonalInformation> &CV, const char Path[]);
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[]);
 
-void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut);//functions for reading/writing from keyboard/files
+/* Functions for Reading and Writing From Keyboard and Files */
+
+void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut);
 void PrintStringInStructDataVectorToScreen(const vector<char> &Vector);
 void InsertStringInStructDataVectorFromFile(vector<char> &Vector, ifstream &FileIn);
 void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector);
 
-void SortVector(vector<PersonalInformation> &CV);//sorting functions
+/* Sorting Functions */
+
+void SortVector(vector<PersonalInformation> &CV);
 bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector<char> FirstNameVect1, vector<char>
                   FirstNameVect2);
 
-void RebuildContactBook(vector<PersonalInformation> &CV, const char Path[]);//misc functions
+/* Miscellaneous Functions */
+
+void RebuildContactBook(vector<PersonalInformation> &CV, const char Path[]);
 void CreateFolderAndTextFile(char FullPath[]);
 bool EmptyFileChecker(const char Path[]);
 bool EndOfFileChecker(ifstream &FileIn);
 void ClearDataVectorsFromStructure(PersonalInformation &X);
 
-void SaveContactBook(vector<PersonalInformation> &CV, const char Path[]);//functions for saving
+/* Functions for Saving */
+
+void SaveContactBook(vector<PersonalInformation> &CV, const char Path[]);
 string Date();
 
-//fix up delete all contacts function - to many enters required near the end
+/*
+ -----------------------------BUGS AND FIXES------------------------------
 
-//double check to see if cin.ignores are needed before each menufunction call in the switch case
-//now that the cin.ignore(10...) has been implemented
+ fix up editing contacts function - how it looks when doing the editing
 
-//fix up editing contacts function - how it looks when doing the editing
-//fix need for using multiple enters at the end of the editing contacts function prior to returning back to main.
-
-//dynamic birthdays?  Enter in birthday and display current age?
-
-//fix bug where one can't hit enter on age without any numbers
-
-//how big to make array holding pathway? - any way to use vector for this field?
-
-//loop in delete contact function?
-//support to type in multiple numbers, separated by spaces, to delete a bunch at once
-
-//fix output when user selects vector element outside of vector size bounds - usually just +1 larger than last element in vector
-
-//ways to exit functions - type "Q" to leave - then if statement with "return/break"
+ how big to make array holding pathway? - any way to use vector for this field?
+ 
+ ---------------------------NEW FEATURES TO ADD---------------------------
+ 
+ dynamic birthdays?  Enter in birthday and display current age?
+ ways to exit functions - type "Q" to leave - then if statement with "return/break"
+ loop in delete contact function?
+ support to type in multiple numbers, separated by spaces, to delete a bunch at once
+*/
 
 int main()
 {
@@ -87,10 +91,10 @@ void MainMenu()
     {
         if (MainMenuCounter++ > 0)//skip this set of commands for the first time in the menu, enter every time after
         {
-            cin.ignore(10, '\n');//clear everything in buffer up until a newline
             cout << "Press enter to go back to main menu: ";
             cin.ignore();//pause the program, wait for user to press enter
-            cout << "\n";
+            
+            cout << "\n======================\n";
         }
         
         cout << "(1) Display List";
@@ -103,6 +107,7 @@ void MainMenu()
         cout << "\n\nChoice: ";
         
         cin >> Choice;
+        cin.ignore();
         
         cout << "\n";
         
@@ -116,28 +121,24 @@ void MainMenu()
                 
             case 2:
             {
-                cin.ignore();//remove newline before jumping into AddContact(), or it won't work properly
                 AddContact(ContactVector, FullPath);
                 break;
             }
                 
             case 3:
             {
-                cin.ignore();//remove newline before jumping into AddContact(), or it won't work properly
                 EditExistingContact(ContactVector, FullPath);
                 break;
             }
                 
             case 4:
             {
-                cin.ignore();//remove newline before jumping into DisplayContacts(), or it won't work properly
                 DeleteContact(ContactVector, FullPath);
                 break;
             }
                 
             case 5:
             {
-                cin.ignore();//remove newline before jumping into DisplayContacts(), or it won't work properly
                 DeleteAllContacts(ContactVector, FullPath);
                 break;
             }
@@ -175,7 +176,7 @@ void DisplayContacts(const vector<PersonalInformation> &CV)
         
         cout << "\n\n";
         
-        usleep(115000);//fine tune this maybe
+        usleep(100000);//fine tune this maybe
     }
     
     if (CV.size() == 0)
@@ -223,67 +224,8 @@ void AddContact(vector<PersonalInformation> &CV, const char Path[])
         
         cout << "\n";
     }
-}
-
-void DeleteContact(vector<PersonalInformation> &CV, const char Path[])
-{
-    int ContactNumberToDelete;
-    char ConfirmDelete;
     
-    DisplayContacts(CV);//display list again
-    
-    cout << "Type in the number of the contact you wish to delete: ";
-    cin >> ContactNumberToDelete;
-    
-    ContactNumberToDelete--;//decrement to work with vector/array notation
-    
-    if (ContactNumberToDelete < CV.size())//error will occur if tries to erase number outside of vector bound
-    {
-        cout << "\nYou are trying to delete: ";
-        
-        cout << "\n\n======================\n\n";
-        
-        cout << "First Name:   ";
-        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].FirstNameVector);
-        
-        cout << "Last Name:    ";
-        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].LastNameVector);
-        
-        cout << "Address:      ";
-        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].AddressVector);
-        
-        cout << "Phone Number: ";
-        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].PhoneNumberVector);
-        
-        cout << "Age:          ";
-        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].Age);
-        
-        cout << "\n\n======================\n\n";
-        
-        
-        cout << "\nAre you sure you want to delete ";
-        
-        for (int i = 0; CV[ContactNumberToDelete].FirstNameVector[i] != '\n'; i++)//display name of contact being deleted
-        {
-            cout << CV[ContactNumberToDelete].FirstNameVector[i];
-        }
-        
-        cout << "? Y/N: ";
-        cin >> ConfirmDelete;
-        
-        if (toupper(ConfirmDelete) == 'Y')
-            CV.erase(CV.begin() + ContactNumberToDelete);
-    }
-    
-    if (ContactNumberToDelete > CV.size())
-        cout << "\nNo contact located at this number";
-    
-    if (toupper(ConfirmDelete) == 'N' && ContactNumberToDelete > CV.size())
-        cout << "No contact deleted.";//if user chooses to not delete the contact
-    
-    cout << "\n\n";
-    
-    SaveContactBook(CV, Path);//save settings after deleting a contact
+    cin.ignore();//removes 1 newline at the end of this function - needed for main loop to work correctly
 }
 
 void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[])
@@ -395,6 +337,69 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
     
     SortVector(Vector);
     SaveContactBook(Vector, Path);
+}
+
+void DeleteContact(vector<PersonalInformation> &CV, const char Path[])
+{
+    int ContactNumberToDelete;
+    char ConfirmDelete;
+    
+    DisplayContacts(CV);//display list again
+    
+    cout << "Type in the number of the contact you wish to delete: ";
+    cin >> ContactNumberToDelete;
+    
+    if (ContactNumberToDelete <= CV.size())//error will occur if tries to erase number outside of vector bound
+    {
+        ContactNumberToDelete--;//decrement to work with vector/array notation
+        
+        cout << "\nYou are trying to delete: ";
+        
+        cout << "\n\n======================\n\n";
+        
+        cout << "First Name:   ";
+        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].FirstNameVector);
+        
+        cout << "Last Name:    ";
+        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].LastNameVector);
+        
+        cout << "Address:      ";
+        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].AddressVector);
+        
+        cout << "Phone Number: ";
+        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].PhoneNumberVector);
+        
+        cout << "Age:          ";
+        PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].Age);
+        
+        cout << "\n\n======================\n\n";
+        
+        
+        cout << "\nAre you sure you want to delete ";
+        
+        for (int i = 0; CV[ContactNumberToDelete].FirstNameVector[i] != '\n'; i++)//display name of contact being deleted
+        {
+            cout << CV[ContactNumberToDelete].FirstNameVector[i];
+        }
+        
+        cout << "? Y/N: ";
+        cin >> ConfirmDelete;
+        
+        if (toupper(ConfirmDelete) == 'Y')
+            CV.erase(CV.begin() + ContactNumberToDelete);
+    }
+    
+    else
+        cout << "\nNo contact located at this number";
+    
+    if (toupper(ConfirmDelete) == 'N' && ++ContactNumberToDelete <= CV.size())//increment Contact to work properly with size()function
+        cout << "No contact deleted.";//if user chooses to not delete the contact
+    
+    cout << "\n\n";
+    
+    SaveContactBook(CV, Path);//save settings after deleting a contact
+    
+    cin.ignore();//removes 1 newline at the end of this function - needed for main loop to work correctly
 }
 
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[])
