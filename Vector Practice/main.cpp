@@ -23,28 +23,28 @@ void MainMenu();
 
 /* Main Menu Functions */
 
-void DisplayContacts(const vector<PersonalInformation> &CV);
-void AddContact(vector<PersonalInformation> &CV, const char Path[]);
+void DisplayContacts(const vector <PersonalInformation> &CV);
+void AddContact(vector <PersonalInformation> &CV, const char Path[]);
 void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]);
-void DeleteContact(vector<PersonalInformation> &CV, const char Path[]);
+void DeleteContact(vector <PersonalInformation> &CV, const char Path[]);
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[]);
 
 /* Functions for Reading and Writing From Keyboard and Files */
 
-void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut);
-void PrintStringInStructDataVectorToScreen(const vector<char> &Vector);
-void InsertStringInStructDataVectorFromFile(vector<char> &Vector, ifstream &FileIn);
-void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector);
+void PrintStringInStructDataVectorToFile(const vector <char> &Vector, ofstream &FileOut);
+void PrintStringInStructDataVectorToScreen(const vector <char> &Vector);
+void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &FileIn);
+void InsertStringInStructDataVectorFromKeyboard(vector <char> &Vector);
 
 /* Sorting Functions */
 
-void SortVector(vector<PersonalInformation> &CV);
-bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector<char> FirstNameVect1, vector<char>
+void SortVector(vector <PersonalInformation> &CV);
+bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vector <char> FirstNameVect1, vector <char>
                   FirstNameVect2);
 
 /* Miscellaneous Functions */
 
-void RebuildContactBook(vector<PersonalInformation> &CV, const char Path[]);
+void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[]);
 void CreateFolderAndTextFile(char FullPath[]);
 bool EmptyFileChecker(const char Path[]);
 bool EndOfFileChecker(ifstream &FileIn);
@@ -52,14 +52,13 @@ void ClearDataVectorsFromStructure(PersonalInformation &X);
 
 /* Functions for Saving */
 
-void SaveContactBook(vector<PersonalInformation> &CV, const char Path[]);
+void SaveContactBook(vector <PersonalInformation> &CV, const char Path[]);
 string Date();
 
 /*
  -----------------------------BUGS AND FIXES------------------------------
 
  fix up editing contacts function - how it looks when doing the editing
-
  how big to make array holding pathway? - any way to use vector for this field?
  
  ---------------------------NEW FEATURES TO ADD---------------------------
@@ -68,6 +67,7 @@ string Date();
  ways to exit functions - type "Q" to leave - then if statement with "return/break"
  loop in delete contact function?
  support to type in multiple numbers, separated by spaces, to delete a bunch at once
+ 
 */
 
 int main()
@@ -77,7 +77,7 @@ int main()
 
 void MainMenu()
 {
-    vector<PersonalInformation> ContactVector;
+    vector <PersonalInformation> ContactVector;
     static int MainMenuCounter = 0;
     int Choice;
     char FullPath[180] = {0};
@@ -146,8 +146,6 @@ void MainMenu()
             default:
                 break;
         }
-        
-        
     }
     while (Choice != 6);
 }
@@ -176,7 +174,7 @@ void DisplayContacts(const vector<PersonalInformation> &CV)
         
         cout << "\n\n";
         
-        usleep(100000);//fine tune this maybe
+        usleep(60000);//fine tune this maybe
     }
     
     if (CV.size() == 0)
@@ -185,7 +183,7 @@ void DisplayContacts(const vector<PersonalInformation> &CV)
     cout << "======================\n\n";
 }
 
-void AddContact(vector<PersonalInformation> &CV, const char Path[])
+void AddContact(vector <PersonalInformation> &CV, const char Path[])
 {
     PersonalInformation Temporary;//temporary holding spot for input, used to store in vector
     char UserChoice;
@@ -339,7 +337,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
     SaveContactBook(Vector, Path);
 }
 
-void DeleteContact(vector<PersonalInformation> &CV, const char Path[])
+void DeleteContact(vector <PersonalInformation> &CV, const char Path[])
 {
     int ContactNumberToDelete;
     char ConfirmDelete;
@@ -434,7 +432,7 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[])
         cout << "\nContacts were not deleted.\n\n";
 }
 
-void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &FileOut)
+void PrintStringInStructDataVectorToFile(const vector <char> &Vector, ofstream &FileOut)
 {
     for (int i = 0; i < Vector.size(); i++)
     {
@@ -442,7 +440,7 @@ void PrintStringInStructDataVectorToFile(const vector<char> &Vector, ofstream &F
     }
 }
 
-void PrintStringInStructDataVectorToScreen(const vector<char> &Vector)
+void PrintStringInStructDataVectorToScreen(const vector <char> &Vector)
 {
     for (int i = 0; i < Vector.size(); i++)
     {
@@ -465,7 +463,7 @@ void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &Fil
     }
 }
 
-void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector)
+void InsertStringInStructDataVectorFromKeyboard(vector <char> &Vector)
 {
     char Insert = 0;//used for inserting characters into individual struct vectors
     //initialized at 0 to allow while loop to execute
@@ -496,7 +494,7 @@ void InsertStringInStructDataVectorFromKeyboard(vector<char> &Vector)
         (Vector[0] = toupper(Vector[0]));//if not a number, always capitalize (for first name and last names)
 }
 
-void SortVector(vector<PersonalInformation> &CV)//my modified bubble sort code I found online
+void SortVector(vector <PersonalInformation> &CV)//my modified bubble sort code I found online
 {
     bool SwapsMade = true;
     
@@ -516,7 +514,7 @@ void SortVector(vector<PersonalInformation> &CV)//my modified bubble sort code I
     }
 }
 
-bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector<char> FirstNameVect1, vector<char> FirstNameVect2)
+bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vector <char> FirstNameVect1, vector <char> FirstNameVect2)
 {
     //checks to see which last name comes first
     
@@ -544,7 +542,7 @@ bool NamesInOrder(vector<char> LastNameVect1, vector<char> LastNameVect2, vector
     //no swap will be made back in SortVector() function
 }
 
-void RebuildContactBook(vector<PersonalInformation> &CV, const char Path[])
+void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[])
 {
     PersonalInformation Temporary;
     bool EndOfFile;
@@ -651,7 +649,7 @@ void ClearDataVectorsFromStructure(PersonalInformation &X)
     X.Age.clear();
 }
 
-void SaveContactBook(vector<PersonalInformation> &CV, const char Path[])
+void SaveContactBook(vector <PersonalInformation> &CV, const char Path[])
 {
     ofstream FileOut;
     
@@ -683,7 +681,7 @@ void SaveContactBook(vector<PersonalInformation> &CV, const char Path[])
     FileOut.close();
 }
 
-string Date()//not my code here - just modified it to read easier
+string Date()//not my code here - modified it to display what I want and to read easier
 {
     char Time[50];
     
