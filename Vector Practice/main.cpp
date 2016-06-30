@@ -57,8 +57,7 @@ string Date();
 
 /*
  -----------------------------BUGS AND FIXES------------------------------
-
- fix up editing contacts function - how it looks when doing the editing
+ 
  how big to make array holding pathway? - any way to use vector for this field?
  
  ---------------------------NEW FEATURES TO ADD---------------------------
@@ -246,85 +245,95 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].FirstNameVector);
         
         cout << "\nPress enter to skip editing a field.";
-        cout << "\nPress \"E\" + enter to edit a field.";
+        cout << "\nPress \"Y\" + enter to edit a field.";
         
         cout << "\n\n======================\n\n";
         
         cout << "Original First Name:   ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].FirstNameVector);
+        
+        cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
         
-        if (toupper(FieldToEdit) == 'E')
+        if (toupper(FieldToEdit) == 'Y')
         {
             cin.ignore();//clear left over newline in input buffer
             
             Vector[ContactNumberToEdit].FirstNameVector.clear();
             
-            cout << "\nEnter new first name: ";
+            cout << "\nEnter New First Name: ";
             InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].FirstNameVector);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
-        cout << "Original Last Name:    ";
+        cout << "\nOriginal Last Name:    ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].LastNameVector);
+        
+        cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
         
-        if (toupper(FieldToEdit) == 'E')
+        if (toupper(FieldToEdit) == 'Y')
         {
             cin.ignore();//clear left over newline in input buffer
             
             Vector[ContactNumberToEdit].LastNameVector.clear();
             
-            cout << "\nEnter new last name: ";
+            cout << "\nEnter New Last Name: ";
             InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].LastNameVector);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
-        cout << "Original Address:      ";
+        cout << "\nOriginal Address:      ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].AddressVector);
+        
+        cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
         
-        if (toupper(FieldToEdit) == 'E')
+        if (toupper(FieldToEdit) == 'Y')
         {
             cin.ignore();//clear left over newline in input buffer
             
             Vector[ContactNumberToEdit].AddressVector.clear();
             
-            cout << "\nEnter new address: ";
+            cout << "\nEnter New Address: ";
             InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].AddressVector);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
-        cout << "Original Phone Number: ";
+        cout << "\nOriginal Phone Number: ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].PhoneNumberVector);
+        
+        cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
         
-        if (toupper(FieldToEdit) == 'E')
+        if (toupper(FieldToEdit) == 'Y')
         {
             cin.ignore();//clear left over newline in input buffer
             
             Vector[ContactNumberToEdit].PhoneNumberVector.clear();
             
-            cout << "\nEnter new phone number: ";
+            cout << "\nEnter New Phone Number: ";
             InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].PhoneNumberVector);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
-        cout << "Original Age:          ";
+        cout << "\nOriginal Age:          ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].Age);
+        
+        cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
         
-        if (toupper(FieldToEdit) == 'E')
+        if (toupper(FieldToEdit) == 'Y')
         {
             cin.ignore();//clear left over newline in input buffer
             
             Vector[ContactNumberToEdit].Age.clear();
             
-            cout << "\nEnter age: ";
+            cout << "\nEnter New Age: ";
             InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].Age);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
