@@ -63,9 +63,9 @@ string Date();
  ---------------------------NEW FEATURES TO ADD---------------------------
  
  dynamic birthdays?  Enter in birthday and display current age?
- ways to exit functions - type "Q" to leave - then if statement with "return/break"
+ ways to exit main menu functions - type "Q" to leave - then if statement with "return/break"
  enhance loop in delete contact function?
- support to type in multiple numbers, separated by spaces, to delete a bunch at once
+ -support to type in multiple numbers, separated by spaces, to delete a bunch at once
  
 */
 
