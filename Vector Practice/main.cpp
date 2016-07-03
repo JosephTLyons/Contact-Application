@@ -61,13 +61,14 @@ void SaveContactBook(vector <PersonalInformation> &CV, const char Path[]);
 string Date();
 
 
-void BirthdayFunction();//DELETE WHEN DONE, JUST FOR TESTING;
-int CalculateDayNumberFromMonthAndDay();
+void BirthDayInput();//DELETE WHEN DONE, JUST FOR TESTING;
+int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthDay, const int & CurrentYear);
 
 /*
  -----------------------------BUGS AND FIXES------------------------------
  
  how big to make array holding pathway? - any way to use vector for this field?
+ organize latest funtions and function prototypes into the other organized ones
  
  ---------------------------NEW FEATURES TO ADD---------------------------
  
@@ -80,7 +81,7 @@ int CalculateDayNumberFromMonthAndDay();
 
 int main()
 {
-    BirthdayFunction();//DELETE WHEN DONE, JUST FOR TESTING;
+    BirthDayInput();//DELETE WHEN DONE, JUST FOR TESTING;
     MainMenu();
 }
 
@@ -717,11 +718,14 @@ string Date()//not my code here - modified it to display what I want and to read
     return string(Time);
 }
 
-void BirthdayFunction()
+void BirthDayInput()
 {
-    int MonthUserInput;
-    int DayUserInput;
-    int YearUserInput;
+    int BirthMonth = 0;
+    int Birthday = 0;
+    int BirthYear = 0;
+    
+    int DayOfTheYearBirthdayLandsOn = 0;
+    int UsersCurrentAge = 0;
     
     char CurrentMonthOfThisYearString[3];//only 2 digits, EX 11 (November), +1 for null
     char CurrentDayOfThisYearString[4];//only 3 digits will ever be here, 365 days is 3 digits long, +1 for null
@@ -731,26 +735,22 @@ void BirthdayFunction()
     int CurrentDayOfThisYear = 0;
     int CurrentYear = 0;
     
-    int UsersCurrentMonth;
-    int UsersCurrentDay;
-    int UsersCurrentYear;
-    
-    time_t now = time(NULL);
+    time_t now = time(NULL);//Get current time/date
 
     /* USER ENTERS IN CONTACTS BIRTHDAY */
     
-    cout << "Enter Month (1-12): ";
-    cin >> MonthUserInput;
+    cout << "Enter Month (1 - 12): ";
+    cin >> BirthMonth;
     
-    cout << "Enter Day (1-28/30/31): ";
-    cin >> DayUserInput;
+    cout << "Enter Day (1 - 31):   ";
+    cin >> Birthday;
     
-    cout << "Enter Year (XXXX): ";
-    cin >> YearUserInput;
+    cout << "Enter Year (XXXX):    ";
+    cin >> BirthYear;
     
-    /* GET CURRENT MONTH AND STORE IN THE ASSOCIATED INT */
+    /* GET CURRENT MONTH, CONVERT TO NUMBER, AND STORE IN THE ASSOCIATED INT */
     
-    strftime(CurrentMonthOfThisYearString, 5, "%m", localtime(&now));
+    strftime(CurrentMonthOfThisYearString, 5, "%m", localtime(&now));//store month number in string
     
     for (int i = 0; CurrentMonthOfThisYearString[i]; i++)
     {
@@ -758,9 +758,9 @@ void BirthdayFunction()
         CurrentMonthOfThisYear += (CurrentMonthOfThisYearString[i] - 48);
     }
     
-    /* GET CURRENT DAY OF THIS YEAR AND STORE IN THE ASSOCIATED INT */
+    /* GET CURRENT DAY OF THIS YEAR, CONVERT TO NUMBER, AND STORE IN THE ASSOCIATED INT */
     
-    strftime(CurrentDayOfThisYearString, 50, "%j", localtime(&now));
+    strftime(CurrentDayOfThisYearString, 50, "%j", localtime(&now));//store day of year in string
     
     for (int i = 0; CurrentDayOfThisYearString[i]; i++)
     {
@@ -768,9 +768,9 @@ void BirthdayFunction()
         CurrentDayOfThisYear += (CurrentDayOfThisYearString[i] - 48);
     }
     
-    /* GET CURRENT YEAR AND STORE IN THE ASSOCIATED INT */
+    /* GET CURRENT YEAR, CONVERT TO NUMBER, AND STORE IN THE ASSOCIATED INT */
     
-    strftime(CurrentYearString, 5, "%Y", localtime(&now));
+    strftime(CurrentYearString, 5, "%Y", localtime(&now));//store current year in string
     
     for (int i = 0; CurrentYearString[i]; i++)
     {
@@ -778,9 +778,126 @@ void BirthdayFunction()
         CurrentYear += (CurrentYearString[i] - 48);
     }
     
-    UsersCurrentDay = CurrentDayOfThisYear - UsersCurrentDay;
-    UsersCurrentYear = CurrentYear - YearUserInput;
+    /* CALCULATE WHAT DAY OF THE YEAR THE USERS BIRTHDAY LANDS ON */
     
-    //convert day and month into day/year number and subtract from current day/year number
-    //if negative number, decrement age, nothing else if positive - dont increment
+    DayOfTheYearBirthdayLandsOn = CalculateDayNumberFromMonthAndDay(BirthMonth, Birthday, CurrentYear);
+    
+    UsersCurrentAge = CurrentYear - BirthYear;//Obtain age
+    
+    /* IF USERS BIRTHDAY HASN'T OCCURED THIS YEAR, THEN DECREMENT THEIR AGE BY 1 */
+    
+    if (CurrentDayOfThisYear < DayOfTheYearBirthdayLandsOn)
+        --UsersCurrentAge;
+}
+
+int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthDay, const int & CurrentYear)
+{
+    int DayOfYearThatBirthdayIsOn = 0;
+    int DayHolder = 0;
+    
+    // FUNCTION DOESN'T ACCOUNT FOR LEAP YEARS CURRENTLY - IMPLEMENT LATER
+    
+    if (BirthMonth >= 1)//January - 31
+    {
+        DayOfYearThatBirthdayIsOn += DayHolder;
+        DayHolder = 31;
+    }
+    
+    if (BirthMonth >= 2)//February - 28/29
+    {
+        DayOfYearThatBirthdayIsOn += DayHolder;
+        DayHolder = 28;
+        
+        /* CHECK TO SEE IF LEAP YEAR OR NOT */
+        
+        if (CurrentYear % 4 == 0)
+        {
+            if (CurrentYear % 100 == 0)
+            {
+                if (CurrentYear % 400 == 0)
+                    DayHolder = 29;
+            }
+            
+            else
+                DayHolder = 29;
+            
+        }
+                    
+        /* - ALGORITH AB0VE DERIVED FROM
+         
+         https://support.microsoft.com/en-us/kb/214019
+         
+         1. If the year is evenly divisible by 4, go to step 2. Otherwise, go to step 5.
+         2. If the year is evenly divisible by 100, go to step 3. Otherwise, go to step 4.
+         3. If the year is evenly divisible by 400, go to step 4. Otherwise, go to step 5.
+         4. The year is a leap year (it has 366 days).
+         5. The year is not a leap year (it has 365 days).
+         
+         */
+            
+    }
+    
+    if (BirthMonth >= 3)//March - 31
+    {
+        DayOfYearThatBirthdayIsOn += DayHolder;
+        DayHolder = 31;
+    }
+    
+    if (BirthMonth >= 4)//April - 30
+    {
+        DayOfYearThatBirthdayIsOn += DayHolder;
+        DayHolder = 30;
+    }
+    
+    if (BirthMonth >= 5)//May - 31
+    {
+        DayOfYearThatBirthdayIsOn += DayHolder;
+        DayHolder = 31;
+    }
+    
+    if (BirthMonth >= 6)//June - 30
+    {
+        DayOfYearThatBirthdayIsOn += DayHolder;
+        DayHolder = 30;
+    }
+    
+    if (BirthMonth >= 7)//July - 31
+    {
+        DayOfYearThatBirthdayIsOn += DayHolder;
+        DayHolder = 31;
+    }
+    
+    if (BirthMonth >= 8)//August - 31
+    {
+        DayOfYearThatBirthdayIsOn += DayHolder;
+        DayHolder = 31;
+    }
+    
+    if (BirthMonth >= 9)//September - 30
+    {
+        DayOfYearThatBirthdayIsOn += DayHolder;
+        DayHolder = 30;
+    }
+    
+    if (BirthMonth >= 10)//October - 31
+    {
+        DayOfYearThatBirthdayIsOn += DayHolder;
+        DayHolder = 31;
+    }
+    
+    if (BirthMonth >= 11)//November - 30
+    {
+        DayOfYearThatBirthdayIsOn += DayHolder;
+        DayHolder = 30;
+    }
+    
+    if (BirthMonth >= 12)//December - 31
+    {
+        DayOfYearThatBirthdayIsOn += DayHolder;
+        DayHolder = 31;
+    }
+    
+    DayOfYearThatBirthdayIsOn += BirthDay;
+    
+    return DayOfYearThatBirthdayIsOn;
 }
