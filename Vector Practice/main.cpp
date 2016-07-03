@@ -17,6 +17,11 @@ struct PersonalInformation
     vector <char> AddressVector;
     vector <char> PhoneNumberVector;
     vector <char> Age;
+    
+    /* NEW DATA MEMBERS FOR THIS BRANCH */
+    
+    vector <char> DateOfBirth;
+    vector <char> CurrentAge;
 };
 
 void MainMenu();
@@ -55,6 +60,10 @@ void ClearDataVectorsFromStructure(PersonalInformation &X);
 void SaveContactBook(vector <PersonalInformation> &CV, const char Path[]);
 string Date();
 
+
+void BirthdayFunction();//DELETE WHEN DONE, JUST FOR TESTING;
+int CalculateDayNumberFromMonthAndDay();
+
 /*
  -----------------------------BUGS AND FIXES------------------------------
  
@@ -71,6 +80,7 @@ string Date();
 
 int main()
 {
+    BirthdayFunction();//DELETE WHEN DONE, JUST FOR TESTING;
     MainMenu();
 }
 
@@ -705,4 +715,72 @@ string Date()//not my code here - modified it to display what I want and to read
     strftime(Time, 50, "%D, %I:%M %p", localtime(&now));
     
     return string(Time);
+}
+
+void BirthdayFunction()
+{
+    int MonthUserInput;
+    int DayUserInput;
+    int YearUserInput;
+    
+    char CurrentMonthOfThisYearString[3];//only 2 digits, EX 11 (November), +1 for null
+    char CurrentDayOfThisYearString[4];//only 3 digits will ever be here, 365 days is 3 digits long, +1 for null
+    char CurrentYearString[5];//only 4 digits will ever be here, EX. 2016 is 4 digits long, +1 for null
+    
+    int CurrentMonthOfThisYear = 0;
+    int CurrentDayOfThisYear = 0;
+    int CurrentYear = 0;
+    
+    int UsersCurrentMonth;
+    int UsersCurrentDay;
+    int UsersCurrentYear;
+    
+    time_t now = time(NULL);
+
+    /* USER ENTERS IN CONTACTS BIRTHDAY */
+    
+    cout << "Enter Month (1-12): ";
+    cin >> MonthUserInput;
+    
+    cout << "Enter Day (1-28/30/31): ";
+    cin >> DayUserInput;
+    
+    cout << "Enter Year (XXXX): ";
+    cin >> YearUserInput;
+    
+    /* GET CURRENT MONTH AND STORE IN THE ASSOCIATED INT */
+    
+    strftime(CurrentMonthOfThisYearString, 5, "%m", localtime(&now));
+    
+    for (int i = 0; CurrentMonthOfThisYearString[i]; i++)
+    {
+        CurrentMonthOfThisYear *= 10;
+        CurrentMonthOfThisYear += (CurrentMonthOfThisYearString[i] - 48);
+    }
+    
+    /* GET CURRENT DAY OF THIS YEAR AND STORE IN THE ASSOCIATED INT */
+    
+    strftime(CurrentDayOfThisYearString, 50, "%j", localtime(&now));
+    
+    for (int i = 0; CurrentDayOfThisYearString[i]; i++)
+    {
+        CurrentDayOfThisYear *= 10;
+        CurrentDayOfThisYear += (CurrentDayOfThisYearString[i] - 48);
+    }
+    
+    /* GET CURRENT YEAR AND STORE IN THE ASSOCIATED INT */
+    
+    strftime(CurrentYearString, 5, "%Y", localtime(&now));
+    
+    for (int i = 0; CurrentYearString[i]; i++)
+    {
+        CurrentYear *= 10;
+        CurrentYear += (CurrentYearString[i] - 48);
+    }
+    
+    UsersCurrentDay = CurrentDayOfThisYear - UsersCurrentDay;
+    UsersCurrentYear = CurrentYear - YearUserInput;
+    
+    //convert day and month into day/year number and subtract from current day/year number
+    //if negative number, decrement age, nothing else if positive - dont increment
 }
