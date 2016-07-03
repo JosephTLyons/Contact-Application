@@ -16,9 +16,6 @@ struct PersonalInformation
     vector <char> LastNameVector;
     vector <char> AddressVector;
     vector <char> PhoneNumberVector;
-    
-    /* NEW DATA MEMBERS FOR THIS BRANCH */
-    
     vector <char> DateOfBirth;
 
     int MonthBorn;
@@ -26,8 +23,6 @@ struct PersonalInformation
     int YearBorn;
     
     int CurrentAge;
-    
-    //vector <char> Age;//delete later on - and in clear
 };
 
 void MainMenu();
@@ -96,7 +91,6 @@ void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
 
 int main()
 {
-    //BirthDayInput();//DELETE WHEN DONE, JUST FOR TESTING;
     MainMenu();
 }
 
@@ -635,7 +629,7 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[])
         
         /* AUTOMATICALLY RECALCULATE CURRENT YEAR EVERY TIME LIST IS REBUILT */
         
-        CalculateCurrentAge(Temporary, Temporary.MonthBorn, Temporary.DayBorn, Temporary.YearBorn);
+        Temporary.CurrentAge = CalculateCurrentAge(Temporary, Temporary.MonthBorn, Temporary.DayBorn, Temporary.YearBorn);
     
         CV.push_back(Temporary);
         
@@ -643,6 +637,10 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[])
         
         EndOfFile = EndOfFileChecker(FileIn);
     }
+    
+    /* SAVED CONTACTS AFTER READING IN CASE AGES WERE UPDATED AFTER RE-CALCULATING CURRENT AGE */
+    
+    SaveContactBook(CV, Path);
     
     FileIn.close();
 }
