@@ -27,7 +27,7 @@ struct PersonalInformation
 
 void MainMenu();
 
-/* Main Menu Functions */
+/* MAIN MENU FUNCTIONS */
 
 void DisplayContacts(const vector <PersonalInformation> &CV);
 void AddContact(vector <PersonalInformation> &CV, const char Path[]);
@@ -35,20 +35,20 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
 void DeleteContact(vector <PersonalInformation> &CV, const char Path[]);
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[]);
 
-/* Functions for Reading and Writing From Keyboard and Files */
+/* FUNCTIONS FROM READING AND WRITING FROM FILES AND FROM KEYBOARD */
 
 void PrintStringInStructDataVectorToFile(const vector <char> &Vector, ofstream &FileOut);
 void PrintStringInStructDataVectorToScreen(const vector <char> &Vector);
 void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &FileIn);
 void InsertStringInStructDataVectorFromKeyboard(vector <char> &Vector);
 
-/* Sorting Functions */
+/* SORTING FUNCTIONS */
 
 void SortVector(vector <PersonalInformation> &CV);
 bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vector <char> FirstNameVect1, vector <char>
                   FirstNameVect2);
 
-/* Miscellaneous Functions */
+/* MISCELLANEOUS FUNCTIONS */
 
 void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[]);
 void CreateFolderAndTextFile(char FullPath[]);
@@ -56,12 +56,13 @@ bool EmptyFileChecker(const char Path[]);
 bool EndOfFileChecker(ifstream &FileIn);
 void ClearDataVectorsFromStructure(PersonalInformation &X);
 
-/* Functions for Saving */
+/* FUNCTIONS FOR SAVING */
 
 void SaveContactBook(vector <PersonalInformation> &CV, const char Path[]);
 string Date();
 
-
+/* FUNCTIONS FOR DYNAMIC AGE/BIRTHDAY */
+ 
 int BirthDayInput(PersonalInformation & TempPersonalInfoHolder);
 int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & MonthBorn, int & DayBorn, int & YearBorn);//DELETE WHEN DONE, JUST FOR TESTING;
 int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthDay, const int & CurrentYear);
@@ -71,14 +72,13 @@ void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
  -----------------------------BUGS AND FIXES------------------------------
  
  how big to make array holding pathway? - any way to use vector for this field?
- 
- organize latest funtions and function prototypes into the other organized ones
- delete un-needed struct data members when done - Current Age being used
- 
- support to just type in newlines to skip birthday, instead of using 0
- 
- calculate current age each time contacts are displayed
  fix all other functions like editing etc
+ organize latest funtions and function prototypes into the other organized ones
+ support to just type in newlines to skip birthday, instead of using 0
+ fix newline issue where newline is entered after saving but not when inputting - on current age
+ 
+ √calculate current age each time contacts are displayed
+ √delete un-needed struct data members when done - Current Age being used
  
  ---------------------------NEW FEATURES TO ADD---------------------------
  
@@ -199,7 +199,7 @@ void DisplayContacts(const vector<PersonalInformation> &CV)
             {
                 if (CV[i].DateOfBirth[2] != 'A')
                 {
-                    cout << "Current Age:    ";
+                    cout << "\nCurrent Age:    ";
                     cout << CV[i].CurrentAge;
                 }
             }
@@ -446,7 +446,7 @@ void DeleteContact(vector <PersonalInformation> &CV, const char Path[])
         cin >> DeleteAnotherContactChoice;
         cin.ignore();//removes 1 newline at the end of this function - needed for main loop to work correctly
     }
-    while (toupper(DeleteAnotherContactChoice) == 'Y');
+    while (toupper(DeleteAnotherContactChoice) == 'Y' && CV.size() > 0);//don't try to delete when nothing is left in vector
     
     cout << "\n\n";
 }
