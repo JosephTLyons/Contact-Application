@@ -16,16 +16,18 @@ struct PersonalInformation
     vector <char> LastNameVector;
     vector <char> AddressVector;
     vector <char> PhoneNumberVector;
-    vector <char> Age;//delete later on
     
     /* NEW DATA MEMBERS FOR THIS BRANCH */
     
     vector <char> DateOfBirth;
-    vector <char> CurrentAge;
-    
-    int YearBorn;
+
     int MonthBorn;
     int DayBorn;
+    int YearBorn;
+    
+    int CurrentAge;
+    
+    vector <char> Age;//delete later on - and in clear
 };
 
 void MainMenu();
@@ -65,7 +67,8 @@ void SaveContactBook(vector <PersonalInformation> &CV, const char Path[]);
 string Date();
 
 
-int BirthDayInput(PersonalInformation & PersonalInformationVector);//DELETE WHEN DONE, JUST FOR TESTING;
+int BirthDayInput(PersonalInformation & TempPersonalInfoHolder);
+int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & MonthBorn, int & DayBorn, int & YearBorn);//DELETE WHEN DONE, JUST FOR TESTING;
 int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthDay, const int & CurrentYear);
 void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
 
@@ -76,6 +79,9 @@ void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
  organize latest funtions and function prototypes into the other organized ones
  delete un-needed stuct data members when done - Current Age being used
  insert N/A in birthday and current age if no birthday is entered (newlines are entered), using cin.get
+ if N/A is in birthday field, don't display current age
+ calculate current age each time contacts are displayed
+ fix all other functions like editing etc
  
  ---------------------------NEW FEATURES TO ADD---------------------------
  
@@ -186,8 +192,22 @@ void DisplayContacts(const vector<PersonalInformation> &CV)
         cout << "Phone Number:   ";
         PrintStringInStructDataVectorToScreen(CV[i].PhoneNumberVector);
         
-        cout << "Age:            ";
-        PrintStringInStructDataVectorToScreen(CV[i].Age);
+        cout << "Birthday:       ";
+        PrintStringInStructDataVectorToScreen(CV[i].DateOfBirth);
+        
+        /* ONLY DISPLAY CURRENT AGE IF N/A ISN'T IN DATEOFBIRTH FIELD */
+        
+        if (CV[i].DateOfBirth[0] != 'N')
+        {
+            if (CV[i].DateOfBirth[1] != '/')
+            {
+                if (CV[i].DateOfBirth[2] != 'A')
+                {
+                    cout << "\nCurrent Age:    ";
+                    cout << CV[i].CurrentAge;
+                }
+            }
+        }
         
         cout << "\n\n";
         
@@ -204,7 +224,6 @@ void AddContact(vector <PersonalInformation> &CV, const char Path[])
 {
     PersonalInformation Temporary;//temporary holding spot for input, used to store in vector
     char UserChoice;
-    int TemporaryAge;
     
     while (toupper(UserChoice) != 'N' && toupper(UserChoice) != 'Q')
     {
@@ -222,13 +241,8 @@ void AddContact(vector <PersonalInformation> &CV, const char Path[])
         
         cout << "Enter Birthday:";
         
-        TemporaryAge = BirthDayInput(Temporary);
+        Temporary.CurrentAge = BirthDayInput(Temporary);
     
-        
-        
-        
-        
-        
         CV.push_back(Temporary);//store Temp in ContactVector Vector
         
         ClearDataVectorsFromStructure(Temporary);
@@ -605,9 +619,20 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[])
         
         InsertStringInStructDataVectorFromFile(Temporary.PhoneNumberVector, FileIn);
         
-        InsertStringInStructDataVectorFromFile(Temporary.Age, FileIn);
-    
+        InsertStringInStructDataVectorFromFile(Temporary.DateOfBirth, FileIn);
         
+        FileIn >> Temporary.CurrentAge;
+        
+        FileIn >> Temporary.MonthBorn;
+        
+        FileIn >> Temporary.DayBorn;
+        
+        FileIn >> Temporary.YearBorn;
+        
+        /* AUTOMATICALLY RECALCULATE CURRENT YEAR EVERY TIME LIST IS REBUILT */
+        
+        CalculateCurrentAge(Temporary, Temporary.MonthBorn, Temporary.DayBorn, Temporary.YearBorn);
+    
         CV.push_back(Temporary);
         
         ClearDataVectorsFromStructure(Temporary);
@@ -688,6 +713,7 @@ void ClearDataVectorsFromStructure(PersonalInformation &X)
     X.AddressVector.clear();
     X.PhoneNumberVector.clear();
     X.Age.clear();
+    X.DateOfBirth.clear();
 }
 
 void SaveContactBook(vector <PersonalInformation> &CV, const char Path[])
@@ -708,9 +734,18 @@ void SaveContactBook(vector <PersonalInformation> &CV, const char Path[])
         PrintStringInStructDataVectorToFile(CV[i].AddressVector, FileOut);
         
         PrintStringInStructDataVectorToFile(CV[i].PhoneNumberVector, FileOut);
-
-        PrintStringInStructDataVectorToFile(CV[i].Age, FileOut);
         
+        PrintStringInStructDataVectorToFile(CV[i].DateOfBirth, FileOut);
+        
+        FileOut << endl;
+        
+        FileOut << CV[i].CurrentAge << endl;
+        
+        FileOut << CV[i].MonthBorn << endl;
+        
+        FileOut << CV[i].DayBorn<< endl;
+        
+        FileOut << CV[i].YearBorn;
         
         FileOut << "\n\n";
     }
@@ -734,6 +769,26 @@ string Date()//not my code here - modified it to display what I want and to read
 
 int BirthDayInput(PersonalInformation & TempPersonalInfoHolder)
 {
+    /* USER ENTERS IN CONTACTS BIRTHDAY */
+    
+    cout << "\n  Enter Month (1 - 12): ";
+    cin >> TempPersonalInfoHolder.MonthBorn;
+    
+    cout << "  Enter Day (1 - 31):   ";
+    cin >> TempPersonalInfoHolder.DayBorn;
+    
+    cout << "  Enter Year (XXXX):    ";
+    cin >> TempPersonalInfoHolder.YearBorn;
+    
+    /* STORE DATE OF BIRTH IN DATEOFBIRTH VECTOR */
+    
+    StoreDateOfBirthInVector(TempPersonalInfoHolder);
+    
+    return CalculateCurrentAge(TempPersonalInfoHolder, TempPersonalInfoHolder.MonthBorn, TempPersonalInfoHolder.DayBorn, TempPersonalInfoHolder.YearBorn);
+}
+
+int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & MonthBorn, int & DayBorn, int & YearBorn)
+{
     int DayOfTheYearBirthdayLandsOn = 0;
     int UsersCurrentAge = 0;
     
@@ -746,17 +801,6 @@ int BirthDayInput(PersonalInformation & TempPersonalInfoHolder)
     int CurrentYear = 0;
     
     time_t now = time(NULL);//Get current time/date
-
-    /* USER ENTERS IN CONTACTS BIRTHDAY */
-    
-    cout << "\n  Enter Month (1 - 12): ";
-    cin >> TempPersonalInfoHolder.MonthBorn;
-    
-    cout << "  Enter Day (1 - 31):   ";
-    cin >> TempPersonalInfoHolder.DayBorn;
-    
-    cout << "  Enter Year (XXXX):    ";
-    cin >> TempPersonalInfoHolder.YearBorn;
     
     /* GET CURRENT MONTH, CONVERT TO NUMBER, AND STORE IN THE ASSOCIATED INT */
     
@@ -790,18 +834,14 @@ int BirthDayInput(PersonalInformation & TempPersonalInfoHolder)
     
     /* CALCULATE WHAT DAY OF THE YEAR THE USERS BIRTHDAY LANDS ON */
     
-    DayOfTheYearBirthdayLandsOn = CalculateDayNumberFromMonthAndDay(TempPersonalInfoHolder.MonthBorn, TempPersonalInfoHolder.DayBorn, TempPersonalInfoHolder.YearBorn);
+    DayOfTheYearBirthdayLandsOn = CalculateDayNumberFromMonthAndDay(MonthBorn, DayBorn, YearBorn);
     
-    UsersCurrentAge = CurrentYear - TempPersonalInfoHolder.YearBorn;//Obtain age
+    UsersCurrentAge = CurrentYear - YearBorn;//Obtain age
     
     /* IF USERS BIRTHDAY HASN'T OCCURED THIS YEAR, THEN DECREMENT THEIR AGE BY 1 */
     
     if (CurrentDayOfThisYear < DayOfTheYearBirthdayLandsOn)
         --UsersCurrentAge;
-    
-    /* STORE DATE OF BIRTH IN DATEOFBIRTH VECTOR */
-    
-    StoreDateOfBirthInVector(TempPersonalInfoHolder);
     
     return UsersCurrentAge;
 }
@@ -918,61 +958,79 @@ int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthD
     return DayOfYearThatBirthdayIsOn;
 }
 
-void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)// STILL NEED TO GET YEAR INSERTION IN VECTOR WORKING PROPERLY HERE
+void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)// STILL NEED TO GET DAY AND YEAR INSERTION IN VECTOR WORKING PROPERLY HERE
 {
     const char *MonthNames[12] = {"January",   "February", "March",    "April",
                                   "May",       "June",     "July",     "August"
                                   "September", "October",  "November", "December"};
     
-    char Temp = 0;
+    int TempMonth = TempPersonalInfoHolder.MonthBorn;
+    int TempDay   = TempPersonalInfoHolder.DayBorn;
+    int TempYear  = TempPersonalInfoHolder.YearBorn;
     
-    /* INSERT MONTH NAME INTO DATEOFBIRTH VECTOR */
+    char TempHolder;
     
-    for (int i = 0; MonthNames[TempPersonalInfoHolder.MonthBorn-1][i]; i++)
+    /* FIRST CHECK TO SEE IF BIRTHDAY WAS ENTERED - LATER CHANGE THIS TO JUST HITTING ENTER */
+    
+    if (TempPersonalInfoHolder.MonthBorn == 0)
     {
-        TempPersonalInfoHolder.DateOfBirth.push_back(MonthNames[TempPersonalInfoHolder.MonthBorn-1][i]);
+        if (TempPersonalInfoHolder.DayBorn == 0)
+        {
+            if (TempPersonalInfoHolder.YearBorn == 0)
+            {
+                TempPersonalInfoHolder.DateOfBirth.push_back('N');
+                TempPersonalInfoHolder.DateOfBirth.push_back('/');
+                TempPersonalInfoHolder.DateOfBirth.push_back('A');
+                return;
+            }
+        }
+    }
+    
+    /* INSERT MONTH NAME INTO MONTHBORN VECTOR */
+    
+    for (int i = 0; MonthNames[TempMonth-1][i]; i++)
+    {
+        TempPersonalInfoHolder.DateOfBirth.push_back(MonthNames[TempMonth-1][i]);
     }
     
     TempPersonalInfoHolder.DateOfBirth.push_back(' ');
     
-    /* INSERT DAY INTO DATEOFBIRTH VECTOR */
+    /* INSERT DAY INTO DAYBORN VECTOR */
 
-    for (int i = 0; TempPersonalInfoHolder.DayBorn >= 0 && i <= 1; i++)//i <= 1 means the loop will only execute twice (largest date (31) is 2 numbers big)
+    for (int i = 0; TempDay >= 0 && i <= 1; i++)//i <= 1 means the loop will only execute twice (largest date (31) is 2 numbers big)
     {
-        Temp = TempPersonalInfoHolder.DayBorn / 10;
+        TempHolder = TempDay / 10;
         
-        if (Temp == 0)//once you get to ones place, insert the one digit and break the loop
+        if (TempHolder == 0)//once you get to ones place, insert the one digit and break the loop
         {
-            Temp = TempPersonalInfoHolder.DayBorn % 10;
-            TempPersonalInfoHolder.DateOfBirth.push_back(Temp + 48);//convert to proper ASCII value, then insert in vector
+            TempHolder = TempDay % 10;
+            TempPersonalInfoHolder.DateOfBirth.push_back(TempDay + 48);//convert to proper ASCII value, then insert in vector
             break;
         }
         
-        TempPersonalInfoHolder.DateOfBirth.push_back(Temp + 48);//convert to proper ASCII value, then insert in vector
+        TempPersonalInfoHolder.DateOfBirth.push_back(TempDay + 48);//convert to proper ASCII value, then insert in vector
         
-        TempPersonalInfoHolder.DayBorn %= 10;
+        TempDay %= 10;
     }
     
     TempPersonalInfoHolder.DateOfBirth.push_back(',');
     TempPersonalInfoHolder.DateOfBirth.push_back(' ');
     
-    /* INSERT YEAR INTO DATEOFBIRTH VECTOR */
+    /* INSERT YEAR INTO YEARBORN VECTOR */
     
-    for (int i = 0; TempPersonalInfoHolder.YearBorn >= 0 && i <= 3; i++)//i <= 1 means the loop will only execute four times (largest year is 4 digits big (XXXX)
+    for (int i = 0; TempYear >= 0 && i <= 3; i++)//i <= 1 means the loop will only execute four times (largest year is 4 digits big (XXXX)
     {
-        Temp = TempPersonalInfoHolder.YearBorn / 1000;
+        TempHolder = TempYear / 1000;
         
-        if (Temp == 0)//once you get to ones place, insert the one digit and break the loop
+        if (TempHolder == 0)//once you get to ones place, insert the one digit and break the loop
         {
-            Temp = TempPersonalInfoHolder.YearBorn % 1000;
-            TempPersonalInfoHolder.DateOfBirth.push_back(Temp + 48);//convert to proper ASCII value, then insert in vector
+            TempHolder = TempYear % 1000;
+            TempPersonalInfoHolder.DateOfBirth.push_back(TempDay + 48);//convert to proper ASCII value, then insert in vector
             break;
         }
         
-        TempPersonalInfoHolder.DateOfBirth.push_back(Temp + 48);//convert to proper ASCII value, then insert in vector
+        TempPersonalInfoHolder.DateOfBirth.push_back(TempDay + 48);//convert to proper ASCII value, then insert in vector
         
-        TempPersonalInfoHolder.YearBorn %= 1000;
+        TempYear %= 1000;
     }
-
-    
 }
