@@ -27,7 +27,7 @@ struct PersonalInformation
     
     int CurrentAge;
     
-    vector <char> Age;//delete later on - and in clear
+    //vector <char> Age;//delete later on - and in clear
 };
 
 void MainMenu();
@@ -362,8 +362,8 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
-        cout << "\nOriginal Age:          ";
-        PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].Age);
+        cout << "\nCurrent Birthday:      ";
+        PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].DateOfBirth);
         
         cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
@@ -372,10 +372,10 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
         {
             cin.ignore();//clear left over newline in input buffer
             
-            Vector[ContactNumberToEdit].Age.clear();
+            Vector[ContactNumberToEdit].DateOfBirth.clear();
             
-            cout << "\nEnter New Age: ";
-            InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].Age);
+            cout << "\nEnter New Birthday: ";
+            Vector[ContactNumberToEdit].CurrentAge = BirthDayInput(Vector[ContactNumberToEdit]);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
@@ -420,8 +420,8 @@ void DeleteContact(vector <PersonalInformation> &CV, const char Path[])
             cout << "Phone Number: ";
             PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].PhoneNumberVector);
             
-            cout << "Age:          ";
-            PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].Age);
+            cout << "Current Age:  ";
+            cout << CV[ContactNumberToDelete].CurrentAge;
             
             cout << "\n======================\n\n";
             
@@ -460,6 +460,7 @@ void DeleteContact(vector <PersonalInformation> &CV, const char Path[])
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[])
 {
     vector <char> UserChoice;
+    bool ContactsNotDeletedFlag = true;
     char Insert;
     
     cout << "Are you sure you'd like to delete all contacts? Type \"YES\" to confirm (Must be a capital YES): ";
@@ -477,6 +478,7 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[])
         {
             if (UserChoice[2] == 'S')
             {
+                ContactsNotDeletedFlag = false;
                 Vector.clear();
                 SaveContactBook(Vector, Path);
                 
@@ -485,7 +487,7 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[])
         }
     }
     
-    else
+    if (ContactsNotDeletedFlag == true)
         cout << "\nContacts were not deleted.\n\n";
 }
 
@@ -714,7 +716,6 @@ void ClearDataVectorsFromStructure(PersonalInformation &X)
     X.LastNameVector.clear();
     X.AddressVector.clear();
     X.PhoneNumberVector.clear();
-    X.Age.clear();
     X.DateOfBirth.clear();
 }
 
