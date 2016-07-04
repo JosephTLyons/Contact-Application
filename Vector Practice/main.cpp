@@ -71,6 +71,8 @@ string Date();
 /*
  -----------------------------BUGS AND FIXES------------------------------
  
+ merged DynamicBirthdays branch into master
+ 
  how big to make array holding pathway? - any way to use vector for this field?
 
  support to just type in newlines to skip birthday, instead of using 0 - use of cin.get() and chars, not int
