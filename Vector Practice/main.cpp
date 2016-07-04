@@ -952,6 +952,7 @@ void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)
                 TempPersonalInfoHolder.DateOfBirth.push_back('N');
                 TempPersonalInfoHolder.DateOfBirth.push_back('/');
                 TempPersonalInfoHolder.DateOfBirth.push_back('A');
+                TempPersonalInfoHolder.DateOfBirth.push_back('\n');
                 return;
             }
         }
