@@ -91,7 +91,7 @@ string Date();
 
 int main()
 {
-    MainMenu();
+    MainMenu();//consider removing this function entirely and just placing all inside main()
 }
 
 void MainMenu()
