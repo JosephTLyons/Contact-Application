@@ -79,6 +79,10 @@ string Date();
  --use temp char variables in birthday input, then convert them to numbers, so I dont have to change the data
  --members from int to char, which would be a lot of extra work
  
+ bound checking on birthday entry
+ -no months greater than 12
+ -no days greater than 31
+ 
  ---------------------------NEW FEATURES TO ADD---------------------------
  
  ways to exit main menu functions - type "Q" to leave - then if statement with "return/break"
@@ -190,7 +194,7 @@ void DisplayContacts(const vector<PersonalInformation> &CV)
         cout << "Phone Number:   ";
         PrintStringInStructDataVectorToScreen(CV[i].PhoneNumberVector);
         
-        cout << "Birthday:       ";
+        cout << "Date Of Birth:  ";
         PrintStringInStructDataVectorToScreen(CV[i].DateOfBirth);
         
         /* ONLY DISPLAY CURRENT AGE IF N/A ISN'T IN DATEOFBIRTH FIELD */
@@ -286,7 +290,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
         
         cout << "\n\n======================\n\n";
         
-        cout << "Original First Name:   ";
+        cout << "Original First Name:    ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].FirstNameVector);
         
         cout << "Edit Field?: ";
@@ -298,13 +302,13 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             
             Vector[ContactNumberToEdit].FirstNameVector.clear();
             
-            cout << "\nEnter New First Name: ";
+            cout << "\nEnter New First Name:   ";
             InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].FirstNameVector);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
-        cout << "\nOriginal Last Name:    ";
+        cout << "\nOriginal Last Name:     ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].LastNameVector);
         
         cout << "Edit Field?: ";
@@ -316,13 +320,13 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             
             Vector[ContactNumberToEdit].LastNameVector.clear();
             
-            cout << "\nEnter New Last Name: ";
+            cout << "\nEnter New Last Name:    ";
             InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].LastNameVector);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
-        cout << "\nOriginal Address:      ";
+        cout << "\nOriginal Address:       ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].AddressVector);
         
         cout << "Edit Field?: ";
@@ -334,13 +338,13 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             
             Vector[ContactNumberToEdit].AddressVector.clear();
             
-            cout << "\nEnter New Address: ";
+            cout << "\nEnter New Address:      ";
             InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].AddressVector);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
-        cout << "\nOriginal Phone Number: ";
+        cout << "\nOriginal Phone Number:  ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].PhoneNumberVector);
         
         cout << "Edit Field?: ";
@@ -358,7 +362,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
-        cout << "\nOriginal Birthday:     ";
+        cout << "\nOriginal Date of Birth: ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].DateOfBirth);
         
         cout << "Edit Field?: ";
@@ -370,7 +374,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             
             Vector[ContactNumberToEdit].DateOfBirth.clear();
             
-            cout << "\nEnter New Birthday: ";
+            cout << "\nEnter New Date of Birth:";
             Vector[ContactNumberToEdit].CurrentAge = BirthDayInput(Vector[ContactNumberToEdit]);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
@@ -404,19 +408,22 @@ void DeleteContact(vector <PersonalInformation> &CV, const char Path[])
             
             cout << "\n\n======================\n\n";
             
-            cout << "First Name:   ";
+            cout << "First Name:    ";
             PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].FirstNameVector);
             
-            cout << "Last Name:    ";
+            cout << "Last Name:     ";
             PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].LastNameVector);
             
-            cout << "Address:      ";
+            cout << "Address:       ";
             PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].AddressVector);
             
-            cout << "Phone Number: ";
+            cout << "Phone Number:  ";
             PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].PhoneNumberVector);
             
-            cout << "Current Age:  ";
+            cout << "Date of Birth: ";
+            PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].DateOfBirth);
+            
+            cout << "Current Age:   ";
             cout << CV[ContactNumberToDelete].CurrentAge;
             
             cout << "\n======================\n\n";
@@ -1013,8 +1020,6 @@ void SaveContactBook(vector <PersonalInformation> &CV, const char Path[])
         PrintStringInStructDataVectorToFile(CV[i].PhoneNumberVector, FileOut);
         
         PrintStringInStructDataVectorToFile(CV[i].DateOfBirth, FileOut);
-        
-        FileOut << endl;
         
         FileOut << CV[i].CurrentAge << endl;
         
