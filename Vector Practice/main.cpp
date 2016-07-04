@@ -56,36 +56,36 @@ bool EmptyFileChecker(const char Path[]);
 bool EndOfFileChecker(ifstream &FileIn);
 void ClearDataVectorsFromStructure(PersonalInformation &X);
 
+/* FUNCTIONS FOR DYNAMIC AGE/BIRTHDAY */
+ 
+int BirthDayInput(PersonalInformation & TempPersonalInfoHolder);
+int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & MonthBorn, int & DayBorn, int & YearBorn);
+int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthDay, const int & CurrentYear);
+void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
+
 /* FUNCTIONS FOR SAVING */
 
 void SaveContactBook(vector <PersonalInformation> &CV, const char Path[]);
 string Date();
 
-/* FUNCTIONS FOR DYNAMIC AGE/BIRTHDAY */
- 
-int BirthDayInput(PersonalInformation & TempPersonalInfoHolder);
-int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & MonthBorn, int & DayBorn, int & YearBorn);//DELETE WHEN DONE, JUST FOR TESTING;
-int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthDay, const int & CurrentYear);
-void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
-
 /*
  -----------------------------BUGS AND FIXES------------------------------
  
  how big to make array holding pathway? - any way to use vector for this field?
- fix all other functions like editing etc
- organize latest funtions and function prototypes into the other organized ones
- support to just type in newlines to skip birthday, instead of using 0
- fix newline issue where newline is entered after saving but not when inputting - on current age
- 
- √calculate current age each time contacts are displayed
- √delete un-needed struct data members when done - Current Age being used
+
+ support to just type in newlines to skip birthday, instead of using 0 - use of cin.get() and chars, not int
+ --use temp char variables in birthday input, then convert them to numbers, so I dont have to change the data
+ --members from int to char, which would be a lot of extra work
  
  ---------------------------NEW FEATURES TO ADD---------------------------
  
- dynamic birthdays?  Enter in birthday and display current age?
  ways to exit main menu functions - type "Q" to leave - then if statement with "return/break"
  enhance loop in delete contact function?
  -support to type in multiple numbers, separated by spaces, to delete a bunch at once
+ support to let user know when a person's birthday is, up to 7 days before it comes, and
+    exactly how many days it is until their birthday
+ 
+ bring the boundchecking (no contact at this location) over from deleting function to edit function
  
 */
 
@@ -97,7 +97,7 @@ int main()
 void MainMenu()
 {
     vector <PersonalInformation> ContactVector;
-    static int MainMenuCounter = 0;
+    static int MainMenuPauseCounter = 0;
     int Choice;
     char FullPath[180] = {0};
     
@@ -108,7 +108,7 @@ void MainMenu()
     
     do
     {
-        if (MainMenuCounter++ > 0)//skip this set of commands for the first time in the menu, enter every time after
+        if (MainMenuPauseCounter++ > 0)//skip this set of commands for the first time in the menu, enter every time after
         {
             cout << "Press enter to go back to main menu: ";
             cin.ignore();//pause the program, wait for user to press enter
@@ -199,7 +199,7 @@ void DisplayContacts(const vector<PersonalInformation> &CV)
             {
                 if (CV[i].DateOfBirth[2] != 'A')
                 {
-                    cout << "\nCurrent Age:    ";
+                    cout << "Current Age:    ";
                     cout << CV[i].CurrentAge;
                 }
             }
@@ -356,7 +356,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
-        cout << "\nCurrent Birthday:      ";
+        cout << "\nOriginal Birthday:     ";
         PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].DateOfBirth);
         
         cout << "Edit Field?: ";
@@ -717,57 +717,6 @@ void ClearDataVectorsFromStructure(PersonalInformation &X)
     X.DateOfBirth.clear();
 }
 
-void SaveContactBook(vector <PersonalInformation> &CV, const char Path[])
-{
-    ofstream FileOut;
-    
-    FileOut.open(Path);
-    
-    if (FileOut.fail())//check to see if file opened
-        cout << "Couldn't Open File\n";
-    
-    for (int i = 0; i < CV.size(); i++)
-    {
-        PrintStringInStructDataVectorToFile(CV[i].FirstNameVector, FileOut);
-        
-        PrintStringInStructDataVectorToFile(CV[i].LastNameVector, FileOut);
-        
-        PrintStringInStructDataVectorToFile(CV[i].AddressVector, FileOut);
-        
-        PrintStringInStructDataVectorToFile(CV[i].PhoneNumberVector, FileOut);
-        
-        PrintStringInStructDataVectorToFile(CV[i].DateOfBirth, FileOut);
-        
-        FileOut << endl;
-        
-        FileOut << CV[i].CurrentAge << endl;
-        
-        FileOut << CV[i].MonthBorn << endl;
-        
-        FileOut << CV[i].DayBorn<< endl;
-        
-        FileOut << CV[i].YearBorn;
-        
-        FileOut << "\n\n";
-    }
-
-    FileOut << (char) 0 << endl;//used as a way to mark the end of the document, using 0 because user can't type it
-    
-    FileOut << "Contacts Last Altered: " << Date() << endl;
-    
-    FileOut.close();
-}
-
-string Date()//not my code here - modified it to display what I want and to read easier
-{
-    char Time[50];
-    
-    time_t now = time(NULL);
-    strftime(Time, 50, "%D, %I:%M %p", localtime(&now));
-    
-    return string(Time);
-}
-
 int BirthDayInput(PersonalInformation & TempPersonalInfoHolder)
 {
     /* USER ENTERS IN CONTACTS BIRTHDAY */
@@ -800,6 +749,8 @@ int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & Mont
     int CurrentMonthOfThisYear = 0;
     int CurrentDayOfThisYear = 0;
     int CurrentYear = 0;
+    
+    //int BirthdayIsNearChecker = 0;
     
     time_t now = time(NULL);//Get current time/date
     
@@ -844,6 +795,17 @@ int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & Mont
     if (CurrentDayOfThisYear < DayOfTheYearBirthdayLandsOn)
         --UsersCurrentAge;
     
+    /* CHECK TO SEE HOW CLOSE CONTACT'S BIRTHDAY IS */
+    
+    /*
+    
+    BirthdayIsNearChecker = DayOfTheYearBirthdayLandsOn - CurrentDayOfThisYear;
+    
+    if (BirthdayIsNearChecker >= 0 && BirthdayIsNearChecker <= 7)
+        cout << "Birthday is in " << BirthdayIsNearChecker << " days.";
+     
+    */
+    
     return UsersCurrentAge;
 }
 
@@ -851,8 +813,6 @@ int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthD
 {
     int DayOfYearThatBirthdayIsOn = 0;
     int DayHolder = 0;
-    
-    // FUNCTION DOESN'T ACCOUNT FOR LEAP YEARS CURRENTLY - IMPLEMENT LATER
     
     if (BirthMonth >= 1)//January - 31
     {
@@ -1027,4 +987,57 @@ void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)
     
     for (int i = 0; YearArray[i]; i++)
         TempPersonalInfoHolder.DateOfBirth.push_back(YearArray[i]);
+    
+    TempPersonalInfoHolder.DateOfBirth.push_back('\n');
+}
+
+void SaveContactBook(vector <PersonalInformation> &CV, const char Path[])
+{
+    ofstream FileOut;
+    
+    FileOut.open(Path);
+    
+    if (FileOut.fail())//check to see if file opened
+        cout << "Couldn't Open File\n";
+    
+    for (int i = 0; i < CV.size(); i++)
+    {
+        PrintStringInStructDataVectorToFile(CV[i].FirstNameVector, FileOut);
+        
+        PrintStringInStructDataVectorToFile(CV[i].LastNameVector, FileOut);
+        
+        PrintStringInStructDataVectorToFile(CV[i].AddressVector, FileOut);
+        
+        PrintStringInStructDataVectorToFile(CV[i].PhoneNumberVector, FileOut);
+        
+        PrintStringInStructDataVectorToFile(CV[i].DateOfBirth, FileOut);
+        
+        FileOut << endl;
+        
+        FileOut << CV[i].CurrentAge << endl;
+        
+        FileOut << CV[i].MonthBorn << endl;
+        
+        FileOut << CV[i].DayBorn<< endl;
+        
+        FileOut << CV[i].YearBorn;
+        
+        FileOut << "\n\n";
+    }
+    
+    FileOut << (char) 0 << endl;//used as a way to mark the end of the document, using 0 because user can't type it
+    
+    FileOut << "Contacts Last Altered: " << Date() << endl;
+    
+    FileOut.close();
+}
+
+string Date()//not my code here - modified it to display what I want and to read easier
+{
+    char Time[50];
+    
+    time_t now = time(NULL);
+    strftime(Time, 50, "%D, %I:%M %p", localtime(&now));
+    
+    return string(Time);
 }
