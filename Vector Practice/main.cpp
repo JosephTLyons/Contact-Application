@@ -23,6 +23,8 @@ struct PersonalInformation
     int YearBorn;
     
     int CurrentAge;
+    
+    short int BirthdayIsInXDays;
 };
 
 void MainMenu();
@@ -71,8 +73,6 @@ string Date();
 /*
  -----------------------------BUGS AND FIXES------------------------------
  
- merged DynamicBirthdays branch into master
- 
  how big to make array holding pathway? - any way to use vector for this field?
 
  support to just type in newlines to skip birthday, instead of using 0 - use of cin.get() and chars, not int
@@ -83,6 +83,16 @@ string Date();
  -no months greater than 12
  -no days greater than 31
  
+ use constant reference for parameters when possible to not only keep values from being changed
+ but to use less memory
+ 
+ work on optimizing code by changing int to short int or using characters - in functions and in struct
+ 
+ bring the boundchecking (no contact at this location) over from deleting function to edit function
+ 
+ change birthday reminder from struct data member to variable in display function that holds number
+ and displays to screen, being overwrtten each time - maybe
+ 
  ---------------------------NEW FEATURES TO ADD---------------------------
  
  ways to exit main menu functions - type "Q" to leave - then if statement with "return/break"
@@ -90,8 +100,6 @@ string Date();
  -support to type in multiple numbers, separated by spaces, to delete a bunch at once
  support to let user know when a person's birthday is, up to 7 days before it comes, and
     exactly how many days it is until their birthday
- 
- bring the boundchecking (no contact at this location) over from deleting function to edit function
  
 */
 
@@ -210,6 +218,11 @@ void DisplayContacts(const vector<PersonalInformation> &CV)
                 }
             }
         }
+        
+        /* IF BIRTHDAY IS LESS THAN 7 DAYS AWAY, DISPLAY THAT INFORMATION TO THE SCREEEN */
+        
+        if (CV[i].BirthdayIsInXDays >= 0 && CV[i].BirthdayIsInXDays <= 7)
+            cout << "\n*BIRTHDAY IS IN " << CV[i].BirthdayIsInXDays << " DAYS*";
         
         cout << "\n\n";
         
@@ -759,8 +772,6 @@ int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & Mont
     int CurrentDayOfThisYear = 0;
     int CurrentYear = 0;
     
-    //int BirthdayIsNearChecker = 0;
-    
     time_t now = time(NULL);//Get current time/date
     
     /* GET CURRENT MONTH, CONVERT TO NUMBER, AND STORE IN THE ASSOCIATED INT */
@@ -804,16 +815,9 @@ int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & Mont
     if (CurrentDayOfThisYear < DayOfTheYearBirthdayLandsOn)
         --UsersCurrentAge;
     
-    /* CHECK TO SEE HOW CLOSE CONTACT'S BIRTHDAY IS */
+    /* CALCULATE HOW CLOSE CONTACT'S BIRTHDAY IS */
     
-    /*
-    
-    BirthdayIsNearChecker = DayOfTheYearBirthdayLandsOn - CurrentDayOfThisYear;
-    
-    if (BirthdayIsNearChecker >= 0 && BirthdayIsNearChecker <= 7)
-        cout << "Birthday is in " << BirthdayIsNearChecker << " days.";
-     
-    */
+    TempPersonalInfoHolder.BirthdayIsInXDays = DayOfTheYearBirthdayLandsOn - CurrentDayOfThisYear;
     
     return UsersCurrentAge;
 }
@@ -934,6 +938,9 @@ void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)
                                   "May",       "June",     "July",     "August",
                                   "September", "October",  "November", "December"};
     
+    /* PLACING DATA MEMBERS INTO TEMPORARY VARIABLES BECAUSE THE VALUES OF THE VARIABLES WILL BE CHANGED */
+    /* DONT WANT TO CHANGE THE DATA MEMBERS THOUGH */
+    
     int TempMonth = TempPersonalInfoHolder.MonthBorn;
     int TempDay   = TempPersonalInfoHolder.DayBorn;
     int TempYear  = TempPersonalInfoHolder.YearBorn;
@@ -972,7 +979,7 @@ void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)
     for (int i = 1; i >= 0; i--)
     {
         DayArray[i] *= 10;
-        DayArray[i] = (TempDay % 10) + 48;//convertion happens here
+        DayArray[i] = (TempDay % 10) + 48;//convertion to char happens here
         TempDay /= 10;
     }
     
