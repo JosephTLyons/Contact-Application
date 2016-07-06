@@ -31,11 +31,12 @@ void MainMenu();
 
 /* MAIN MENU FUNCTIONS */
 
-void DisplayContacts(const vector <PersonalInformation> &CV);
+void DisplayContacts(const vector <PersonalInformation> &CV, const int & DisplaySpeed);
 void AddContact(vector <PersonalInformation> &CV, const char Path[]);
-void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]);
-void DeleteContact(vector <PersonalInformation> &CV, const char Path[]);
+void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed);
+void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed);
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[]);
+void SettingsAndConfiguration(int & DisplaySpeed, int & SpeedSelectionChoice);
 
 /* FUNCTIONS FROM READING AND WRITING FROM FILES AND FROM KEYBOARD */
 
@@ -101,6 +102,8 @@ string Date();
  support to let user know when a person's birthday is, up to 7 days before it comes, and
     exactly how many days it is until their birthday
  
+ search for contact function
+ 
 */
 
 int main()
@@ -112,8 +115,15 @@ void MainMenu()
 {
     vector <PersonalInformation> ContactVector;
     static int MainMenuPauseCounter = 0;
+    
     int Choice;
+    
     char FullPath[180] = {0};
+    
+    int DisplaySpeed = 60000;//fine tune this maybe
+    int SpeedSelectionChoice;
+    
+    
     
     CreateFolderAndTextFile(FullPath);//creates The Lyons' Den Labs folder in Application Support folder in Library
     
@@ -135,7 +145,8 @@ void MainMenu()
         cout << "\n(3) Edit Existing Contact";
         cout << "\n(4) Delete Contact";
         cout << "\n(5) Delete All Contacts";
-        cout << "\n(6) Exit";
+        cout << "\n(6) Settings and Configuration";
+        cout << "\n(7) Exit";
         
         cout << "\n\nChoice: ";
         
@@ -148,7 +159,7 @@ void MainMenu()
         {
             case 1:
             {
-                DisplayContacts(ContactVector);
+                DisplayContacts(ContactVector, DisplaySpeed);
                 break;
             }
                 
@@ -160,13 +171,13 @@ void MainMenu()
                 
             case 3:
             {
-                EditExistingContact(ContactVector, FullPath);
+                EditExistingContact(ContactVector, FullPath, DisplaySpeed);
                 break;
             }
                 
             case 4:
             {
-                DeleteContact(ContactVector, FullPath);
+                DeleteContact(ContactVector, FullPath, DisplaySpeed);
                 break;
             }
                 
@@ -176,14 +187,20 @@ void MainMenu()
                 break;
             }
                 
+            case 6:
+            {
+                SettingsAndConfiguration(DisplaySpeed, SpeedSelectionChoice);
+                break;
+            }
+                
             default:
                 break;
         }
     }
-    while (Choice != 6);
+    while (Choice != 7);
 }
 
-void DisplayContacts(const vector<PersonalInformation> &CV)
+void DisplayContacts(const vector<PersonalInformation> &CV, const int & DisplaySpeed)
 {
     cout << "======================\n\n";
     
@@ -226,7 +243,7 @@ void DisplayContacts(const vector<PersonalInformation> &CV)
         
         cout << "\n\n";
         
-        usleep(60000);//fine tune this maybe
+        usleep(DisplaySpeed);
     }
     
     if (CV.size() == 0)
@@ -279,12 +296,12 @@ void AddContact(vector <PersonalInformation> &CV, const char Path[])
     cin.ignore();//removes 1 newline at the end of this function - needed for main loop to work correctly
 }
 
-void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[])
+void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed)
 {
     int ContactNumberToEdit;
     char FieldToEdit = 0;
     
-    DisplayContacts(Vector);
+    DisplayContacts(Vector, DisplaySpeed);
     
     cout << "Which contact would you like to edit: ";
     cin >> ContactNumberToEdit;
@@ -400,7 +417,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
     SaveContactBook(Vector, Path);
 }
 
-void DeleteContact(vector <PersonalInformation> &CV, const char Path[])
+void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed)
 {
     int ContactNumberToDelete;
     char ConfirmDelete = 0;
@@ -408,7 +425,7 @@ void DeleteContact(vector <PersonalInformation> &CV, const char Path[])
     
     do
     {
-        DisplayContacts(CV);//display list again
+        DisplayContacts(CV, DisplaySpeed);//display list again
         
         cout << "Type in the number of the contact you wish to delete: ";
         cin >> ContactNumberToDelete;
@@ -505,6 +522,54 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[])
     
     if (ContactsNotDeletedFlag == true)
         cout << "\nContacts were not deleted.\n\n";
+}
+
+void SettingsAndConfiguration(int & DisplaySpeed, int & SpeedSelectionChoice)
+{
+    /* VARIABLES THAT HOLD THE VARIOUS SPEEDS, EASY TO MODIFY THESE HERE */
+    
+    int Slow   = 110000;
+    int Medium = 60000;
+    int Fast   = 20000;
+    
+    cout << "Scrolling contact display rate: ";
+    
+    cout << "\n\n(1) Slow";
+    
+    if (DisplaySpeed == Slow)
+        cout << " *";
+    
+    
+    cout << "\n(2) Medium";
+    
+    if (DisplaySpeed == Medium)
+        cout << " *";
+    
+    
+    cout << "\n(3) Fast";
+    
+    if (DisplaySpeed == Fast)
+        cout << " *";
+    
+    
+    cout << "\n\n* = current option selected";
+    
+    cout << "\n\nSpeed Selection: ";
+    
+    cin >> SpeedSelectionChoice;
+    
+    if (SpeedSelectionChoice == 1)
+        DisplaySpeed = Slow;
+    
+    else if (SpeedSelectionChoice == 2)
+        DisplaySpeed = Medium;
+    
+    else
+        DisplaySpeed = Fast;
+    
+    cout << "\n";
+    
+    //settings for displaying birthday reminders or not
 }
 
 void PrintStringInStructDataVectorToFile(const vector <char> &Vector, ofstream &FileOut)
