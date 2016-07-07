@@ -32,11 +32,12 @@ void MainMenu();
 /* MAIN MENU FUNCTIONS */
 
 void DisplayContacts(const vector <PersonalInformation> &CV, const int & DisplaySpeed);
-void AddContact(vector <PersonalInformation> &CV, const char Path[]);
-void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed);
-void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed);
-void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[]);
-void SettingsAndConfiguration(int & DisplaySpeed, int & SpeedSelectionChoice);
+void AddContact(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice);
+void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
+void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
+void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice);
+void SettingsAndConfigurationInput(int & DisplaySpeed, int & SpeedSelectionChoice);
+void SettingsAndConfigurationSpeedChange(int & DisplaySpeed, int & SpeedSelectionChoice);
 
 /* FUNCTIONS FROM READING AND WRITING FROM FILES AND FROM KEYBOARD */
 
@@ -53,10 +54,9 @@ bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vect
 
 /* MISCELLANEOUS FUNCTIONS */
 
-void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[]);
+void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice);
 void CreateFolderAndTextFile(char FullPath[]);
 bool EmptyFileChecker(const char Path[]);
-bool EndOfFileChecker(ifstream &FileIn);
 void ClearDataVectorsFromStructure(PersonalInformation &X);
 
 /* FUNCTIONS FOR DYNAMIC AGE/BIRTHDAY */
@@ -68,7 +68,7 @@ void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
 
 /* FUNCTIONS FOR SAVING */
 
-void SaveContactBook(vector <PersonalInformation> &CV, const char Path[]);
+void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice);
 string Date();
 
 /*
@@ -116,19 +116,20 @@ void MainMenu()
     vector <PersonalInformation> ContactVector;
     static int MainMenuPauseCounter = 0;
     
-    int Choice;
-    
     char FullPath[180] = {0};
     
-    int DisplaySpeed = 60000;//fine tune this maybe
-    int SpeedSelectionChoice;
-    
+    int SwitchChoice;
+    int DisplaySpeed = 60000;//defaults at 60,000 - which is medium speed in the SettingsAndConfiguration() function
+    int SpeedSelectionChoice = 2;//defaults at medium speed
     
     
     CreateFolderAndTextFile(FullPath);//creates The Lyons' Den Labs folder in Application Support folder in Library
     
     if(EmptyFileChecker(FullPath))
-        RebuildContactBook(ContactVector, FullPath);
+    {
+        RebuildContactBook(ContactVector, FullPath, SpeedSelectionChoice);//restort contacts
+        SettingsAndConfigurationSpeedChange(DisplaySpeed, SpeedSelectionChoice);//restore user settings
+    }
     
     do
     {
@@ -150,12 +151,12 @@ void MainMenu()
         
         cout << "\n\nChoice: ";
         
-        cin >> Choice;
+        cin >> SwitchChoice;
         cin.ignore();
         
         cout << "\n";
         
-        switch (Choice)
+        switch (SwitchChoice)
         {
             case 1:
             {
@@ -165,31 +166,36 @@ void MainMenu()
                 
             case 2:
             {
-                AddContact(ContactVector, FullPath);
+                AddContact(ContactVector, FullPath, SpeedSelectionChoice);
+                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice);
                 break;
             }
                 
             case 3:
             {
-                EditExistingContact(ContactVector, FullPath, DisplaySpeed);
+                EditExistingContact(ContactVector, FullPath, DisplaySpeed, SpeedSelectionChoice);
+                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice);
                 break;
             }
                 
             case 4:
             {
-                DeleteContact(ContactVector, FullPath, DisplaySpeed);
+                DeleteContact(ContactVector, FullPath, DisplaySpeed, SpeedSelectionChoice);
+                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice);
                 break;
             }
                 
             case 5:
             {
-                DeleteAllContacts(ContactVector, FullPath);
+                DeleteAllContacts(ContactVector, FullPath, SpeedSelectionChoice);
+                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice);
                 break;
             }
                 
             case 6:
             {
-                SettingsAndConfiguration(DisplaySpeed, SpeedSelectionChoice);
+                SettingsAndConfigurationInput(DisplaySpeed, SpeedSelectionChoice);
+                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice);
                 break;
             }
                 
@@ -197,7 +203,7 @@ void MainMenu()
                 break;
         }
     }
-    while (Choice != 7);
+    while (SwitchChoice != 7);
 }
 
 void DisplayContacts(const vector<PersonalInformation> &CV, const int & DisplaySpeed)
@@ -252,7 +258,7 @@ void DisplayContacts(const vector<PersonalInformation> &CV, const int & DisplayS
     cout << "======================\n\n";
 }
 
-void AddContact(vector <PersonalInformation> &CV, const char Path[])
+void AddContact(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice)
 {
     PersonalInformation Temporary;//temporary holding spot for input, used to store in vector
     char UserChoice;
@@ -282,8 +288,6 @@ void AddContact(vector <PersonalInformation> &CV, const char Path[])
         if (CV.size() > 1)//don't go into sort function if only one name is in vector
             SortVector(CV);
         
-        SaveContactBook(CV, Path);//save settings after adding a contact and sorting
-        
         cout << "\nAdd another contact? Y/N: ";
         cin >> UserChoice;
         
@@ -296,7 +300,7 @@ void AddContact(vector <PersonalInformation> &CV, const char Path[])
     cin.ignore();//removes 1 newline at the end of this function - needed for main loop to work correctly
 }
 
-void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed)
+void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice)
 {
     int ContactNumberToEdit;
     char FieldToEdit = 0;
@@ -414,10 +418,9 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
     }
     
     SortVector(Vector);
-    SaveContactBook(Vector, Path);
 }
 
-void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed)
+void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice)
 {
     int ContactNumberToDelete;
     char ConfirmDelete = 0;
@@ -479,8 +482,6 @@ void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const in
         if (toupper(ConfirmDelete) == 'N' && ++ContactNumberToDelete <= CV.size())//increment Contact to work properly with size()function
             cout << "\nNo contact deleted.";//if user chooses to not delete the contact
         
-        SaveContactBook(CV, Path);//save settings after deleting a contact
-        
         cout << "\n\nDelete another contact? Y/N: ";
         cin >> DeleteAnotherContactChoice;
         cin.ignore();//removes 1 newline at the end of this function - needed for main loop to work correctly
@@ -490,7 +491,7 @@ void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const in
     cout << "\n\n";
 }
 
-void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[])
+void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice)
 {
     vector <char> UserChoice;
     bool ContactsNotDeletedFlag = true;
@@ -513,7 +514,6 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[])
             {
                 ContactsNotDeletedFlag = false;
                 Vector.clear();
-                SaveContactBook(Vector, Path);
                 
                 cout << "\nAll contacts have been deleted.\n\n";
             }
@@ -524,13 +524,15 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[])
         cout << "\nContacts were not deleted.\n\n";
 }
 
-void SettingsAndConfiguration(int & DisplaySpeed, int & SpeedSelectionChoice)
+void SettingsAndConfigurationInput(int & DisplaySpeed, int & SpeedSelectionChoice)
 {
     /* VARIABLES THAT HOLD THE VARIOUS SPEEDS, EASY TO MODIFY THESE HERE */
     
     int Slow   = 110000;
     int Medium = 60000;
     int Fast   = 20000;
+    
+    /* DISPLAY OPTIONS AND SHOW WHICH OPTION IS CURRENTLY SELECTED */
     
     cout << "Scrolling contact display rate: ";
     
@@ -558,6 +560,21 @@ void SettingsAndConfiguration(int & DisplaySpeed, int & SpeedSelectionChoice)
     
     cin >> SpeedSelectionChoice;
     
+    SettingsAndConfigurationSpeedChange(DisplaySpeed, SpeedSelectionChoice);
+    
+    cout << "\n";
+}
+
+void SettingsAndConfigurationSpeedChange(int & DisplaySpeed, int & SpeedSelectionChoice)
+{
+    /* VARIABLES THAT HOLD THE VARIOUS SPEEDS, EASY TO MODIFY THESE HERE */
+    
+    int Slow   = 110000;
+    int Medium = 60000;
+    int Fast   = 20000;
+    
+    /* INPUT CHOICE OF SPEED AND STORE IN DISPLAYSPEED */
+    
     if (SpeedSelectionChoice == 1)
         DisplaySpeed = Slow;
     
@@ -566,8 +583,6 @@ void SettingsAndConfiguration(int & DisplaySpeed, int & SpeedSelectionChoice)
     
     else
         DisplaySpeed = Fast;
-    
-    cout << "\n";
     
     //settings for displaying birthday reminders or not
 }
@@ -682,19 +697,36 @@ bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vect
     //no swap will be made back in SortVector() function
 }
 
-void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[])
+void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice)
 {
     PersonalInformation Temporary;
-    bool EndOfFile;
+    int AmountOfContactsInFile;
     
     ifstream FileIn;
     
     FileIn.open(Path);
     
-    if (FileIn.fail())//check to see if file opened
-        cout << "Couldn't Open File\n";
+    /* CHECK TO SEE IF FILE OPENS */
     
-    for (int i = 0; EndOfFile == false; i++)//2 is temporary - fix condition here to work with getting ALL contacts
+    if (FileIn.fail())
+    {
+        cout << "Couldn't Open File\n";
+        return;
+    }
+    
+    FileIn.ignore(24);//ignore "Speed Selection Choice: " text
+    
+    FileIn >> SpeedSelectionChoice;
+    
+    FileIn.ignore();// ignore single newline between numbers
+    
+    FileIn.ignore(20);// ignore "Number of Contacts: " text
+    
+    AmountOfContactsInFile = FileIn.get() - 48;// convert from char to number
+    
+    FileIn.ignore(2);// ignore two newlines after
+    
+    for (int i = 0; CV.size() < AmountOfContactsInFile; i++)//2 is temporary - fix condition here to work with getting ALL contacts
     {
         InsertStringInStructDataVectorFromFile(Temporary.FirstNameVector, FileIn);
         
@@ -722,12 +754,12 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[])
         
         ClearDataVectorsFromStructure(Temporary);
         
-        EndOfFile = EndOfFileChecker(FileIn);
+        FileIn.ignore(2);//ignore two newlines between contacts (two newlines because last item is an int and doesn't store the newline like the vectors do)
     }
     
     /* SAVED CONTACTS AFTER READING IN CASE AGES WERE UPDATED AFTER RE-CALCULATING CURRENT AGE */
     
-    SaveContactBook(CV, Path);
+    SaveContactBookAndSettings(CV, Path, SpeedSelectionChoice);
     
     FileIn.close();
 }
@@ -772,27 +804,6 @@ bool EmptyFileChecker(const char Path[])//shouldn't be declaring a new variable,
     {   FileIn.close();
         return true;
     }
-}
-
-bool EndOfFileChecker(ifstream &FileIn)//remove superfluous newlines between contacts and after last contactnew
-//check for end of file (I used 0)
-{
-    char Temporary;
-    
-    do
-    {
-        FileIn.get(Temporary);
-        
-        if (Temporary == 0)
-            return true;
-        
-        if (Temporary != '\n' && Temporary != 0)//this if statement is used to place back first letter
-            //otherwise, you risk losing first letter if not EndOfFile
-            FileIn.putback(Temporary);
-    }
-    while (Temporary == '\n');
-    
-    return false;
 }
 
 void ClearDataVectorsFromStructure(PersonalInformation &X)
@@ -1073,7 +1084,7 @@ void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)
     TempPersonalInfoHolder.DateOfBirth.push_back('\n');
 }
 
-void SaveContactBook(vector <PersonalInformation> &CV, const char Path[])
+void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice)
 {
     ofstream FileOut;
     
@@ -1081,6 +1092,16 @@ void SaveContactBook(vector <PersonalInformation> &CV, const char Path[])
     
     if (FileOut.fail())//check to see if file opened
         cout << "Couldn't Open File\n";
+    
+    FileOut << "Speed Selection Choice: ";
+    
+    FileOut << SpeedSelectionChoice << endl;
+    
+    /* SAVE NUMBER OF CONTACTS TO .TXT FILE SO WE KNOW HOW MANY WE ARE READING IN IN THE REBUILD FUNCTION */
+    
+    FileOut << "Number of Contacts: ";
+    
+    FileOut << CV.size() << endl << endl;
     
     for (int i = 0; i < CV.size(); i++)
     {
@@ -1104,8 +1125,6 @@ void SaveContactBook(vector <PersonalInformation> &CV, const char Path[])
         
         FileOut << "\n\n";
     }
-    
-    FileOut << (char) 0 << endl;//used as a way to mark the end of the document, using 0 because user can't type it
     
     FileOut << "Contacts Last Altered: " << Date() << endl;
     
