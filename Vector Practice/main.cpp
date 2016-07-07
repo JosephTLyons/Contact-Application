@@ -36,8 +36,8 @@ void AddContact(vector <PersonalInformation> &CV, const char Path[], int & Speed
 void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
 void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice);
-void SettingsAndConfigurationInput(int & DisplaySpeed, int & SpeedSelectionChoice);
-void SettingsAndConfigurationSpeedChange(int & DisplaySpeed, int & SpeedSelectionChoice);
+void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice);
+void SettingsAndConfigurationAlterations(int & DisplaySpeed, int & SpeedSelectionChoice);
 
 /* FUNCTIONS FROM READING AND WRITING FROM FILES AND FROM KEYBOARD */
 
@@ -128,7 +128,7 @@ void MainMenu()
     if(EmptyFileChecker(FullPath))
     {
         RebuildContactBook(ContactVector, FullPath, SpeedSelectionChoice);//restort contacts
-        SettingsAndConfigurationSpeedChange(DisplaySpeed, SpeedSelectionChoice);//restore user settings
+        SettingsAndConfigurationAlterations(DisplaySpeed, SpeedSelectionChoice);//restore user settings
     }
     
     do
@@ -194,7 +194,7 @@ void MainMenu()
                 
             case 6:
             {
-                SettingsAndConfigurationInput(DisplaySpeed, SpeedSelectionChoice);
+                SettingsAndConfigurationMenuAndUserInput(DisplaySpeed, SpeedSelectionChoice);
                 SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice);
                 break;
             }
@@ -524,7 +524,7 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], 
         cout << "\nContacts were not deleted.\n\n";
 }
 
-void SettingsAndConfigurationInput(int & DisplaySpeed, int & SpeedSelectionChoice)
+void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice)
 {
     /* VARIABLES THAT HOLD THE VARIOUS SPEEDS, EASY TO MODIFY THESE HERE */
     
@@ -536,22 +536,38 @@ void SettingsAndConfigurationInput(int & DisplaySpeed, int & SpeedSelectionChoic
     
     cout << "Scrolling contact display rate: ";
     
-    cout << "\n\n(1) Slow";
+    /* SLOW SPEED */
+    
+    cout << "\n\n(1)";
     
     if (DisplaySpeed == Slow)
-        cout << " *";
+        cout << " [*]";
+    else
+        cout << " [ ]";
     
+    cout << " Slow";
     
-    cout << "\n(2) Medium";
+    /* MEDIUM SPEED */
+    
+    cout << "\n(2)";
     
     if (DisplaySpeed == Medium)
-        cout << " *";
+        cout << " [*]";
+    else
+        cout << " [ ]";
     
+    cout << " Medium";
     
-    cout << "\n(3) Fast";
+    /* FAST SPEED */
+    
+    cout << "\n(3)";
     
     if (DisplaySpeed == Fast)
-        cout << " *";
+        cout << " [*]";
+    else
+        cout << " [ ]";
+    
+    cout << " Fast";
     
     
     cout << "\n\n* = current option selected";
@@ -560,18 +576,18 @@ void SettingsAndConfigurationInput(int & DisplaySpeed, int & SpeedSelectionChoic
     
     cin >> SpeedSelectionChoice;
     
-    SettingsAndConfigurationSpeedChange(DisplaySpeed, SpeedSelectionChoice);
+    SettingsAndConfigurationAlterations(DisplaySpeed, SpeedSelectionChoice);
     
     cout << "\n";
 }
 
-void SettingsAndConfigurationSpeedChange(int & DisplaySpeed, int & SpeedSelectionChoice)
+void SettingsAndConfigurationAlterations(int & DisplaySpeed, int & SpeedSelectionChoice)
 {
     /* VARIABLES THAT HOLD THE VARIOUS SPEEDS, EASY TO MODIFY THESE HERE */
     
-    int Slow   = 110000;
+    int Slow   = 120000;
     int Medium = 60000;
-    int Fast   = 20000;
+    int Fast   = 10000;
     
     /* INPUT CHOICE OF SPEED AND STORE IN DISPLAYSPEED */
     
