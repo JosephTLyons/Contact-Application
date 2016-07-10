@@ -36,7 +36,7 @@ void AddContact(vector <PersonalInformation> &CV, const char Path[], int & Speed
 void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
 void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice);
-void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice);
+void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
 void SettingsAndConfigurationAlterations(int & DisplaySpeed, int & SpeedSelectionChoice);
 
 /* FUNCTIONS FROM READING AND WRITING FROM FILES AND FROM KEYBOARD */
@@ -71,8 +71,14 @@ void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
 void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice);
 string Date();
 
+
+
+
+char EncryptOutput(char Input);
+
 /*
  -----------------------------BUGS AND FIXES------------------------------
+ track down bug that causes program to pick setting 3 each time
  
  how big to make array holding pathway? - any way to use vector for this field?
 
@@ -194,7 +200,7 @@ void MainMenu()
                 
             case 6:
             {
-                SettingsAndConfigurationMenuAndUserInput(DisplaySpeed, SpeedSelectionChoice);
+                SettingsAndConfigurationMenuAndUserInput(DisplaySpeed, SpeedSelectionChoice, ContactVector);
                 SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice);
                 break;
             }
@@ -433,7 +439,7 @@ void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const in
         cout << "Type in the number of the contact you wish to delete: ";
         cin >> ContactNumberToDelete;
         
-        if (ContactNumberToDelete <= CV.size())//error will occur if tries to erase number outside of vector bound
+        if (ContactNumberToDelete >= 0 && ContactNumberToDelete <= CV.size())//error will occur if tries to erase number outside of vector bound
         {
             ContactNumberToDelete--;//decrement to work with vector/array notation
             
@@ -524,72 +530,81 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], 
         cout << "\nContacts were not deleted.\n\n";
 }
 
-void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice)
+void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SelectionForSpeedOrQuit, vector <PersonalInformation> CV)
 {
-    /* VARIABLES THAT HOLD THE VARIOUS SPEEDS, EASY TO MODIFY THESE HERE */
+    char LoopAgainOrNot = 'N';
     
-    int Slow   = 110000;
-    int Medium = 60000;
-    int Fast   = 20000;
-    
-    /* DISPLAY OPTIONS AND SHOW WHICH OPTION IS CURRENTLY SELECTED */
-    
-    cout << "Scrolling contact display rate: ";
-    
-    /* SLOW SPEED */
-    
-    cout << "\n\n(1)";
-    
-    if (DisplaySpeed == Slow)
-        cout << " [*]";
-    else
-        cout << " [ ]";
-    
-    cout << " Slow";
-    
-    /* MEDIUM SPEED */
-    
-    cout << "\n(2)";
-    
-    if (DisplaySpeed == Medium)
-        cout << " [*]";
-    else
-        cout << " [ ]";
-    
-    cout << " Medium";
-    
-    /* FAST SPEED */
-    
-    cout << "\n(3)";
-    
-    if (DisplaySpeed == Fast)
-        cout << " [*]";
-    else
-        cout << " [ ]";
-    
-    cout << " Fast";
-    
-    
-    cout << "\n\n* = current option selected";
-    
-    cout << "\n\nSpeed Selection: ";
-    
-    cin >> SpeedSelectionChoice;
-    
-    SettingsAndConfigurationAlterations(DisplaySpeed, SpeedSelectionChoice);
-    
-    cout << "\n";
+    do
+    {
+        /* DISPLAY OPTIONS AND SHOW WHICH OPTION IS CURRENTLY SELECTED */
+        
+        cout << "Scrolling contact display rate: ";
+        
+        /* SLOW SPEED DISPLAY */
+        
+        cout << "\n\n(1)";
+        
+        if (SelectionForSpeedOrQuit == 1)
+            cout << " [*]";
+        else
+            cout << " [ ]";
+        
+        cout << " Slow";
+        
+        /* MEDIUM SPEED DISPLAY */
+        
+        cout << "\n(2)";
+        
+        if (SelectionForSpeedOrQuit == 2)
+            cout << " [*]";
+        else
+            cout << " [ ]";
+        
+        cout << " Medium";
+        
+        /* FAST SPEED DISPLAY */
+        
+        cout << "\n(3)";
+        
+        if (SelectionForSpeedOrQuit == 3)
+            cout << " [*]";
+        else
+            cout << " [ ]";
+        
+        cout << " Fast";
+        
+        
+        cout << "\n(4)     Quit Settings";
+        
+        
+        cout << "\n\n* = current option selected";
+        
+        cout << "\n\nSpeed Selection: ";
+        
+        cin >> SelectionForSpeedOrQuit;
+        
+        SettingsAndConfigurationAlterations(DisplaySpeed, SelectionForSpeedOrQuit);
+        
+        cout << "Preview of Speed:\n\n";
+        
+        DisplayContacts(CV, DisplaySpeed);
+        
+        cout << "\nSet a different speeed? Y/N: ";
+        cin >> LoopAgainOrNot;
+        cin.ignore();//remove one left over newline
+    }
+    while (toupper(LoopAgainOrNot) == 'Y');
 }
 
 void SettingsAndConfigurationAlterations(int & DisplaySpeed, int & SpeedSelectionChoice)
 {
     /* VARIABLES THAT HOLD THE VARIOUS SPEEDS, EASY TO MODIFY THESE HERE */
     
-    int Slow   = 120000;
-    int Medium = 60000;
-    int Fast   = 10000;
+    int Slow   = 140000;
+    int Medium = 70000;
+    int Fast   = 20000;
     
-    /* INPUT CHOICE OF SPEED AND STORE IN DISPLAYSPEED */
+    /* INPUT CHOICE OF SPEED AND STORE SPEED IN DISPLAYSPEED */
     
     if (SpeedSelectionChoice == 1)
         DisplaySpeed = Slow;
@@ -1097,8 +1112,7 @@ void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)
     for (int i = 0; YearArray[i]; i++)
         TempPersonalInfoHolder.DateOfBirth.push_back(YearArray[i]);
     
-    TempPersonalInfoHolder.DateOfBirth.push_back('\n');
-}
+    TempPersonalInfoHolder.DateOfBirth.push_back('\n');}
 
 void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice)
 {
@@ -1155,4 +1169,11 @@ string Date()//not my code here - modified it to display what I want and to read
     strftime(Time, 50, "%D, %I:%M %p", localtime(&now));
     
     return string(Time);
+}
+
+char EncryptOutput(char Input)
+{
+    
+    
+    return 'A';
 }
