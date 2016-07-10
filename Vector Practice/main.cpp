@@ -75,11 +75,10 @@ string Date();
 
 
 char EncryptOutput(char Input);
+char DecryptInput(char Input);
 
 /*
  -----------------------------BUGS AND FIXES------------------------------
- track down bug that causes program to pick setting 3 each time
- 
  how big to make array holding pathway? - any way to use vector for this field?
 
  support to just type in newlines to skip birthday, instead of using 0 - use of cin.get() and chars, not int
@@ -622,7 +621,7 @@ void PrintStringInStructDataVectorToFile(const vector <char> &Vector, ofstream &
 {
     for (int i = 0; i < Vector.size(); i++)
     {
-        FileOut << Vector[i];
+        FileOut << EncryptOutput(Vector[i]);
     }
 }
 
@@ -1145,13 +1144,13 @@ void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Pat
         
         PrintStringInStructDataVectorToFile(CV[i].DateOfBirth, FileOut);
         
-        FileOut << CV[i].CurrentAge << endl;
+        FileOut << EncryptOutput(CV[i].CurrentAge) << endl;
         
-        FileOut << CV[i].MonthBorn << endl;
+        FileOut << EncryptOutput(CV[i].MonthBorn)  << endl;
         
-        FileOut << CV[i].DayBorn<< endl;
+        FileOut << EncryptOutput(CV[i].DayBorn)    << endl;
         
-        FileOut << CV[i].YearBorn;
+        FileOut << EncryptOutput(CV[i].YearBorn);
         
         FileOut << "\n\n";
     }
@@ -1173,7 +1172,18 @@ string Date()//not my code here - modified it to display what I want and to read
 
 char EncryptOutput(char Input)
 {
+    /* FIRST, USE A HARDCODED KEY FOR XOR ENCRYPTION */
     
+    Input ^= 'A';
     
-    return 'A';
+    return Input;
+}
+
+char DecryptInput(char Input)
+{
+    /* FIRST, USE A HARDCODED KEY FOR XOR ENCRYPTION */
+    
+    Input ^= 'A';
+    
+    return Input;
 }
