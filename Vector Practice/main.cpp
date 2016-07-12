@@ -77,6 +77,9 @@ char EncryptDecryptChar(char Input);
 
 /*
  -----------------------------BUGS AND FIXES------------------------------
+ fix error in calculating encrypted
+ 
+ organize function prototypes again
  
  how big to make array holding pathway? - any way to use vector for this field?
 
@@ -99,6 +102,8 @@ char EncryptDecryptChar(char Input);
  and displays to screen, being overwrtten each time - maybe
  
  ---------------------------NEW FEATURES TO ADD---------------------------
+ password protect the encryption by using a password and cycling the letters of the password
+    then going back to the beginning of that password and doing it again until its done
  
  ways to exit main menu functions - type "Q" to leave - then if statement with "return/break"
  enhance loop in delete contact function?
