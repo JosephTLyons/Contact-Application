@@ -75,7 +75,7 @@ string Date();
 
 
 char EncryptOutput(char Input);
-char DecryptInput(char Input);
+void DecryptInput(char & Input);
 
 /*
  -----------------------------BUGS AND FIXES------------------------------
@@ -756,7 +756,7 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
     
     FileIn.ignore(2);// ignore two newlines after
     
-    for (int i = 0; CV.size() < AmountOfContactsInFile; i++)//2 is temporary - fix condition here to work with getting ALL contacts
+    for (int i = 0; CV.size() < AmountOfContactsInFile; i++)
     {
         InsertStringInStructDataVectorFromFile(Temporary.FirstNameVector, FileIn);
         
@@ -767,6 +767,8 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
         InsertStringInStructDataVectorFromFile(Temporary.PhoneNumberVector, FileIn);
         
         InsertStringInStructDataVectorFromFile(Temporary.DateOfBirth, FileIn);
+        
+        //Get decryption working for input
         
         FileIn >> Temporary.CurrentAge;
         
@@ -1179,11 +1181,9 @@ char EncryptOutput(char Input)
     return Input;
 }
 
-char DecryptInput(char Input)
+void DecryptInput(char & Input)
 {
     /* FIRST, USE A HARDCODED KEY FOR XOR ENCRYPTION */
     
     Input ^= 'A';
-    
-    return Input;
 }
