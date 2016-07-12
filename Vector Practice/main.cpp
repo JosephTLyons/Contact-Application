@@ -578,6 +578,8 @@ void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSel
     
     SettingsAndConfigurationAlterations(DisplaySpeed, SpeedSelectionChoice);
     
+    DisplayContacts(<#const vector<PersonalInformation> &CV#>, <#const int &DisplaySpeed#>)
+    
     cout << "\n";
 }
 
