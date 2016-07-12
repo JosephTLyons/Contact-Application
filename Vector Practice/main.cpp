@@ -524,7 +524,7 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], 
         cout << "\nContacts were not deleted.\n\n";
 }
 
-void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice)
+void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV)
 {
     char LoopAgainOrNot = 'N';
     
