@@ -71,6 +71,10 @@ void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
 void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice);
 string Date();
 
+
+
+char EncryptDecryptChar(char Input);
+
 /*
  -----------------------------BUGS AND FIXES------------------------------
  
@@ -614,9 +618,15 @@ void SettingsAndConfigurationAlterations(int & DisplaySpeed, int & SpeedSelectio
 
 void PrintStringInStructDataVectorToFile(const vector <char> &Vector, ofstream &FileOut)
 {
+    /* EncryptedCharHolder HOLDS THE CHARACTER THAT HAS BEEN ENCRYPTED */
+    
+    char EncryptedCharHolder;
+    
     for (int i = 0; i < Vector.size(); i++)
     {
-        FileOut << Vector[i];
+        EncryptedCharHolder = EncryptDecryptChar(Vector[i]);
+        
+        FileOut << EncryptedCharHolder;
     }
 }
 
@@ -636,6 +646,8 @@ void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &Fil
     while (Insert != '\n' && Insert != 0)//this character is inserted at the end of the text file
     {
         FileIn.get(Insert);
+        
+        Insert = EncryptDecryptChar(Insert);
         
         //if (Insert != '\n')//dont store newlines in text
         
@@ -724,6 +736,10 @@ bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vect
 
 void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice)
 {
+    /* DecryptedCharHolder HOLDS THE CHARACTER THAT HAS BEEN ENCRYPTED */
+    
+    char DecryptedCharHolder;
+    
     PersonalInformation Temporary;
     int AmountOfContactsInFile;
     
@@ -763,13 +779,19 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
         
         InsertStringInStructDataVectorFromFile(Temporary.DateOfBirth, FileIn);
         
-        FileIn >> Temporary.CurrentAge;
+        //FIX AGE CALCULATION AFTER DECRYPTING AND READING IN
         
-        FileIn >> Temporary.MonthBorn;
+        DecryptedCharHolder = (int) EncryptDecryptChar(Temporary.CurrentAge);
+        FileIn >> DecryptedCharHolder;
         
-        FileIn >> Temporary.DayBorn;
+        DecryptedCharHolder = (int) EncryptDecryptChar(Temporary.MonthBorn);
+        FileIn >> DecryptedCharHolder;
         
-        FileIn >> Temporary.YearBorn;
+        DecryptedCharHolder = (int) EncryptDecryptChar(Temporary.DayBorn);
+        FileIn >> DecryptedCharHolder;
+        
+        DecryptedCharHolder = (int) EncryptDecryptChar(Temporary.YearBorn);
+        FileIn >> DecryptedCharHolder;
         
         /* AUTOMATICALLY RECALCULATE CURRENT YEAR EVERY TIME LIST IS REBUILT */
         
@@ -1111,6 +1133,9 @@ void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)
 
 void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice)
 {
+    /* EncryptedCharHolder HOLDS THE CHARACTER THAT HAS BEEN ENCRYPTED */
+    
+    char EncryptedCharHolder;
     ofstream FileOut;
     
     FileOut.open(Path);
@@ -1130,6 +1155,8 @@ void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Pat
     
     for (int i = 0; i < CV.size(); i++)
     {
+        /* ENCRYPT AND FILEOUT THE NEWLY ENCRYPTED CHARACTER/NUMBER IN BOTH PRINTSTRING FUNCT AND BASIC FILOUTS AFTER */
+        
         PrintStringInStructDataVectorToFile(CV[i].FirstNameVector, FileOut);
         
         PrintStringInStructDataVectorToFile(CV[i].LastNameVector, FileOut);
@@ -1140,13 +1167,23 @@ void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Pat
         
         PrintStringInStructDataVectorToFile(CV[i].DateOfBirth, FileOut);
         
-        FileOut << CV[i].CurrentAge << endl;
         
-        FileOut << CV[i].MonthBorn << endl;
+        EncryptedCharHolder = EncryptDecryptChar(CV[i].CurrentAge);
+        FileOut << EncryptedCharHolder << endl;
         
-        FileOut << CV[i].DayBorn<< endl;
         
-        FileOut << CV[i].YearBorn;
+        EncryptedCharHolder = EncryptDecryptChar(CV[i].MonthBorn);
+        FileOut << EncryptedCharHolder << endl;
+        
+        
+        
+        EncryptedCharHolder = EncryptDecryptChar(CV[i].DayBorn);
+        FileOut << EncryptedCharHolder << endl;
+        
+        
+        
+        EncryptedCharHolder = EncryptDecryptChar(CV[i].YearBorn);
+        FileOut << EncryptedCharHolder;
         
         FileOut << "\n\n";
     }
@@ -1164,4 +1201,13 @@ string Date()//not my code here - modified it to display what I want and to read
     strftime(Time, 50, "%D, %I:%M %p", localtime(&now));
     
     return string(Time);
+}
+
+char EncryptDecryptChar(char Input)
+{
+    /* FIRST USE HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
+    
+    Input ^= 'J';
+    
+    return Input;
 }
