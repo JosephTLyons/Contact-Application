@@ -74,6 +74,7 @@ string Date();
 
 
 char EncryptDecryptChar(char Input);
+int EncryptDecryptInt(int Input);
 
 /*
  -----------------------------BUGS AND FIXES------------------------------
@@ -741,9 +742,9 @@ bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vect
 
 void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice)
 {
-    /* DecryptedCharHolder HOLDS THE CHARACTER THAT HAS BEEN ENCRYPTED */
+    /* DecryptedIntHolder HOLDS THE INT THAT HAS BEEN ENCRYPTED FOR DAYS, MONTHS, YEARS, ETC. */
     
-    char DecryptedCharHolder;
+    int DecryptedIntHolder;
     
     PersonalInformation Temporary;
     int AmountOfContactsInFile;
@@ -786,17 +787,17 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
         
         //FIX AGE CALCULATION AFTER DECRYPTING AND READING IN
         
-        DecryptedCharHolder = (int) EncryptDecryptChar(Temporary.CurrentAge);
-        FileIn >> DecryptedCharHolder;
+        FileIn >> Temporary.CurrentAge;
+        Temporary.CurrentAge = EncryptDecryptInt(Temporary.CurrentAge);
         
-        DecryptedCharHolder = (int) EncryptDecryptChar(Temporary.MonthBorn);
-        FileIn >> DecryptedCharHolder;
+        FileIn >> Temporary.MonthBorn;
+        Temporary.MonthBorn = EncryptDecryptInt(Temporary.MonthBorn);
         
-        DecryptedCharHolder = (int) EncryptDecryptChar(Temporary.DayBorn);
-        FileIn >> DecryptedCharHolder;
+        FileIn >> Temporary.DayBorn;
+        Temporary.DayBorn = EncryptDecryptInt(Temporary.DayBorn);
         
-        DecryptedCharHolder = (int) EncryptDecryptChar(Temporary.YearBorn);
-        FileIn >> DecryptedCharHolder;
+        FileIn >> Temporary.YearBorn;
+        Temporary.YearBorn = EncryptDecryptInt(Temporary.YearBorn);
         
         /* AUTOMATICALLY RECALCULATE CURRENT YEAR EVERY TIME LIST IS REBUILT */
         
@@ -1138,9 +1139,9 @@ void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)
 
 void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice)
 {
-    /* EncryptedCharHolder HOLDS THE CHARACTER THAT HAS BEEN ENCRYPTED */
+    /* EncryptedIntHolder HOLDS THE INT THAT HAS BEEN ENCRYPTED FOR DAYS, MONTHS, YEARS, ETC. */
     
-    char EncryptedCharHolder;
+    int EncryptedIntHolder;
     ofstream FileOut;
     
     FileOut.open(Path);
@@ -1173,22 +1174,21 @@ void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Pat
         PrintStringInStructDataVectorToFile(CV[i].DateOfBirth, FileOut);
         
         
-        EncryptedCharHolder = EncryptDecryptChar(CV[i].CurrentAge);
-        FileOut << EncryptedCharHolder << endl;
+        
+        EncryptedIntHolder = EncryptDecryptInt(CV[i].CurrentAge);
+        FileOut << EncryptedIntHolder << endl;
         
         
-        EncryptedCharHolder = EncryptDecryptChar(CV[i].MonthBorn);
-        FileOut << EncryptedCharHolder << endl;
+        EncryptedIntHolder = EncryptDecryptInt(CV[i].MonthBorn);
+        FileOut << EncryptedIntHolder << endl;
         
         
-        
-        EncryptedCharHolder = EncryptDecryptChar(CV[i].DayBorn);
-        FileOut << EncryptedCharHolder << endl;
-        
+        EncryptedIntHolder = EncryptDecryptInt(CV[i].DayBorn);
+        FileOut << EncryptedIntHolder << endl;
         
         
-        EncryptedCharHolder = EncryptDecryptChar(CV[i].YearBorn);
-        FileOut << EncryptedCharHolder;
+        EncryptedIntHolder = EncryptDecryptInt(CV[i].YearBorn);
+        FileOut << EncryptedIntHolder << endl;
         
         FileOut << "\n\n";
     }
@@ -1210,9 +1210,18 @@ string Date()//not my code here - modified it to display what I want and to read
 
 char EncryptDecryptChar(char Input)
 {
-    /* FIRST USE HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
+    /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
     
-    Input ^= 'J';
+    //Input ^= 'J';
+    
+    return Input;
+}
+
+int EncryptDecryptInt(int Input)
+{
+    /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
+    
+    //Input ^= 'J';
     
     return Input;
 }
