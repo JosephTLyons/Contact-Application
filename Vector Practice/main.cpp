@@ -807,7 +807,7 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
         
         ClearDataVectorsFromStructure(Temporary);
         
-        FileIn.ignore(2);//ignore two newlines between contacts (two newlines because last item is an int and doesn't store the newline like the vectors do)
+        FileIn.ignore(3);//ignore two newlines between contacts (two newlines because last item is an int and doesn't store the newline like the vectors do)
     }
     
     /* SAVED CONTACTS AFTER READING IN CASE AGES WERE UPDATED AFTER RE-CALCULATING CURRENT AGE */
@@ -1212,7 +1212,9 @@ char EncryptDecryptChar(char Input)
 {
     /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
     
-    //Input ^= 'J';
+    char CharKey = 'J';
+    
+    Input ^= CharKey++;
     
     return Input;
 }
@@ -1220,8 +1222,11 @@ char EncryptDecryptChar(char Input)
 int EncryptDecryptInt(int Input)
 {
     /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
+    //use a different method of encryption for the ints
     
-    //Input ^= 'J';
+    char IntKey = 'k';
+    
+    Input ^= IntKey++;
     
     return Input;
 }
