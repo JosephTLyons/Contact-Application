@@ -742,10 +742,6 @@ bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vect
 
 void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice)
 {
-    /* DecryptedIntHolder HOLDS THE INT THAT HAS BEEN ENCRYPTED FOR DAYS, MONTHS, YEARS, ETC. */
-    
-    int DecryptedIntHolder;
-    
     PersonalInformation Temporary;
     int AmountOfContactsInFile;
     
@@ -775,6 +771,8 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
     
     for (int i = 0; CV.size() < AmountOfContactsInFile; i++)
     {
+        /* DECRYPTION FOR VECTORS HAPPENS IN INSERTSTRINGIN... FUNCTIONS */
+        
         InsertStringInStructDataVectorFromFile(Temporary.FirstNameVector, FileIn);
         
         InsertStringInStructDataVectorFromFile(Temporary.LastNameVector, FileIn);
@@ -785,7 +783,7 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
         
         InsertStringInStructDataVectorFromFile(Temporary.DateOfBirth, FileIn);
         
-        //FIX AGE CALCULATION AFTER DECRYPTING AND READING IN
+        /* DECRYPTION FOR INTS HAPPENS RIGHT HERE */
         
         FileIn >> Temporary.CurrentAge;
         Temporary.CurrentAge = EncryptDecryptInt(Temporary.CurrentAge);
@@ -807,7 +805,7 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
         
         ClearDataVectorsFromStructure(Temporary);
         
-        FileIn.ignore(3);//ignore two newlines between contacts (two newlines because last item is an int and doesn't store the newline like the vectors do)
+        FileIn.ignore(2);//ignore two newlines between contacts (two newlines because last item is an int and doesn't store the newline like the vectors do)
     }
     
     /* SAVED CONTACTS AFTER READING IN CASE AGES WERE UPDATED AFTER RE-CALCULATING CURRENT AGE */
@@ -1139,10 +1137,8 @@ void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)
 
 void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice)
 {
-    /* EncryptedIntHolder HOLDS THE INT THAT HAS BEEN ENCRYPTED FOR DAYS, MONTHS, YEARS, ETC. */
-    
-    int EncryptedIntHolder;
     ofstream FileOut;
+    
     
     FileOut.open(Path);
     
@@ -1161,7 +1157,7 @@ void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Pat
     
     for (int i = 0; i < CV.size(); i++)
     {
-        /* ENCRYPT AND FILEOUT THE NEWLY ENCRYPTED CHARACTER/NUMBER IN BOTH PRINTSTRING FUNCT AND BASIC FILOUTS AFTER */
+        /* ENCRYPTION FOR VECTORS HAPPENS IN PRINTSTRINGSTRUCT... FUNCTIONS */
         
         PrintStringInStructDataVectorToFile(CV[i].FirstNameVector, FileOut);
         
@@ -1173,22 +1169,15 @@ void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Pat
         
         PrintStringInStructDataVectorToFile(CV[i].DateOfBirth, FileOut);
         
+        /* ENCRYPTION FOR INTS HAPPENS RIGHT HERE */
         
+        FileOut << EncryptDecryptInt(CV[i].CurrentAge) << endl;
         
-        EncryptedIntHolder = EncryptDecryptInt(CV[i].CurrentAge);
-        FileOut << EncryptedIntHolder << endl;
+        FileOut << EncryptDecryptInt(CV[i].MonthBorn) << endl;
         
+        FileOut << EncryptDecryptInt(CV[i].DayBorn) << endl;
         
-        EncryptedIntHolder = EncryptDecryptInt(CV[i].MonthBorn);
-        FileOut << EncryptedIntHolder << endl;
-        
-        
-        EncryptedIntHolder = EncryptDecryptInt(CV[i].DayBorn);
-        FileOut << EncryptedIntHolder << endl;
-        
-        
-        EncryptedIntHolder = EncryptDecryptInt(CV[i].YearBorn);
-        FileOut << EncryptedIntHolder << endl;
+        FileOut << EncryptDecryptInt(CV[i].YearBorn);
         
         FileOut << "\n\n";
     }
