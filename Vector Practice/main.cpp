@@ -803,8 +803,6 @@ void CreateFolderAndTextFile(char FullPath[])
     mkdir(FullPath, ACCESSPERMS);//make The Lyons' Den Labs folder
     
     strcat(FullPath, RestOfPath);
-    
-    //done making folder and obtaining pathway
 }
 
 bool EmptyFileChecker(const char Path[])//shouldn't be declaring a new variable, should be passing it in, but that would call for a major rewrite of the menu function and all the function parameters
