@@ -15,7 +15,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "1185"
             endingLineNumber = "1185"
-            landmarkName = "Date()"
+            landmarkName = "SaveContactBookAndSettings(vector &lt;PersonalInformation&gt; &amp;CV, const char Path[], int &amp; SpeedSelectionChoice)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
