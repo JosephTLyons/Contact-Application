@@ -36,6 +36,7 @@ void AddContact(vector <PersonalInformation> &CV, const char Path[], int & Speed
 void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
 void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice);
+void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
 void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
 void SettingsAndConfigurationAlterations(int & DisplaySpeed, int & SpeedSelectionChoice);
 
@@ -536,6 +537,33 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], 
     
     if (ContactsNotDeletedFlag == true)
         cout << "\nContacts were not deleted.\n\n";
+}
+
+void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV)
+{
+    int Choice;
+    
+    do
+    {
+        cout <<   "(1) Display Speed";
+        cout << "\n(2) Encryption Settings";
+        cout << "\n(3) STUFF";
+        cout << "\n(4) QUIT SETTINGS";
+        
+        cout << "\n\n Choice: ";
+        cin >> Choice;
+        
+        switch (Choice)
+        {
+            case 1:
+                <#statements#>
+                break;
+                
+            default:
+                break;
+        }
+    }
+    while (Choice >= 1 && Choice <= 3);
 }
 
 void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV)
