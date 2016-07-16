@@ -10,28 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Vector Practice/main.cpp"
-            timestampString = "490261947.813618"
+            timestampString = "490356776.326584"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "1158"
-            endingLineNumber = "1158"
+            startingLineNumber = "1185"
+            endingLineNumber = "1185"
             landmarkName = "SaveContactBookAndSettings(vector &lt;PersonalInformation&gt; &amp;CV, const char Path[], int &amp; SpeedSelectionChoice)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Vector Practice/main.cpp"
-            timestampString = "490261971.728193"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "774"
-            endingLineNumber = "774"
-            landmarkName = "RebuildContactBook(vector &lt;PersonalInformation&gt; &amp;CV, const char Path[], int &amp; SpeedSelectionChoice)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

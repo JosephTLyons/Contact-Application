@@ -66,15 +66,15 @@ int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & Mont
 int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthDay, const int & CurrentYear);
 void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
 
+/* FUNCTIONS FOR ENCRYPTION/DECRYPTION */
+
+char EncryptDecryptChar(char Input);
+int EncryptDecryptInt(int Input);
+
 /* FUNCTIONS FOR SAVING */
 
 void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice);
 string Date();
-
-
-
-char EncryptDecryptChar(char Input);
-int EncryptDecryptInt(int Input);
 
 /*
  -----------------------------BUGS AND FIXES------------------------------
@@ -105,6 +105,10 @@ int EncryptDecryptInt(int Input);
  ---------------------------NEW FEATURES TO ADD---------------------------
  password protect the encryption by using a password and cycling the letters of the password
     then going back to the beginning of that password and doing it again until its done
+ 
+ in settings section, ask if user wants encryption or not, if yes, turn it on, if not, turn it off
+ 
+ expand more in the user settings
  
  ways to exit main menu functions - type "Q" to leave - then if statement with "return/break"
  enhance loop in delete contact function?
@@ -595,6 +599,8 @@ void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSel
         
         cout << "\nSet a different speeed? Y/N: ";
         cin >> LoopAgainOrNot;
+        
+        cout << "\n";
         cin.ignore();//remove one left over newline
     }
     while (toupper(LoopAgainOrNot) == 'Y');
@@ -624,15 +630,9 @@ void SettingsAndConfigurationAlterations(int & DisplaySpeed, int & SpeedSelectio
 
 void PrintStringInStructDataVectorToFile(const vector <char> &Vector, ofstream &FileOut)
 {
-    /* EncryptedCharHolder HOLDS THE CHARACTER THAT HAS BEEN ENCRYPTED */
-    
-    char EncryptedCharHolder;
-    
     for (int i = 0; i < Vector.size(); i++)
     {
-        EncryptedCharHolder = EncryptDecryptChar(Vector[i]);
-        
-        FileOut << EncryptedCharHolder;
+        FileOut << EncryptDecryptChar(Vector[i]);
     }
 }
 
@@ -647,15 +647,13 @@ void PrintStringInStructDataVectorToScreen(const vector <char> &Vector)
 void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &FileIn)
 {
     char Insert = 1;//used for inserting characters into individual struct vectors
-    //initialized at 1 to allow while loop to execute
+                    //initialized at 1 to allow while loop to execute
     
-    while (Insert != '\n' && Insert != 0)//this character is inserted at the end of the text file
+    while (Insert != '\n')
     {
         FileIn.get(Insert);
         
         Insert = EncryptDecryptChar(Insert);
-        
-        //if (Insert != '\n')//dont store newlines in text
         
         Vector.push_back(Insert);
     }
@@ -1135,6 +1133,31 @@ void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)
     TempPersonalInfoHolder.DateOfBirth.push_back('\n');
 }
 
+char EncryptDecryptChar(char Input)
+{
+    /* USED TO ENCRYPT/DECRYPT THE VECTORS IN STRUCT: FIRSTNAME, LASTNAME, ADDRESS, PHONENUMBER,DATEOFBIRTH */
+    /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
+    
+    char CharKey = 'J';
+    
+    Input ^= CharKey;
+    
+    return Input;
+}
+
+int EncryptDecryptInt(int Input)
+{
+    /* USED TO ENCRYPT/DECRYPT INTS IN STRUCT: MONTHBORN, DAYBORN, YEARBORN AND CURRENTAGE */
+    /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
+    //use a different method of encryption for the ints
+    
+    char IntKey = 'z';
+    
+    Input ^= IntKey;
+    
+    return Input;
+}
+
 void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice)
 {
     ofstream FileOut;
@@ -1195,27 +1218,4 @@ string Date()//not my code here - modified it to display what I want and to read
     strftime(Time, 50, "%D, %I:%M %p", localtime(&now));
     
     return string(Time);
-}
-
-char EncryptDecryptChar(char Input)
-{
-    /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
-    
-    char CharKey = 'J';
-    
-    Input ^= CharKey++;
-    
-    return Input;
-}
-
-int EncryptDecryptInt(int Input)
-{
-    /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
-    //use a different method of encryption for the ints
-    
-    char IntKey = 'k';
-    
-    Input ^= IntKey++;
-    
-    return Input;
 }
