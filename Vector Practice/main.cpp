@@ -66,6 +66,11 @@ int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & Mont
 int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthDay, const int & CurrentYear);
 void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
 
+/* FUNCTIONS FOR ENCRYPTION/DECRYPTION */
+
+char EncryptDecryptChar(char Input);
+int EncryptDecryptInt(int Input);
+
 /* FUNCTIONS FOR SAVING */
 
 void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice);
@@ -73,6 +78,9 @@ string Date();
 
 /*
  -----------------------------BUGS AND FIXES------------------------------
+ fix error in calculating encrypted
+ 
+ organize function prototypes again
  
  how big to make array holding pathway? - any way to use vector for this field?
 
@@ -95,6 +103,12 @@ string Date();
  and displays to screen, being overwrtten each time - maybe
  
  ---------------------------NEW FEATURES TO ADD---------------------------
+ password protect the encryption by using a password and cycling the letters of the password
+    then going back to the beginning of that password and doing it again until its done
+ 
+ in settings section, ask if user wants encryption or not, if yes, turn it on, if not, turn it off
+ 
+ expand more in the user settings
  
  ways to exit main menu functions - type "Q" to leave - then if statement with "return/break"
  enhance loop in delete contact function?
@@ -585,6 +599,8 @@ void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSel
         
         cout << "\nSet a different speeed? Y/N: ";
         cin >> LoopAgainOrNot;
+        
+        cout << "\n";
         cin.ignore();//remove one left over newline
     }
     while (toupper(LoopAgainOrNot) == 'Y');
@@ -616,7 +632,7 @@ void PrintStringInStructDataVectorToFile(const vector <char> &Vector, ofstream &
 {
     for (int i = 0; i < Vector.size(); i++)
     {
-        FileOut << Vector[i];
+        FileOut << EncryptDecryptChar(Vector[i]);
     }
 }
 
@@ -631,13 +647,13 @@ void PrintStringInStructDataVectorToScreen(const vector <char> &Vector)
 void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &FileIn)
 {
     char Insert = 1;//used for inserting characters into individual struct vectors
-    //initialized at 1 to allow while loop to execute
+                    //initialized at 1 to allow while loop to execute
     
-    while (Insert != '\n' && Insert != 0)//this character is inserted at the end of the text file
+    while (Insert != '\n')
     {
         FileIn.get(Insert);
         
-        //if (Insert != '\n')//dont store newlines in text
+        Insert = EncryptDecryptChar(Insert);
         
         Vector.push_back(Insert);
     }
@@ -753,6 +769,8 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
     
     for (int i = 0; CV.size() < AmountOfContactsInFile; i++)
     {
+        /* DECRYPTION FOR VECTORS HAPPENS IN INSERTSTRINGIN... FUNCTIONS */
+        
         InsertStringInStructDataVectorFromFile(Temporary.FirstNameVector, FileIn);
         
         InsertStringInStructDataVectorFromFile(Temporary.LastNameVector, FileIn);
@@ -763,13 +781,19 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
         
         InsertStringInStructDataVectorFromFile(Temporary.DateOfBirth, FileIn);
         
+        /* DECRYPTION FOR INTS HAPPENS RIGHT HERE */
+        
         FileIn >> Temporary.CurrentAge;
+        Temporary.CurrentAge = EncryptDecryptInt(Temporary.CurrentAge);
         
         FileIn >> Temporary.MonthBorn;
+        Temporary.MonthBorn = EncryptDecryptInt(Temporary.MonthBorn);
         
         FileIn >> Temporary.DayBorn;
+        Temporary.DayBorn = EncryptDecryptInt(Temporary.DayBorn);
         
         FileIn >> Temporary.YearBorn;
+        Temporary.YearBorn = EncryptDecryptInt(Temporary.YearBorn);
         
         /* AUTOMATICALLY RECALCULATE CURRENT YEAR EVERY TIME LIST IS REBUILT */
         
@@ -1107,9 +1131,35 @@ void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)
     TempPersonalInfoHolder.DateOfBirth.push_back('\n');
 }
 
+char EncryptDecryptChar(char Input)
+{
+    /* USED TO ENCRYPT/DECRYPT THE VECTORS IN STRUCT: FIRSTNAME, LASTNAME, ADDRESS, PHONENUMBER,DATEOFBIRTH */
+    /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
+    
+    char CharKey = 'J';
+    
+    Input ^= CharKey;
+    
+    return Input;
+}
+
+int EncryptDecryptInt(int Input)
+{
+    /* USED TO ENCRYPT/DECRYPT INTS IN STRUCT: MONTHBORN, DAYBORN, YEARBORN AND CURRENTAGE */
+    /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
+    //use a different method of encryption for the ints
+    
+    char IntKey = 'z';
+    
+    Input ^= IntKey;
+    
+    return Input;
+}
+
 void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice)
 {
     ofstream FileOut;
+    
     
     FileOut.open(Path);
     
@@ -1128,6 +1178,8 @@ void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Pat
     
     for (int i = 0; i < CV.size(); i++)
     {
+        /* ENCRYPTION FOR VECTORS HAPPENS IN PRINTSTRINGSTRUCT... FUNCTIONS */
+        
         PrintStringInStructDataVectorToFile(CV[i].FirstNameVector, FileOut);
         
         PrintStringInStructDataVectorToFile(CV[i].LastNameVector, FileOut);
@@ -1138,13 +1190,15 @@ void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Pat
         
         PrintStringInStructDataVectorToFile(CV[i].DateOfBirth, FileOut);
         
-        FileOut << CV[i].CurrentAge << endl;
+        /* ENCRYPTION FOR INTS HAPPENS RIGHT HERE */
         
-        FileOut << CV[i].MonthBorn << endl;
+        FileOut << EncryptDecryptInt(CV[i].CurrentAge) << endl;
         
-        FileOut << CV[i].DayBorn<< endl;
+        FileOut << EncryptDecryptInt(CV[i].MonthBorn) << endl;
         
-        FileOut << CV[i].YearBorn;
+        FileOut << EncryptDecryptInt(CV[i].DayBorn) << endl;
+        
+        FileOut << EncryptDecryptInt(CV[i].YearBorn);
         
         FileOut << "\n\n";
     }
