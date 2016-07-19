@@ -27,8 +27,6 @@ struct PersonalInformation
     short int BirthdayIsInXDays;
 };
 
-void MainMenu();
-
 /* MAIN MENU FUNCTIONS */
 
 void DisplayContacts(const vector <PersonalInformation> &CV, const int & DisplaySpeed);
@@ -41,14 +39,14 @@ void SettingsAndConfigurationAlterations(int & DisplaySpeed, int & SpeedSelectio
 
 /* FUNCTIONS FROM READING AND WRITING FROM FILES AND FROM KEYBOARD */
 
-void PrintStringInStructDataVectorToFile(const vector <char> &Vector, ofstream &FileOut);
-void PrintStringInStructDataVectorToScreen(const vector <char> &Vector);
-void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &FileIn);
-void InsertStringInStructDataVectorFromKeyboard(vector <char> &Vector);
+void PrintVectorToFile(const vector <char> &Vector, ofstream &FileOut);
+void PrintVectorToScreen(const vector <char> &Vector);
+void InsertStringInVectorFromFile(vector <char> &Vector, ifstream &FileIn);
+void InsertStringDataVectorFromKeyboard(vector <char> &Vector);
 
 /* SORTING FUNCTIONS */
 
-void SortVector(vector <PersonalInformation> &CV);
+void SortContactVector(vector <PersonalInformation> &CV);
 bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vector <char> FirstNameVect1, vector <char>
                   FirstNameVect2);
 
@@ -78,10 +76,6 @@ string Date();
 
 /*
  -----------------------------BUGS AND FIXES------------------------------
- fix error in calculating encrypted
- 
- organize function prototypes again
- 
  how big to make array holding pathway? - any way to use vector for this field?
 
  support to just type in newlines to skip birthday, instead of using 0 - use of cin.get() and chars, not int
@@ -122,20 +116,14 @@ string Date();
 
 int main()
 {
-    MainMenu();//consider removing this function entirely and just placing all inside main()
-}
-
-void MainMenu()
-{
     vector <PersonalInformation> ContactVector;
-    static int MainMenuPauseCounter = 0;
+    static int MainMenuPauseCounter = 0;//pauses main menu and waits for user to press enter
     
     char FullPath[180] = {0};
     
     int SwitchChoice;
     int DisplaySpeed = 60000;//defaults at 60,000 - which is medium speed in the SettingsAndConfiguration() function
     int SpeedSelectionChoice = 2;//defaults at medium speed
-    
     
     CreateFolderAndTextFile(FullPath);//creates The Lyons' Den Labs folder in Application Support folder in Library
     
@@ -228,19 +216,19 @@ void DisplayContacts(const vector<PersonalInformation> &CV, const int & DisplayS
     {
         cout << "Contact Number: " << i+1;
         cout << "\nFirst Name:     ";
-        PrintStringInStructDataVectorToScreen(CV[i].FirstNameVector);
+        PrintVectorToScreen(CV[i].FirstNameVector);
         
         cout << "Last Name:      ";
-        PrintStringInStructDataVectorToScreen(CV[i].LastNameVector);
+        PrintVectorToScreen(CV[i].LastNameVector);
         
         cout << "Address:        ";
-        PrintStringInStructDataVectorToScreen(CV[i].AddressVector);
+        PrintVectorToScreen(CV[i].AddressVector);
         
         cout << "Phone Number:   ";
-        PrintStringInStructDataVectorToScreen(CV[i].PhoneNumberVector);
+        PrintVectorToScreen(CV[i].PhoneNumberVector);
         
         cout << "Date Of Birth:  ";
-        PrintStringInStructDataVectorToScreen(CV[i].DateOfBirth);
+        PrintVectorToScreen(CV[i].DateOfBirth);
         
         /* ONLY DISPLAY CURRENT AGE IF N/A ISN'T IN DATEOFBIRTH FIELD */
         
@@ -280,16 +268,16 @@ void AddContact(vector <PersonalInformation> &CV, const char Path[], int & Speed
     while (toupper(UserChoice) != 'N' && toupper(UserChoice) != 'Q')
     {
         cout << "Enter First Name:   ";
-        InsertStringInStructDataVectorFromKeyboard(Temporary.FirstNameVector);
+        InsertStringDataVectorFromKeyboard(Temporary.FirstNameVector);
         
         cout << "Enter Last Name:    ";
-        InsertStringInStructDataVectorFromKeyboard(Temporary.LastNameVector);
+        InsertStringDataVectorFromKeyboard(Temporary.LastNameVector);
         
         cout << "Enter Address:      ";
-        InsertStringInStructDataVectorFromKeyboard(Temporary.AddressVector);
+        InsertStringDataVectorFromKeyboard(Temporary.AddressVector);
         
         cout << "Enter Phone Number: ";
-        InsertStringInStructDataVectorFromKeyboard(Temporary.PhoneNumberVector);
+        InsertStringDataVectorFromKeyboard(Temporary.PhoneNumberVector);
         
         cout << "Enter Birthday:";
         
@@ -300,7 +288,7 @@ void AddContact(vector <PersonalInformation> &CV, const char Path[], int & Speed
         ClearDataVectorsFromStructure(Temporary);
         
         if (CV.size() > 1)//don't go into sort function if only one name is in vector
-            SortVector(CV);
+            SortContactVector(CV);
         
         cout << "\nAdd another contact? Y/N: ";
         cin >> UserChoice;
@@ -331,7 +319,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
     {
         cout << "\n\nContact you wish to edit: ";
         
-        PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].FirstNameVector);
+        PrintVectorToScreen(Vector[ContactNumberToEdit].FirstNameVector);
         
         cout << "\nPress enter to skip editing a field.";
         cout << "\nPress \"Y\" + enter to edit a field.";
@@ -339,7 +327,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
         cout << "\n\n======================\n\n";
         
         cout << "Original First Name:    ";
-        PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].FirstNameVector);
+        PrintVectorToScreen(Vector[ContactNumberToEdit].FirstNameVector);
         
         cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
@@ -351,13 +339,13 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             Vector[ContactNumberToEdit].FirstNameVector.clear();
             
             cout << "\nEnter New First Name:   ";
-            InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].FirstNameVector);
+            InsertStringDataVectorFromKeyboard(Vector[ContactNumberToEdit].FirstNameVector);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
         cout << "\nOriginal Last Name:     ";
-        PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].LastNameVector);
+        PrintVectorToScreen(Vector[ContactNumberToEdit].LastNameVector);
         
         cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
@@ -369,13 +357,13 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             Vector[ContactNumberToEdit].LastNameVector.clear();
             
             cout << "\nEnter New Last Name:    ";
-            InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].LastNameVector);
+            InsertStringDataVectorFromKeyboard(Vector[ContactNumberToEdit].LastNameVector);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
         cout << "\nOriginal Address:       ";
-        PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].AddressVector);
+        PrintVectorToScreen(Vector[ContactNumberToEdit].AddressVector);
         
         cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
@@ -387,13 +375,13 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             Vector[ContactNumberToEdit].AddressVector.clear();
             
             cout << "\nEnter New Address:      ";
-            InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].AddressVector);
+            InsertStringDataVectorFromKeyboard(Vector[ContactNumberToEdit].AddressVector);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
         cout << "\nOriginal Phone Number:  ";
-        PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].PhoneNumberVector);
+        PrintVectorToScreen(Vector[ContactNumberToEdit].PhoneNumberVector);
         
         cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
@@ -405,13 +393,13 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
             Vector[ContactNumberToEdit].PhoneNumberVector.clear();
             
             cout << "\nEnter New Phone Number: ";
-            InsertStringInStructDataVectorFromKeyboard(Vector[ContactNumberToEdit].PhoneNumberVector);
+            InsertStringDataVectorFromKeyboard(Vector[ContactNumberToEdit].PhoneNumberVector);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
         cout << "\nOriginal Date of Birth: ";
-        PrintStringInStructDataVectorToScreen(Vector[ContactNumberToEdit].DateOfBirth);
+        PrintVectorToScreen(Vector[ContactNumberToEdit].DateOfBirth);
         
         cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
@@ -431,7 +419,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
         cout << "\n\n======================\n\n";
     }
     
-    SortVector(Vector);
+    SortContactVector(Vector);
 }
 
 void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice)
@@ -456,19 +444,19 @@ void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const in
             cout << "\n\n======================\n\n";
             
             cout << "First Name:    ";
-            PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].FirstNameVector);
+            PrintVectorToScreen(CV[ContactNumberToDelete].FirstNameVector);
             
             cout << "Last Name:     ";
-            PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].LastNameVector);
+            PrintVectorToScreen(CV[ContactNumberToDelete].LastNameVector);
             
             cout << "Address:       ";
-            PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].AddressVector);
+            PrintVectorToScreen(CV[ContactNumberToDelete].AddressVector);
             
             cout << "Phone Number:  ";
-            PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].PhoneNumberVector);
+            PrintVectorToScreen(CV[ContactNumberToDelete].PhoneNumberVector);
             
             cout << "Date of Birth: ";
-            PrintStringInStructDataVectorToScreen(CV[ContactNumberToDelete].DateOfBirth);
+            PrintVectorToScreen(CV[ContactNumberToDelete].DateOfBirth);
             
             cout << "Current Age:   ";
             cout << CV[ContactNumberToDelete].CurrentAge;
@@ -628,7 +616,7 @@ void SettingsAndConfigurationAlterations(int & DisplaySpeed, int & SpeedSelectio
     //settings for displaying birthday reminders or not
 }
 
-void PrintStringInStructDataVectorToFile(const vector <char> &Vector, ofstream &FileOut)
+void PrintVectorToFile(const vector <char> &Vector, ofstream &FileOut)
 {
     for (int i = 0; i < Vector.size(); i++)
     {
@@ -636,7 +624,7 @@ void PrintStringInStructDataVectorToFile(const vector <char> &Vector, ofstream &
     }
 }
 
-void PrintStringInStructDataVectorToScreen(const vector <char> &Vector)
+void PrintVectorToScreen(const vector <char> &Vector)
 {
     for (int i = 0; i < Vector.size(); i++)
     {
@@ -644,7 +632,7 @@ void PrintStringInStructDataVectorToScreen(const vector <char> &Vector)
     }
 }
 
-void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &FileIn)
+void InsertStringInVectorFromFile(vector <char> &Vector, ifstream &FileIn)
 {
     char Insert = 1;//used for inserting characters into individual struct vectors
                     //initialized at 1 to allow while loop to execute
@@ -659,7 +647,7 @@ void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &Fil
     }
 }
 
-void InsertStringInStructDataVectorFromKeyboard(vector <char> &Vector)
+void InsertStringDataVectorFromKeyboard(vector <char> &Vector)
 {
     char Insert = 0;//used for inserting characters into individual struct vectors
     //initialized at 0 to allow while loop to execute
@@ -690,7 +678,7 @@ void InsertStringInStructDataVectorFromKeyboard(vector <char> &Vector)
         (Vector[0] = toupper(Vector[0]));//if not a number, always capitalize (for first name and last names)
 }
 
-void SortVector(vector <PersonalInformation> &CV)//my modified bubble sort code I found online
+void SortContactVector(vector <PersonalInformation> &CV)//my modified bubble sort code I found online
 {
     bool SwapsMade = true;
     
@@ -771,15 +759,15 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
     {
         /* DECRYPTION FOR VECTORS HAPPENS IN INSERTSTRINGIN... FUNCTIONS */
         
-        InsertStringInStructDataVectorFromFile(Temporary.FirstNameVector, FileIn);
+        InsertStringInVectorFromFile(Temporary.FirstNameVector, FileIn);
         
-        InsertStringInStructDataVectorFromFile(Temporary.LastNameVector, FileIn);
+        InsertStringInVectorFromFile(Temporary.LastNameVector, FileIn);
         
-        InsertStringInStructDataVectorFromFile(Temporary.AddressVector, FileIn);
+        InsertStringInVectorFromFile(Temporary.AddressVector, FileIn);
         
-        InsertStringInStructDataVectorFromFile(Temporary.PhoneNumberVector, FileIn);
+        InsertStringInVectorFromFile(Temporary.PhoneNumberVector, FileIn);
         
-        InsertStringInStructDataVectorFromFile(Temporary.DateOfBirth, FileIn);
+        InsertStringInVectorFromFile(Temporary.DateOfBirth, FileIn);
         
         /* DECRYPTION FOR INTS HAPPENS RIGHT HERE */
         
@@ -948,18 +936,18 @@ int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & Mont
 int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthDay, const int & CurrentYear)
 {
     int DayOfYearThatBirthdayIsOn = 0;
-    int DayHolder = 0;
+    int TemporaryDayHolder = 0;
     
     if (BirthMonth >= 1)//January - 31
     {
-        DayOfYearThatBirthdayIsOn += DayHolder;
-        DayHolder = 31;
+        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
+        TemporaryDayHolder = 31;
     }
     
     if (BirthMonth >= 2)//February - 28/29
     {
-        DayOfYearThatBirthdayIsOn += DayHolder;
-        DayHolder = 28;
+        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
+        TemporaryDayHolder = 28;
         
         /* CHECK TO SEE IF LEAP YEAR OR NOT */
         
@@ -968,11 +956,11 @@ int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthD
             if (CurrentYear % 100 == 0)
             {
                 if (CurrentYear % 400 == 0)
-                    DayHolder = 29;
+                    TemporaryDayHolder = 29;
             }
             
             else
-                DayHolder = 29;
+                TemporaryDayHolder = 29;
             
         }
                     
@@ -992,62 +980,62 @@ int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthD
     
     if (BirthMonth >= 3)//March - 31
     {
-        DayOfYearThatBirthdayIsOn += DayHolder;
-        DayHolder = 31;
+        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
+        TemporaryDayHolder = 31;
     }
     
     if (BirthMonth >= 4)//April - 30
     {
-        DayOfYearThatBirthdayIsOn += DayHolder;
-        DayHolder = 30;
+        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
+        TemporaryDayHolder = 30;
     }
     
     if (BirthMonth >= 5)//May - 31
     {
-        DayOfYearThatBirthdayIsOn += DayHolder;
-        DayHolder = 31;
+        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
+        TemporaryDayHolder = 31;
     }
     
     if (BirthMonth >= 6)//June - 30
     {
-        DayOfYearThatBirthdayIsOn += DayHolder;
-        DayHolder = 30;
+        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
+        TemporaryDayHolder = 30;
     }
     
     if (BirthMonth >= 7)//July - 31
     {
-        DayOfYearThatBirthdayIsOn += DayHolder;
-        DayHolder = 31;
+        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
+        TemporaryDayHolder = 31;
     }
     
     if (BirthMonth >= 8)//August - 31
     {
-        DayOfYearThatBirthdayIsOn += DayHolder;
-        DayHolder = 31;
+        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
+        TemporaryDayHolder = 31;
     }
     
     if (BirthMonth >= 9)//September - 30
     {
-        DayOfYearThatBirthdayIsOn += DayHolder;
-        DayHolder = 30;
+        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
+        TemporaryDayHolder = 30;
     }
     
     if (BirthMonth >= 10)//October - 31
     {
-        DayOfYearThatBirthdayIsOn += DayHolder;
-        DayHolder = 31;
+        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
+        TemporaryDayHolder = 31;
     }
     
     if (BirthMonth >= 11)//November - 30
     {
-        DayOfYearThatBirthdayIsOn += DayHolder;
-        DayHolder = 30;
+        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
+        TemporaryDayHolder = 30;
     }
     
     if (BirthMonth >= 12)//December - 31
     {
-        DayOfYearThatBirthdayIsOn += DayHolder;
-        DayHolder = 31;
+        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
+        TemporaryDayHolder = 31;
     }
     
     DayOfYearThatBirthdayIsOn += BirthDay;
@@ -1180,15 +1168,15 @@ void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Pat
     {
         /* ENCRYPTION FOR VECTORS HAPPENS IN PRINTSTRINGSTRUCT... FUNCTIONS */
         
-        PrintStringInStructDataVectorToFile(CV[i].FirstNameVector, FileOut);
+        PrintVectorToFile(CV[i].FirstNameVector, FileOut);
         
-        PrintStringInStructDataVectorToFile(CV[i].LastNameVector, FileOut);
+        PrintVectorToFile(CV[i].LastNameVector, FileOut);
         
-        PrintStringInStructDataVectorToFile(CV[i].AddressVector, FileOut);
+        PrintVectorToFile(CV[i].AddressVector, FileOut);
         
-        PrintStringInStructDataVectorToFile(CV[i].PhoneNumberVector, FileOut);
+        PrintVectorToFile(CV[i].PhoneNumberVector, FileOut);
         
-        PrintStringInStructDataVectorToFile(CV[i].DateOfBirth, FileOut);
+        PrintVectorToFile(CV[i].DateOfBirth, FileOut);
         
         /* ENCRYPTION FOR INTS HAPPENS RIGHT HERE */
         
