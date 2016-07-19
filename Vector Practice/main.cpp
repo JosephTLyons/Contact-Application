@@ -36,9 +36,11 @@ void AddContact(vector <PersonalInformation> &CV, const char Path[], int & Speed
 void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
 void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice);
-void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
-void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
-void SettingsAndConfigurationAlterations(int & DisplaySpeed, int & SpeedSelectionChoice);
+void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV, bool & EncryptionMode);
+
+void EncryptionOnOff(bool & EncryptionMode);
+void SpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
+void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionChoice);
 
 /* FUNCTIONS FROM READING AND WRITING FROM FILES AND FROM KEYBOARD */
 
@@ -136,6 +138,7 @@ void MainMenu()
     int SwitchChoice;
     int DisplaySpeed = 60000;//defaults at 60,000 - which is medium speed in the SettingsAndConfiguration() function
     int SpeedSelectionChoice = 2;//defaults at medium speed
+    bool EncryptionMode;
     
     
     CreateFolderAndTextFile(FullPath);//creates The Lyons' Den Labs folder in Application Support folder in Library
@@ -143,7 +146,7 @@ void MainMenu()
     if(EmptyFileChecker(FullPath))
     {
         RebuildContactBook(ContactVector, FullPath, SpeedSelectionChoice);//restort contacts
-        SettingsAndConfigurationAlterations(DisplaySpeed, SpeedSelectionChoice);//restore user settings
+        ObtainSpeedSettingNumericalValues(DisplaySpeed, SpeedSelectionChoice);//restore user settings
     }
     
     do
@@ -209,7 +212,7 @@ void MainMenu()
                 
             case 6:
             {
-                SettingsAndConfigurationMenuAndUserInput(DisplaySpeed, SpeedSelectionChoice, ContactVector);
+                DisplaySettingsMenu(DisplaySpeed, SpeedSelectionChoice, ContactVector, EncryptionMode);
                 SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice);
                 break;
             }
@@ -539,7 +542,7 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], 
         cout << "\nContacts were not deleted.\n\n";
 }
 
-void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV)
+void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV, bool & EncryptionMode)
 {
     int Choice;
     
@@ -547,26 +550,59 @@ void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector 
     {
         cout <<   "(1) Display Speed";
         cout << "\n(2) Encryption Settings";
-        cout << "\n(3) STUFF";
-        cout << "\n(4) QUIT SETTINGS";
+        cout << "\n(3) QUIT SETTINGS";
         
-        cout << "\n\n Choice: ";
+        cout << "\n\nChoice: ";
         cin >> Choice;
         
         switch (Choice)
         {
             case 1:
-                <#statements#>
+                SpeedSettingsAndUserInput(DisplaySpeed, SpeedSelectionChoice, CV);
+                break;
+                
+            case 2:
+                EncryptionOnOff(EncryptionMode);
                 break;
                 
             default:
                 break;
         }
     }
-    while (Choice >= 1 && Choice <= 3);
+    while (Choice >= 1 && Choice <= 2);
 }
 
-void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV)
+void EncryptionOnOff(bool & EncryptionMode)
+{
+    char UserChoice;
+    
+    cout << "Encyption ";
+    
+    if (EncryptionMode == true)
+    {
+        cout << "[on] / off";
+        cout << "\n\nWould you like to turn encryptoin off? Y/N?: ";
+        
+        cin >> UserChoice;
+        
+        if (toupper(UserChoice) == 'Y')
+            EncryptionMode = false;
+    }
+    
+    else
+    {
+        cout << "on / [off]";
+        cout << "\n\nWould you like to turn encryptoin on? Y/N?: ";
+        
+        cin >> UserChoice;
+        
+        if (toupper(UserChoice) == 'Y')
+            EncryptionMode = true;
+    }
+}
+
+//RENAME BOTH FUNCTIONS BELOW TO SOMETHING THAT FITS JUST FOR SPEED SETTINGS
+void SpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV)
 {
     char LoopAgainOrNot = 'N';
     
@@ -619,7 +655,7 @@ void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSel
         
         cin >> SpeedSelectionChoice;
         
-        SettingsAndConfigurationAlterations(DisplaySpeed, SpeedSelectionChoice);
+        ObtainSpeedSettingNumericalValues(DisplaySpeed, SpeedSelectionChoice);
         
         cout << "Preview of Speed:\n\n";
         
@@ -634,7 +670,7 @@ void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSel
     while (toupper(LoopAgainOrNot) == 'Y');
 }
 
-void SettingsAndConfigurationAlterations(int & DisplaySpeed, int & SpeedSelectionChoice)
+void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionChoice)
 {
     /* VARIABLES THAT HOLD THE VARIOUS SPEEDS, EASY TO MODIFY THESE HERE */
     
