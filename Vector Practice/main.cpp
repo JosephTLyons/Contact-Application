@@ -44,9 +44,9 @@ void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionC
 
 /* FUNCTIONS FROM READING AND WRITING FROM FILES AND FROM KEYBOARD */
 
-void PrintVectorToFile(const vector <char> &Vector, ofstream &FileOut);
+void PrintVectorToFile(const vector <char> &Vector, ofstream &FileOut, const bool & EncryptionMode);
 void PrintVectorToScreen(const vector <char> &Vector);
-void InsertStringInVectorFromFile(vector <char> &Vector, ifstream &FileIn);
+void InsertStringInVectorFromFile(vector <char> &Vector, ifstream &FileIn, const bool & EncryptionMode);
 void InsertStringDataVectorFromKeyboard(vector <char> &Vector);
 
 /* SORTING FUNCTIONS */
@@ -81,6 +81,8 @@ string Date();
 
 /*
  -----------------------------BUGS AND FIXES------------------------------
+ REFACTOR CODE - make easier to read - const everywhere
+ 
  how big to make array holding pathway? - any way to use vector for this field?
 
  support to just type in newlines to skip birthday, instead of using 0 - use of cin.get() and chars, not int
@@ -105,8 +107,6 @@ string Date();
  password protect the encryption by using a password and cycling the letters of the password
     then going back to the beginning of that password and doing it again until its done
  
- in settings section, ask if user wants encryption or not, if yes, turn it on, if not, turn it off
- 
  expand more in the user settings
  
  ways to exit main menu functions - type "Q" to leave - then if statement with "return/break"
@@ -130,6 +130,7 @@ int main()
     int DisplaySpeed = 60000;//defaults at 60,000 - which is medium speed in the SettingsAndConfiguration() function
     int SpeedSelectionChoice = 2;//defaults at medium speed
     bool EncryptionMode;
+    
     
     CreateFolderAndTextFile(FullPath);//creates The Lyons' Den Labs folder in Application Support folder in Library
     
@@ -686,7 +687,7 @@ void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionC
     //settings for displaying birthday reminders or not
 }
 
-void PrintVectorToFile(const vector <char> &Vector, ofstream &FileOut)
+void PrintVectorToFile(const vector <char> &Vector, ofstream &FileOut, const bool & EncryptionMode)
 {
     for (int i = 0; i < Vector.size(); i++)
     {
@@ -702,7 +703,7 @@ void PrintVectorToScreen(const vector <char> &Vector)
     }
 }
 
-void InsertStringInVectorFromFile(vector <char> &Vector, ifstream &FileIn)
+void InsertStringInVectorFromFile(vector <char> &Vector, ifstream &FileIn, const bool & EncryptionMode)
 {
     char Insert = 1;//used for inserting characters into individual struct vectors
                     //initialized at 1 to allow while loop to execute
@@ -833,15 +834,15 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
     {
         /* DECRYPTION FOR VECTORS HAPPENS IN INSERTSTRINGIN... FUNCTIONS */
         
-        InsertStringInVectorFromFile(Temporary.FirstNameVector, FileIn);
+        InsertStringInVectorFromFile(Temporary.FirstNameVector, FileIn, EncryptionMode);
         
-        InsertStringInVectorFromFile(Temporary.LastNameVector, FileIn);
+        InsertStringInVectorFromFile(Temporary.LastNameVector, FileIn, EncryptionMode);
         
-        InsertStringInVectorFromFile(Temporary.AddressVector, FileIn);
+        InsertStringInVectorFromFile(Temporary.AddressVector, FileIn, EncryptionMode);
         
-        InsertStringInVectorFromFile(Temporary.PhoneNumberVector, FileIn);
+        InsertStringInVectorFromFile(Temporary.PhoneNumberVector, FileIn, EncryptionMode);
         
-        InsertStringInVectorFromFile(Temporary.DateOfBirth, FileIn);
+        InsertStringInVectorFromFile(Temporary.DateOfBirth, FileIn, EncryptionMode);
         
         /* DECRYPTION FOR INTS HAPPENS RIGHT HERE */
         
@@ -1257,15 +1258,15 @@ void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Pat
     {
         /* ENCRYPTION FOR VECTORS HAPPENS IN PRINTSTRINGSTRUCT... FUNCTIONS */
         
-        PrintVectorToFile(CV[i].FirstNameVector, FileOut);
+        PrintVectorToFile(CV[i].FirstNameVector, FileOut, EncryptionMode);
         
-        PrintVectorToFile(CV[i].LastNameVector, FileOut);
+        PrintVectorToFile(CV[i].LastNameVector, FileOut, EncryptionMode);
         
-        PrintVectorToFile(CV[i].AddressVector, FileOut);
+        PrintVectorToFile(CV[i].AddressVector, FileOut, EncryptionMode);
         
-        PrintVectorToFile(CV[i].PhoneNumberVector, FileOut);
+        PrintVectorToFile(CV[i].PhoneNumberVector, FileOut, EncryptionMode);
         
-        PrintVectorToFile(CV[i].DateOfBirth, FileOut);
+        PrintVectorToFile(CV[i].DateOfBirth, FileOut, EncryptionMode);
         
         /* ENCRYPTION FOR INTS HAPPENS RIGHT HERE */
         
