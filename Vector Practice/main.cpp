@@ -33,13 +33,12 @@ void DisplayContacts(const vector <PersonalInformation> &CV, const int & Display
 void AddContact(vector <PersonalInformation> &CV);
 void EditExistingContact(vector <PersonalInformation> &Vector, const int & DisplaySpeed);
 void DeleteContact(vector <PersonalInformation> &CV, const int & DisplaySpeed);
-void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice);
-void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV, bool & EncryptionMode);
+void DeleteAllContacts(vector <PersonalInformation> &Vector);
+void DisplaySettingsMenu(const vector <PersonalInformation> &CV, int & DisplaySpeed, int & SpeedSelectionChoice, bool & EncryptionMode);
 
 /* USER SETTINGS FUNCTIONS */
-
 void EncryptionOnOffSetting(bool & EncryptionMode);
-void ScrollSpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
+void ScrollSpeedSettingsAndUserInput(const vector <PersonalInformation> & CV, int & DisplaySpeed, int & SpeedSelectionChoice);
 void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionChoice);
 
 /* FUNCTIONS FROM READING AND WRITING FROM FILES AND FROM KEYBOARD */
@@ -86,12 +85,10 @@ string ObtainDate();
  use constant reference for parameters when possible to not only keep values from being changed
  but to use less memory
  
+ clean up the placement of reference type & - make it consistent in all formal parameter lists
+ 
  functions left to make parameters const
  -----
-void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice);
-void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV, bool & EncryptionMode);
-void EncryptionOnOffSetting(bool & EncryptionMode);
-void SpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
 void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionChoice);
 void PrintVectorToFile(const vector <char> &Vector, ofstream &FileOut, const bool & EncryptionMode);
 void PrintVectorToScreen(const vector <char> &Vector);
@@ -224,14 +221,14 @@ int main()
                 
             case 5:
             {
-                DeleteAllContacts(ContactVector, FullPath, SpeedSelectionChoice);
+                DeleteAllContacts(ContactVector);
                 SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);
                 break;
             }
                 
             case 6:
             {
-                DisplaySettingsMenu(DisplaySpeed, SpeedSelectionChoice, ContactVector, EncryptionMode);
+                DisplaySettingsMenu(ContactVector, DisplaySpeed, SpeedSelectionChoice, EncryptionMode);
                 SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);
                 break;
             }
@@ -528,7 +525,7 @@ void DeleteContact(vector <PersonalInformation> &CV, const int & DisplaySpeed)
     cout << "\n\n";
 }
 
-void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice)
+void DeleteAllContacts(vector <PersonalInformation> &Vector)
 {
     vector <char> UserChoice;
     bool ContactsNotDeletedFlag = true;
@@ -561,7 +558,7 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], 
         cout << "\nContacts were not deleted.\n\n";
 }
 
-void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV, bool & EncryptionMode)
+void DisplaySettingsMenu(const vector <PersonalInformation> &CV, int & DisplaySpeed, int & SpeedSelectionChoice, bool & EncryptionMode)
 {
     int Choice;
     
@@ -577,7 +574,7 @@ void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector 
         switch (Choice)
         {
             case 1:
-                ScrollSpeedSettingsAndUserInput(DisplaySpeed, SpeedSelectionChoice, CV);
+                ScrollSpeedSettingsAndUserInput(CV, DisplaySpeed, SpeedSelectionChoice);
                 break;
                 
             case 2:
@@ -624,7 +621,7 @@ void EncryptionOnOffSetting(bool & EncryptionMode)
     cout << endl;
 }
 
-void ScrollSpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV)
+void ScrollSpeedSettingsAndUserInput(const vector <PersonalInformation> & CV, int & DisplaySpeed, int & SpeedSelectionChoice)
 {
     char LoopAgainOrNot = 'N';
     
