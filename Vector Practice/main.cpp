@@ -31,8 +31,8 @@ struct PersonalInformation
 
 void DisplayContacts(const vector <PersonalInformation> &CV, const int & DisplaySpeed);
 void AddContact(vector <PersonalInformation> &CV);
-void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
-void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
+void EditExistingContact(vector <PersonalInformation> &Vector, const int & DisplaySpeed);
+void DeleteContact(vector <PersonalInformation> &CV, const int & DisplaySpeed);
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice);
 void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV, bool & EncryptionMode);
 
@@ -88,8 +88,6 @@ string ObtainDate();
  
  functions left to make parameters const
  -----
-void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
-void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice);
 void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV, bool & EncryptionMode);
 void EncryptionOnOffSetting(bool & EncryptionMode);
@@ -212,14 +210,14 @@ int main()
                 
             case 3:
             {
-                EditExistingContact(ContactVector, FullPath, DisplaySpeed, SpeedSelectionChoice);
+                EditExistingContact(ContactVector, DisplaySpeed);
                 SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);
                 break;
             }
                 
             case 4:
             {
-                DeleteContact(ContactVector, FullPath, DisplaySpeed, SpeedSelectionChoice);
+                DeleteContact(ContactVector, DisplaySpeed);
                 SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);
                 break;
             }
@@ -339,7 +337,7 @@ void AddContact(vector <PersonalInformation> &CV)
     cin.ignore();//removes 1 newline at the end of this function - needed for main loop to work correctly
 }
 
-void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice)
+void EditExistingContact(vector <PersonalInformation> &Vector, const int & DisplaySpeed)
 {
     int ContactNumberToEdit;
     char FieldToEdit = 0;
@@ -459,7 +457,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[]
     SortContactVector(Vector);
 }
 
-void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice)
+void DeleteContact(vector <PersonalInformation> &CV, const int & DisplaySpeed)
 {
     int ContactNumberToDelete;
     char ConfirmDelete = 0;
