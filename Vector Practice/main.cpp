@@ -30,7 +30,7 @@ struct PersonalInformation
 /* MAIN MENU FUNCTIONS */
 
 void DisplayContacts(const vector <PersonalInformation> &CV, const int & DisplaySpeed);
-void AddContact(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice);
+void AddContact(vector <PersonalInformation> &CV);
 void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
 void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice);
@@ -39,7 +39,7 @@ void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector 
 /* USER SETTINGS FUNCTIONS */
 
 void EncryptionOnOffSetting(bool & EncryptionMode);
-void DisplayScrollSpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
+void ScrollSpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
 void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionChoice);
 
 /* FUNCTIONS FROM READING AND WRITING FROM FILES AND FROM KEYBOARD */
@@ -88,7 +88,6 @@ string ObtainDate();
  
  functions left to make parameters const
  -----
-void AddContact(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice);
 void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
 void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice);
@@ -206,7 +205,7 @@ int main()
                 
             case 2:
             {
-                AddContact(ContactVector, FullPath, SpeedSelectionChoice);
+                AddContact(ContactVector);
                 SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);
                 break;
             }
@@ -298,7 +297,7 @@ void DisplayContacts(const vector<PersonalInformation> &CV, const int & DisplayS
     cout << "======================\n\n";
 }
 
-void AddContact(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice)
+void AddContact(vector <PersonalInformation> &CV)
 {
     PersonalInformation Temporary;//temporary holding spot for input, used to store in vector
     char UserChoice;
@@ -580,7 +579,7 @@ void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector 
         switch (Choice)
         {
             case 1:
-                DisplayScrollSpeedSettingsAndUserInput(DisplaySpeed, SpeedSelectionChoice, CV);
+                ScrollSpeedSettingsAndUserInput(DisplaySpeed, SpeedSelectionChoice, CV);
                 break;
                 
             case 2:
@@ -627,7 +626,7 @@ void EncryptionOnOffSetting(bool & EncryptionMode)
     cout << endl;
 }
 
-void DisplayScrollSpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV)
+void ScrollSpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV)
 {
     char LoopAgainOrNot = 'N';
     
