@@ -39,7 +39,7 @@ void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector 
 /* USER SETTINGS FUNCTIONS */
 
 void EncryptionOnOffSetting(bool & EncryptionMode);
-void SpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
+void DisplayScrollSpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
 void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionChoice);
 
 /* FUNCTIONS FROM READING AND WRITING FROM FILES AND FROM KEYBOARD */
@@ -76,12 +76,46 @@ int EncryptDecryptInt(int Input, const bool & EncryptionMode);
 
 /* FUNCTIONS FOR SAVING */
 
-void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice, const bool & EncryptionMode);
-string Date();
+void SaveContactBookAndSettings(const vector <PersonalInformation> &CV, const char Path[], const int & SpeedSelectionChoice, const bool & EncryptionMode);
+string ObtainDate();
 
 /*
  -----------------------------BUGS AND FIXES------------------------------
- REFACTOR CODE - make easier to read - const everywhere
+ REFACTOR CODE - make easier to read
+ 
+ use constant reference for parameters when possible to not only keep values from being changed
+ but to use less memory
+ 
+ functions left to make parameters const
+ -----
+void AddContact(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice);
+void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
+void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
+void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice);
+void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV, bool & EncryptionMode);
+void EncryptionOnOffSetting(bool & EncryptionMode);
+void SpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
+void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionChoice);
+void PrintVectorToFile(const vector <char> &Vector, ofstream &FileOut, const bool & EncryptionMode);
+void PrintVectorToScreen(const vector <char> &Vector);
+void InsertStringInVectorFromFile(vector <char> &Vector, ifstream &FileIn, const bool & EncryptionMode);
+void InsertStringDataVectorFromKeyboard(vector <char> &Vector);
+void SortContactVector(vector <PersonalInformation> &CV);
+bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vector <char> FirstNameVect1, vector <char>
+                  FirstNameVect2);
+void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice, bool & EncryptionMode);
+void CreateFolderAndTextFile(char FullPath[]);
+bool EmptyFileChecker(const char Path[]);
+void ClearDataVectorsFromStructure(PersonalInformation &X);
+int BirthDayInput(PersonalInformation & TempPersonalInfoHolder);
+int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & MonthBorn, int & DayBorn, int & YearBorn);
+int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthDay, const int & CurrentYear);
+void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
+char EncryptDecryptChar(char Input, const bool & EncryptionMode);
+int EncryptDecryptInt(int Input, const bool & EncryptionMode);
+string ObtainDate();
+ -----
+ 
  
  how big to make array holding pathway? - any way to use vector for this field?
 
@@ -92,9 +126,6 @@ string Date();
  bound checking on birthday entry
  -no months greater than 12
  -no days greater than 31
- 
- use constant reference for parameters when possible to not only keep values from being changed
- but to use less memory
  
  work on optimizing code by changing int to short int or using characters - in functions and in struct
  
@@ -539,8 +570,8 @@ void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector 
     
     do
     {
-        cout <<   "(1) Display Speed";
-        cout << "\n(2) Encryption Settings";
+        cout <<   "(1) Display Scroll Speed";
+        cout << "\n(2) Encryption";
         cout << "\n(3) Quit Settings";
         
         cout << "\n\nChoice: ";
@@ -549,7 +580,7 @@ void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector 
         switch (Choice)
         {
             case 1:
-                SpeedSettingsAndUserInput(DisplaySpeed, SpeedSelectionChoice, CV);
+                DisplayScrollSpeedSettingsAndUserInput(DisplaySpeed, SpeedSelectionChoice, CV);
                 break;
                 
             case 2:
@@ -596,8 +627,7 @@ void EncryptionOnOffSetting(bool & EncryptionMode)
     cout << endl;
 }
 
-//RENAME BOTH FUNCTIONS BELOW TO SOMETHING THAT FITS JUST FOR SPEED SETTINGS
-void SpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV)
+void DisplayScrollSpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV)
 {
     char LoopAgainOrNot = 'N';
     
@@ -1215,7 +1245,7 @@ int EncryptDecryptInt(int Input, const bool & EncryptionMode)
 {
     /* USED TO ENCRYPT/DECRYPT INTS IN STRUCT: MONTHBORN, DAYBORN, YEARBORN AND CURRENTAGE */
     /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
-    //use a different method of encryption for the ints
+    /* USE A DIFFERENT METHOD OF ENCRYPTION FOR THE INTS */
     
     char IntKey = 'z';
     
@@ -1229,7 +1259,7 @@ int EncryptDecryptInt(int Input, const bool & EncryptionMode)
     return Input;
 }
 
-void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice, const bool & EncryptionMode)
+void SaveContactBookAndSettings(const vector <PersonalInformation> &CV, const char Path[], const int & SpeedSelectionChoice, const bool & EncryptionMode)
 {
     ofstream FileOut;
     
@@ -1281,16 +1311,17 @@ void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Pat
         FileOut << "\n\n";
     }
     
-    FileOut << "Contacts Last Altered: " << Date() << endl;
+    FileOut << "Contacts Last Altered: " << ObtainDate() << endl;
     
     FileOut.close();
 }
 
-string Date()//not my code here - modified it to display what I want and to read easier
+string ObtainDate()//not my code here - modified it to display what I want and to read easier
 {
     char Time[50];
     
     time_t now = time(NULL);
+    
     strftime(Time, 50, "%D, %I:%M %p", localtime(&now));
     
     return string(Time);
