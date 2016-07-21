@@ -34,8 +34,13 @@ void AddContact(vector <PersonalInformation> &CV, const char Path[], int & Speed
 void EditExistingContact(vector <PersonalInformation> &Vector, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
 void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const int & DisplaySpeed, int & SpeedSelectionChoice);
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice);
-void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
-void SettingsAndConfigurationAlterations(int & DisplaySpeed, int & SpeedSelectionChoice);
+void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV, bool & EncryptionMode);
+
+/* USER SETTINGS FUNCTIONS */
+
+void EncryptionOnOffSetting(bool & EncryptionMode);
+void SpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
+void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionChoice);
 
 /* FUNCTIONS FROM READING AND WRITING FROM FILES AND FROM KEYBOARD */
 
@@ -52,7 +57,7 @@ bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vect
 
 /* MISCELLANEOUS FUNCTIONS */
 
-void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice);
+void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice, bool & EncryptionMode);
 void CreateFolderAndTextFile(char FullPath[]);
 bool EmptyFileChecker(const char Path[]);
 void ClearDataVectorsFromStructure(PersonalInformation &X);
@@ -66,12 +71,12 @@ void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
 
 /* FUNCTIONS FOR ENCRYPTION/DECRYPTION */
 
-char EncryptDecryptChar(char Input);
-int EncryptDecryptInt(int Input);
+char EncryptDecryptChar(char Input, const bool & EncryptionMode);
+int EncryptDecryptInt(int Input, const bool & EncryptionMode);
 
 /* FUNCTIONS FOR SAVING */
 
-void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice);
+void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice, const bool & EncryptionMode);
 string Date();
 
 /*
@@ -124,13 +129,14 @@ int main()
     int SwitchChoice;
     int DisplaySpeed = 60000;//defaults at 60,000 - which is medium speed in the SettingsAndConfiguration() function
     int SpeedSelectionChoice = 2;//defaults at medium speed
+    bool EncryptionMode;
     
     CreateFolderAndTextFile(FullPath);//creates The Lyons' Den Labs folder in Application Support folder in Library
     
     if(EmptyFileChecker(FullPath))
     {
-        RebuildContactBook(ContactVector, FullPath, SpeedSelectionChoice);//restort contacts
-        SettingsAndConfigurationAlterations(DisplaySpeed, SpeedSelectionChoice);//restore user settings
+        RebuildContactBook(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);//restort contacts
+        ObtainSpeedSettingNumericalValues(DisplaySpeed, SpeedSelectionChoice);//restore user settings
     }
     
     do
@@ -169,35 +175,35 @@ int main()
             case 2:
             {
                 AddContact(ContactVector, FullPath, SpeedSelectionChoice);
-                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice);
+                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);
                 break;
             }
                 
             case 3:
             {
                 EditExistingContact(ContactVector, FullPath, DisplaySpeed, SpeedSelectionChoice);
-                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice);
+                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);
                 break;
             }
                 
             case 4:
             {
                 DeleteContact(ContactVector, FullPath, DisplaySpeed, SpeedSelectionChoice);
-                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice);
+                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);
                 break;
             }
                 
             case 5:
             {
                 DeleteAllContacts(ContactVector, FullPath, SpeedSelectionChoice);
-                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice);
+                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);
                 break;
             }
                 
             case 6:
             {
-                SettingsAndConfigurationMenuAndUserInput(DisplaySpeed, SpeedSelectionChoice, ContactVector);
-                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice);
+                DisplaySettingsMenu(DisplaySpeed, SpeedSelectionChoice, ContactVector, EncryptionMode);
+                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);
                 break;
             }
                 
@@ -526,7 +532,71 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], 
         cout << "\nContacts were not deleted.\n\n";
 }
 
-void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV)
+void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV, bool & EncryptionMode)
+{
+    int Choice;
+    
+    do
+    {
+        cout <<   "(1) Display Speed";
+        cout << "\n(2) Encryption Settings";
+        cout << "\n(3) Quit Settings";
+        
+        cout << "\n\nChoice: ";
+        cin >> Choice;
+        
+        switch (Choice)
+        {
+            case 1:
+                SpeedSettingsAndUserInput(DisplaySpeed, SpeedSelectionChoice, CV);
+                break;
+                
+            case 2:
+                EncryptionOnOffSetting(EncryptionMode);
+                break;
+                
+            default:
+                break;
+        }
+    }
+    while (Choice >= 1 && Choice <= 2);
+    
+    cout << endl;
+}
+
+void EncryptionOnOffSetting(bool & EncryptionMode)
+{
+    char UserChoice;
+    
+    cout << "\nEncyption ";
+    
+    if (EncryptionMode == true)
+    {
+        cout << "[on] / off";
+        cout << "\n\nWould you like to turn encryption off? Y/N?: ";
+        
+        cin >> UserChoice;
+        
+        if (toupper(UserChoice) == 'Y')
+            EncryptionMode = false;
+    }
+    
+    else
+    {
+        cout << "on / [off]";
+        cout << "\n\nWould you like to turn encryption on? Y/N?: ";
+        
+        cin >> UserChoice;
+        
+        if (toupper(UserChoice) == 'Y')
+            EncryptionMode = true;
+    }
+    
+    cout << endl;
+}
+
+//RENAME BOTH FUNCTIONS BELOW TO SOMETHING THAT FITS JUST FOR SPEED SETTINGS
+void SpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV)
 {
     char LoopAgainOrNot = 'N';
     
@@ -579,7 +649,7 @@ void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSel
         
         cin >> SpeedSelectionChoice;
         
-        SettingsAndConfigurationAlterations(DisplaySpeed, SpeedSelectionChoice);
+        ObtainSpeedSettingNumericalValues(DisplaySpeed, SpeedSelectionChoice);
         
         cout << "Preview of Speed:\n\n";
         
@@ -594,7 +664,7 @@ void SettingsAndConfigurationMenuAndUserInput(int & DisplaySpeed, int & SpeedSel
     while (toupper(LoopAgainOrNot) == 'Y');
 }
 
-void SettingsAndConfigurationAlterations(int & DisplaySpeed, int & SpeedSelectionChoice)
+void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionChoice)
 {
     /* VARIABLES THAT HOLD THE VARIOUS SPEEDS, EASY TO MODIFY THESE HERE */
     
@@ -620,7 +690,7 @@ void PrintVectorToFile(const vector <char> &Vector, ofstream &FileOut)
 {
     for (int i = 0; i < Vector.size(); i++)
     {
-        FileOut << EncryptDecryptChar(Vector[i]);
+        FileOut << EncryptDecryptChar(Vector[i], EncryptionMode);
     }
 }
 
@@ -641,7 +711,7 @@ void InsertStringInVectorFromFile(vector <char> &Vector, ifstream &FileIn)
     {
         FileIn.get(Insert);
         
-        Insert = EncryptDecryptChar(Insert);
+        Insert = EncryptDecryptChar(Insert, EncryptionMode);
         
         Vector.push_back(Insert);
     }
@@ -726,7 +796,7 @@ bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vect
     //no swap will be made back in SortVector() function
 }
 
-void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice)
+void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice, bool & EncryptionMode)
 {
     PersonalInformation Temporary;
     int AmountOfContactsInFile;
@@ -742,6 +812,10 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
         cout << "Couldn't Open File\n";
         return;
     }
+    
+    FileIn.ignore(15);//ignore "Security Mode: " text
+    
+    FileIn >> EncryptionMode;
     
     FileIn.ignore(24);//ignore "Speed Selection Choice: " text
     
@@ -772,16 +846,16 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
         /* DECRYPTION FOR INTS HAPPENS RIGHT HERE */
         
         FileIn >> Temporary.CurrentAge;
-        Temporary.CurrentAge = EncryptDecryptInt(Temporary.CurrentAge);
+        Temporary.CurrentAge = EncryptDecryptInt(Temporary.CurrentAge, EncryptionMode);
         
         FileIn >> Temporary.MonthBorn;
-        Temporary.MonthBorn = EncryptDecryptInt(Temporary.MonthBorn);
+        Temporary.MonthBorn = EncryptDecryptInt(Temporary.MonthBorn, EncryptionMode);
         
         FileIn >> Temporary.DayBorn;
-        Temporary.DayBorn = EncryptDecryptInt(Temporary.DayBorn);
+        Temporary.DayBorn = EncryptDecryptInt(Temporary.DayBorn, EncryptionMode);
         
         FileIn >> Temporary.YearBorn;
-        Temporary.YearBorn = EncryptDecryptInt(Temporary.YearBorn);
+        Temporary.YearBorn = EncryptDecryptInt(Temporary.YearBorn, EncryptionMode);
         
         /* AUTOMATICALLY RECALCULATE CURRENT YEAR EVERY TIME LIST IS REBUILT */
         
@@ -796,7 +870,7 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
     
     /* SAVED CONTACTS AFTER READING IN CASE AGES WERE UPDATED AFTER RE-CALCULATING CURRENT AGE */
     
-    SaveContactBookAndSettings(CV, Path, SpeedSelectionChoice);
+    SaveContactBookAndSettings(CV, Path, SpeedSelectionChoice, EncryptionMode);
     
     FileIn.close();
 }
@@ -1119,19 +1193,24 @@ void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)
     TempPersonalInfoHolder.DateOfBirth.push_back('\n');
 }
 
-char EncryptDecryptChar(char Input)
+char EncryptDecryptChar(char Input, const bool & EncryptionMode)
 {
     /* USED TO ENCRYPT/DECRYPT THE VECTORS IN STRUCT: FIRSTNAME, LASTNAME, ADDRESS, PHONENUMBER,DATEOFBIRTH */
     /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
     
     char CharKey = 'J';
     
-    Input ^= CharKey;
+    /* ONLY ENCRYPT TEXT IF ENCRYPT MODE IS TRUE (TURNED ON), ELSE, SKIP IT AND PRINT NORMAL */
+    
+    if (EncryptionMode == true)
+    {
+        Input ^= CharKey;
+    }
     
     return Input;
 }
 
-int EncryptDecryptInt(int Input)
+int EncryptDecryptInt(int Input, const bool & EncryptionMode)
 {
     /* USED TO ENCRYPT/DECRYPT INTS IN STRUCT: MONTHBORN, DAYBORN, YEARBORN AND CURRENTAGE */
     /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
@@ -1139,12 +1218,17 @@ int EncryptDecryptInt(int Input)
     
     char IntKey = 'z';
     
-    Input ^= IntKey;
+    /* ONLY ENCRYPT TEXT IF ENCRYPT MODE IS TRUE (TURNED ON), ELSE, SKIP IT AND PRINT NORMAL */
+    
+    if (EncryptionMode == true)
+    {
+        Input ^= IntKey;
+    }
     
     return Input;
 }
 
-void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice)
+void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice, const bool & EncryptionMode)
 {
     ofstream FileOut;
     
@@ -1153,6 +1237,11 @@ void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Pat
     
     if (FileOut.fail())//check to see if file opened
         cout << "Couldn't Open File\n";
+    
+    
+    FileOut << "Security Mode: ";
+    
+    FileOut << EncryptionMode << endl;
     
     FileOut << "Speed Selection Choice: ";
     
@@ -1180,13 +1269,13 @@ void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Pat
         
         /* ENCRYPTION FOR INTS HAPPENS RIGHT HERE */
         
-        FileOut << EncryptDecryptInt(CV[i].CurrentAge) << endl;
+        FileOut << EncryptDecryptInt(CV[i].CurrentAge, EncryptionMode) << endl;
         
-        FileOut << EncryptDecryptInt(CV[i].MonthBorn) << endl;
+        FileOut << EncryptDecryptInt(CV[i].MonthBorn, EncryptionMode) << endl;
         
-        FileOut << EncryptDecryptInt(CV[i].DayBorn) << endl;
+        FileOut << EncryptDecryptInt(CV[i].DayBorn, EncryptionMode) << endl;
         
-        FileOut << EncryptDecryptInt(CV[i].YearBorn);
+        FileOut << EncryptDecryptInt(CV[i].YearBorn, EncryptionMode);
         
         FileOut << "\n\n";
     }
