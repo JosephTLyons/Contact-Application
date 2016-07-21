@@ -38,7 +38,7 @@ void DeleteContact(vector <PersonalInformation> &CV, const char Path[], const in
 void DeleteAllContacts(vector <PersonalInformation> &Vector, const char Path[], int & SpeedSelectionChoice);
 void DisplaySettingsMenu(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV, bool & EncryptionMode);
 
-
+/* USER SETTINGS FUNCTIONS */
 
 void EncryptionOnOffSetting(bool & EncryptionMode);
 void SpeedSettingsAndUserInput(int & DisplaySpeed, int & SpeedSelectionChoice, vector <PersonalInformation> CV);
@@ -46,9 +46,9 @@ void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionC
 
 /* FUNCTIONS FROM READING AND WRITING FROM FILES AND FROM KEYBOARD */
 
-void PrintStringInStructDataVectorToFile(const vector <char> &Vector, ofstream &FileOut, bool & EncryptionMode);
+void PrintStringInStructDataVectorToFile(const vector <char> &Vector, ofstream &FileOut, const bool & EncryptionMode);
 void PrintStringInStructDataVectorToScreen(const vector <char> &Vector);
-void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &FileIn, bool & EncryptionMode);
+void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &FileIn, const bool & EncryptionMode);
 void InsertStringInStructDataVectorFromKeyboard(vector <char> &Vector);
 
 /* SORTING FUNCTIONS */
@@ -73,12 +73,12 @@ void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
 
 /* FUNCTIONS FOR ENCRYPTION/DECRYPTION */
 
-char EncryptDecryptChar(char Input, bool & EncryptionMode);
-int EncryptDecryptInt(int Input, bool & EncryptionMode);
+char EncryptDecryptChar(char Input, const bool & EncryptionMode);
+int EncryptDecryptInt(int Input, const bool & EncryptionMode);
 
 /* FUNCTIONS FOR SAVING */
 
-void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice, bool & EncryptionMode);
+void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice, const bool & EncryptionMode);
 string Date();
 
 /*
@@ -698,7 +698,7 @@ void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionC
     //settings for displaying birthday reminders or not
 }
 
-void PrintStringInStructDataVectorToFile(const vector <char> &Vector, ofstream &FileOut, bool & EncryptionMode)
+void PrintStringInStructDataVectorToFile(const vector <char> &Vector, ofstream &FileOut, const bool & EncryptionMode)
 {
     for (int i = 0; i < Vector.size(); i++)
     {
@@ -714,7 +714,7 @@ void PrintStringInStructDataVectorToScreen(const vector <char> &Vector)
     }
 }
 
-void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &FileIn, bool & EncryptionMode)
+void InsertStringInStructDataVectorFromFile(vector <char> &Vector, ifstream &FileIn, const bool & EncryptionMode)
 {
     char Insert = 1;//used for inserting characters into individual struct vectors
                     //initialized at 1 to allow while loop to execute
@@ -1205,7 +1205,7 @@ void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)
     TempPersonalInfoHolder.DateOfBirth.push_back('\n');
 }
 
-char EncryptDecryptChar(char Input, bool & EncryptionMode)
+char EncryptDecryptChar(char Input, const bool & EncryptionMode)
 {
     /* USED TO ENCRYPT/DECRYPT THE VECTORS IN STRUCT: FIRSTNAME, LASTNAME, ADDRESS, PHONENUMBER,DATEOFBIRTH */
     /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
@@ -1222,7 +1222,7 @@ char EncryptDecryptChar(char Input, bool & EncryptionMode)
     return Input;
 }
 
-int EncryptDecryptInt(int Input, bool & EncryptionMode)
+int EncryptDecryptInt(int Input, const bool & EncryptionMode)
 {
     /* USED TO ENCRYPT/DECRYPT INTS IN STRUCT: MONTHBORN, DAYBORN, YEARBORN AND CURRENTAGE */
     /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
@@ -1240,7 +1240,7 @@ int EncryptDecryptInt(int Input, bool & EncryptionMode)
     return Input;
 }
 
-void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice, bool & EncryptionMode)
+void SaveContactBookAndSettings(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice, const bool & EncryptionMode)
 {
     ofstream FileOut;
     
