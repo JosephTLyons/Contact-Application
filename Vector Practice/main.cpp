@@ -29,24 +29,24 @@ struct PersonalInformation
 
 /* MAIN MENU FUNCTIONS */
 
-void DisplayContacts(const vector <PersonalInformation> &CV, const int & DisplaySpeed);
-void AddContact(vector <PersonalInformation> &CV);
-void EditExistingContact(vector <PersonalInformation> &Vector, const int & DisplaySpeed);
-void DeleteContact(vector <PersonalInformation> &CV, const int & DisplaySpeed);
-void DeleteAllContacts(vector <PersonalInformation> &Vector);
-void DisplaySettingsMenu(const vector <PersonalInformation> &CV, int & DisplaySpeed, int & SpeedSelectionChoice, bool & EncryptionMode);
+void DisplayContacts(const vector<PersonalInformation> &ContactVect, const int &DisplaySpeed);
+void AddContact(vector <PersonalInformation> &ContactVect);
+void EditExistingContact(vector <PersonalInformation> &ContactVect, const int &DisplaySpeed);
+void DeleteContact(vector <PersonalInformation> &ContactVect, const int &DisplaySpeed);
+void DeleteAllContacts(vector <PersonalInformation> &ContactVect);
+void DisplaySettingsMenu(const vector <PersonalInformation> &ContactVect, int &DisplaySpeed, int &SpeedSelectionChoice, bool &EncryptionMode);
 
 /* USER SETTINGS FUNCTIONS */
 
-void EncryptionOnOffSetting(bool & EncryptionMode);
-void ScrollSpeedSettingsAndUserInput(const vector <PersonalInformation> & CV, int & DisplaySpeed, int & SpeedSelectionChoice);
-void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, const int & SpeedSelectionChoice);
+void EncryptionOnOffSetting(bool &EncryptionMode);
+void ScrollSpeedSettingsAndUserInput(const vector <PersonalInformation> &ContactVect, int &DisplaySpeed, int &SpeedSelectionChoice);
+void ObtainSpeedSettingNumericalValues(int &DisplaySpeed, const int &SpeedSelectionChoice);
 
 /* FUNCTIONS FROM READING AND WRITING FROM FILES AND FROM KEYBOARD */
 
-void PrintVectorToFile(const vector <char> &ContactVect, ofstream &FileOut, const bool & EncryptionMode);
+void PrintVectorToFile(const vector <char> &ContactVect, ofstream &FileOut, const bool &EncryptionMode);
 void PrintVectorToScreen(const vector <char> &ContactVect);
-void InsertStringInVectorFromFile(vector <char> &ContactVect, ifstream &FileIn, const bool & EncryptionMode);
+void InsertStringInVectorFromFile(vector <char> &ContactVect, ifstream &FileIn, const bool &EncryptionMode);
 void InsertStringDataVectorFromKeyboard(vector <char> &ContactVect);
 
 /* SORTING FUNCTIONS */
@@ -56,7 +56,7 @@ bool NamesInOrder(const vector <char> &LastNameVect1, const vector <char> &LastN
 
 /* MISCELLANEOUS FUNCTIONS */
 
-void RebuildContactBook(vector <PersonalInformation> &ContactVect, const char Path[], int & SpeedSelectionChoice, bool & EncryptionMode);
+void RebuildContactBook(vector <PersonalInformation> &ContactVect, const char Path[], int &SpeedSelectionChoice, bool &EncryptionMode);
 void CreateFolderAndTextFile(char FullPath[]);
 bool EmptyFileChecker(const char Path[]);
 void ClearDataVectorsFromStructure(PersonalInformation &TemporaryStorage);
@@ -64,8 +64,8 @@ void ClearDataVectorsFromStructure(PersonalInformation &TemporaryStorage);
 /* FUNCTIONS FOR DYNAMIC AGE/BIRTHDAY */
  
 int BirthDayInput(PersonalInformation &TempPersonalInfoHolder);
-int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, const int & MonthBorn, const int & DayBorn, const int & YearBorn);
-int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthDay, const int & CurrentYear);
+int CalculateCurrentAge(PersonalInformation &TempPersonalInfoHolder, const int &MonthBorn, const int &DayBorn, const int &YearBorn);
+int CalculateDayNumberFromMonthAndDay(const int &BirthMonth, const int &BirthDay, const int &CurrentYear);
 void StoreDateOfBirthInVector(PersonalInformation &TempPersonalInfoHolder);
 
 /* FUNCTIONS FOR ENCRYPTION/DECRYPTION */
@@ -75,18 +75,15 @@ int EncryptDecryptInt(int Input, const bool &EncryptionMode);
 
 /* FUNCTIONS FOR SAVING */
 
-void SaveContactBookAndSettings(const vector <PersonalInformation> &CV, const char Path[], const int & SpeedSelectionChoice, const bool & EncryptionMode);
+void SaveContactBookAndSettings(const vector <PersonalInformation> &ContactVect, const char Path[], const int &SpeedSelectionChoice, const bool &EncryptionMode);
 string ObtainDateAndTime();
 
 /*
  -----------------------------BUGS AND FIXES------------------------------
  REFACTOR CODE - make easier to read
  
- use constant reference for parameters when possible to not only keep values from being changed
- but to use less memory
+ rename other formal parameters
  
- clean up the placement of reference type & - make it consistent in all formal parameter lists
- clean up the parameter names like "contactvect"
  ------
  
  how big to make array holding pathway? - any way to use vector for this field?
@@ -218,59 +215,59 @@ int main()
     while (SwitchChoice != 7);
 }
 
-void DisplayContacts(const vector<PersonalInformation> &CV, const int & DisplaySpeed)
+void DisplayContacts(const vector<PersonalInformation> &ContactVect, const int &DisplaySpeed)
 {
     cout << "======================\n\n";
     
-    for (int i = 0; i < CV.size(); i++)
+    for (int i = 0; i < ContactVect.size(); i++)
     {
         cout << "Contact Number: " << i+1;
         cout << "\nFirst Name:     ";
-        PrintVectorToScreen(CV[i].FirstNameVector);
+        PrintVectorToScreen(ContactVect[i].FirstNameVector);
         
         cout << "Last Name:      ";
-        PrintVectorToScreen(CV[i].LastNameVector);
+        PrintVectorToScreen(ContactVect[i].LastNameVector);
         
         cout << "Address:        ";
-        PrintVectorToScreen(CV[i].AddressVector);
+        PrintVectorToScreen(ContactVect[i].AddressVector);
         
         cout << "Phone Number:   ";
-        PrintVectorToScreen(CV[i].PhoneNumberVector);
+        PrintVectorToScreen(ContactVect[i].PhoneNumberVector);
         
         cout << "Date Of Birth:  ";
-        PrintVectorToScreen(CV[i].DateOfBirth);
+        PrintVectorToScreen(ContactVect[i].DateOfBirth);
         
         /* ONLY DISPLAY CURRENT AGE IF N/A ISN'T IN DATEOFBIRTH FIELD */
         
-        if (CV[i].DateOfBirth[0] != 'N')
+        if (ContactVect[i].DateOfBirth[0] != 'N')
         {
-            if (CV[i].DateOfBirth[1] != '/')
+            if (ContactVect[i].DateOfBirth[1] != '/')
             {
-                if (CV[i].DateOfBirth[2] != 'A')
+                if (ContactVect[i].DateOfBirth[2] != 'A')
                 {
                     cout << "Current Age:    ";
-                    cout << CV[i].CurrentAge;
+                    cout << ContactVect[i].CurrentAge;
                 }
             }
         }
         
         /* IF BIRTHDAY IS LESS THAN 7 DAYS AWAY, DISPLAY THAT INFORMATION TO THE SCREEEN */
         
-        if (CV[i].BirthdayIsInXDays >= 0 && CV[i].BirthdayIsInXDays <= 7)
-            cout << "\n*BIRTHDAY IS IN " << CV[i].BirthdayIsInXDays << " DAYS*";
+        if (ContactVect[i].BirthdayIsInXDays >= 0 && ContactVect[i].BirthdayIsInXDays <= 7)
+            cout << "\n*BIRTHDAY IS IN " << ContactVect[i].BirthdayIsInXDays << " DAYS*";
         
         cout << "\n\n";
         
         usleep(DisplaySpeed);
     }
     
-    if (CV.size() == 0)
+    if (ContactVect.size() == 0)
         cout << "Contact Book is empty.\n\n";
     
     cout << "======================\n\n";
 }
 
-void AddContact(vector <PersonalInformation> &CV)
+void AddContact(vector <PersonalInformation> &ContactVect)
 {
     PersonalInformation Temporary;//temporary holding spot for input, used to store in vector
     char UserChoice;
@@ -293,12 +290,12 @@ void AddContact(vector <PersonalInformation> &CV)
         
         Temporary.CurrentAge = BirthDayInput(Temporary);
     
-        CV.push_back(Temporary);//store Temp in ContactVector Vector
+        ContactVect.push_back(Temporary);//store Temp in ContactVector Vector
         
         ClearDataVectorsFromStructure(Temporary);
         
-        if (CV.size() > 1)//don't go into sort function if only one name is in vector
-            SortContactVector(CV);
+        if (ContactVect.size() > 1)//don't go into sort function if only one name is in vector
+            SortContactVector(ContactVect);
         
         cout << "\nAdd another contact? Y/N: ";
         cin >> UserChoice;
@@ -312,12 +309,12 @@ void AddContact(vector <PersonalInformation> &CV)
     cin.ignore();//removes 1 newline at the end of this function - needed for main loop to work correctly
 }
 
-void EditExistingContact(vector <PersonalInformation> &Vector, const int & DisplaySpeed)
+void EditExistingContact(vector <PersonalInformation> &ContactVect, const int &DisplaySpeed)
 {
     int ContactNumberToEdit;
     char FieldToEdit = 0;
     
-    DisplayContacts(Vector, DisplaySpeed);
+    DisplayContacts(ContactVect, DisplaySpeed);
     
     cout << "Which contact would you like to edit: ";
     cin >> ContactNumberToEdit;
@@ -325,11 +322,11 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const int & Displ
     
     ContactNumberToEdit--;//decrement value here to work with vector/array notation
     
-    if (ContactNumberToEdit < Vector.size())//error will occur if tries to erase number outside of vector bound
+    if (ContactNumberToEdit < ContactVect.size())//error will occur if tries to erase number outside of vector bound
     {
         cout << "\n\nContact you wish to edit: ";
         
-        PrintVectorToScreen(Vector[ContactNumberToEdit].FirstNameVector);
+        PrintVectorToScreen(ContactVect[ContactNumberToEdit].FirstNameVector);
         
         cout << "\nPress enter to skip editing a field.";
         cout << "\nPress \"Y\" + enter to edit a field.";
@@ -337,7 +334,7 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const int & Displ
         cout << "\n\n======================\n\n";
         
         cout << "Original First Name:    ";
-        PrintVectorToScreen(Vector[ContactNumberToEdit].FirstNameVector);
+        PrintVectorToScreen(ContactVect[ContactNumberToEdit].FirstNameVector);
         
         cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
@@ -346,16 +343,16 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const int & Displ
         {
             cin.ignore();//clear left over newline in input buffer
             
-            Vector[ContactNumberToEdit].FirstNameVector.clear();
+            ContactVect[ContactNumberToEdit].FirstNameVector.clear();
             
             cout << "\nEnter New First Name:   ";
-            InsertStringDataVectorFromKeyboard(Vector[ContactNumberToEdit].FirstNameVector);
+            InsertStringDataVectorFromKeyboard(ContactVect[ContactNumberToEdit].FirstNameVector);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
         cout << "\nOriginal Last Name:     ";
-        PrintVectorToScreen(Vector[ContactNumberToEdit].LastNameVector);
+        PrintVectorToScreen(ContactVect[ContactNumberToEdit].LastNameVector);
         
         cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
@@ -364,16 +361,16 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const int & Displ
         {
             cin.ignore();//clear left over newline in input buffer
             
-            Vector[ContactNumberToEdit].LastNameVector.clear();
+            ContactVect[ContactNumberToEdit].LastNameVector.clear();
             
             cout << "\nEnter New Last Name:    ";
-            InsertStringDataVectorFromKeyboard(Vector[ContactNumberToEdit].LastNameVector);
+            InsertStringDataVectorFromKeyboard(ContactVect[ContactNumberToEdit].LastNameVector);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
         cout << "\nOriginal Address:       ";
-        PrintVectorToScreen(Vector[ContactNumberToEdit].AddressVector);
+        PrintVectorToScreen(ContactVect[ContactNumberToEdit].AddressVector);
         
         cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
@@ -382,16 +379,16 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const int & Displ
         {
             cin.ignore();//clear left over newline in input buffer
             
-            Vector[ContactNumberToEdit].AddressVector.clear();
+            ContactVect[ContactNumberToEdit].AddressVector.clear();
             
             cout << "\nEnter New Address:      ";
-            InsertStringDataVectorFromKeyboard(Vector[ContactNumberToEdit].AddressVector);
+            InsertStringDataVectorFromKeyboard(ContactVect[ContactNumberToEdit].AddressVector);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
         cout << "\nOriginal Phone Number:  ";
-        PrintVectorToScreen(Vector[ContactNumberToEdit].PhoneNumberVector);
+        PrintVectorToScreen(ContactVect[ContactNumberToEdit].PhoneNumberVector);
         
         cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
@@ -400,16 +397,16 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const int & Displ
         {
             cin.ignore();//clear left over newline in input buffer
             
-            Vector[ContactNumberToEdit].PhoneNumberVector.clear();
+            ContactVect[ContactNumberToEdit].PhoneNumberVector.clear();
             
             cout << "\nEnter New Phone Number: ";
-            InsertStringDataVectorFromKeyboard(Vector[ContactNumberToEdit].PhoneNumberVector);
+            InsertStringDataVectorFromKeyboard(ContactVect[ContactNumberToEdit].PhoneNumberVector);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
         cout << "\nOriginal Date of Birth: ";
-        PrintVectorToScreen(Vector[ContactNumberToEdit].DateOfBirth);
+        PrintVectorToScreen(ContactVect[ContactNumberToEdit].DateOfBirth);
         
         cout << "Edit Field?: ";
         cin.get(FieldToEdit);//using cin.get() so that newlines are stored
@@ -418,10 +415,10 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const int & Displ
         {
             cin.ignore();//clear left over newline in input buffer
             
-            Vector[ContactNumberToEdit].DateOfBirth.clear();
+            ContactVect[ContactNumberToEdit].DateOfBirth.clear();
             
             cout << "\nEnter New Date of Birth:";
-            Vector[ContactNumberToEdit].CurrentAge = BirthDayInput(Vector[ContactNumberToEdit]);
+            ContactVect[ContactNumberToEdit].CurrentAge = BirthDayInput(ContactVect[ContactNumberToEdit]);
             
             FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
@@ -429,10 +426,10 @@ void EditExistingContact(vector <PersonalInformation> &Vector, const int & Displ
         cout << "\n\n======================\n\n";
     }
     
-    SortContactVector(Vector);
+    SortContactVector(ContactVect);
 }
 
-void DeleteContact(vector <PersonalInformation> &CV, const int & DisplaySpeed)
+void DeleteContact(vector <PersonalInformation> &ContactVect, const int &DisplaySpeed)
 {
     int ContactNumberToDelete;
     char ConfirmDelete = 0;
@@ -440,12 +437,12 @@ void DeleteContact(vector <PersonalInformation> &CV, const int & DisplaySpeed)
     
     do
     {
-        DisplayContacts(CV, DisplaySpeed);//display list again
+        DisplayContacts(ContactVect, DisplaySpeed);//display list again
         
         cout << "Type in the number of the contact you wish to delete: ";
         cin >> ContactNumberToDelete;
         
-        if (ContactNumberToDelete >= 0 && ContactNumberToDelete <= CV.size())//error will occur if tries to erase number outside of vector bound
+        if (ContactNumberToDelete >= 0 && ContactNumberToDelete <= ContactVect.size())//error will occur if tries to erase number outside of vector bound
         {
             ContactNumberToDelete--;//decrement to work with vector/array notation
             
@@ -454,56 +451,56 @@ void DeleteContact(vector <PersonalInformation> &CV, const int & DisplaySpeed)
             cout << "\n\n======================\n\n";
             
             cout << "First Name:    ";
-            PrintVectorToScreen(CV[ContactNumberToDelete].FirstNameVector);
+            PrintVectorToScreen(ContactVect[ContactNumberToDelete].FirstNameVector);
             
             cout << "Last Name:     ";
-            PrintVectorToScreen(CV[ContactNumberToDelete].LastNameVector);
+            PrintVectorToScreen(ContactVect[ContactNumberToDelete].LastNameVector);
             
             cout << "Address:       ";
-            PrintVectorToScreen(CV[ContactNumberToDelete].AddressVector);
+            PrintVectorToScreen(ContactVect[ContactNumberToDelete].AddressVector);
             
             cout << "Phone Number:  ";
-            PrintVectorToScreen(CV[ContactNumberToDelete].PhoneNumberVector);
+            PrintVectorToScreen(ContactVect[ContactNumberToDelete].PhoneNumberVector);
             
             cout << "Date of Birth: ";
-            PrintVectorToScreen(CV[ContactNumberToDelete].DateOfBirth);
+            PrintVectorToScreen(ContactVect[ContactNumberToDelete].DateOfBirth);
             
             cout << "Current Age:   ";
-            cout << CV[ContactNumberToDelete].CurrentAge;
+            cout << ContactVect[ContactNumberToDelete].CurrentAge;
             
             cout << "\n======================\n\n";
             
             
             cout << "\nAre you sure you want to delete ";
             
-            for (int i = 0; CV[ContactNumberToDelete].FirstNameVector[i] != '\n'; i++)//display name of contact being deleted
+            for (int i = 0; ContactVect[ContactNumberToDelete].FirstNameVector[i] != '\n'; i++)//display name of contact being deleted
             {
-                cout << CV[ContactNumberToDelete].FirstNameVector[i];
+                cout << ContactVect[ContactNumberToDelete].FirstNameVector[i];
             }
             
             cout << "? Y/N: ";
             cin >> ConfirmDelete;
             
             if (toupper(ConfirmDelete) == 'Y')
-                CV.erase(CV.begin() + ContactNumberToDelete);
+                ContactVect.erase(ContactVect.begin() + ContactNumberToDelete);
         }
         
         else
             cout << "\nNo contact located at this number";
         
-        if (toupper(ConfirmDelete) == 'N' && ++ContactNumberToDelete <= CV.size())//increment Contact to work properly with size()function
+        if (toupper(ConfirmDelete) == 'N' && ++ContactNumberToDelete <= ContactVect.size())//increment Contact to work properly with size()function
             cout << "\nNo contact deleted.";//if user chooses to not delete the contact
         
         cout << "\n\nDelete another contact? Y/N: ";
         cin >> DeleteAnotherContactChoice;
         cin.ignore();//removes 1 newline at the end of this function - needed for main loop to work correctly
     }
-    while (toupper(DeleteAnotherContactChoice) == 'Y' && CV.size() > 0);//don't try to delete when nothing is left in vector
+    while (toupper(DeleteAnotherContactChoice) == 'Y' && ContactVect.size() > 0);//don't try to delete when nothing is left in vector
     
     cout << "\n\n";
 }
 
-void DeleteAllContacts(vector <PersonalInformation> &Vector)
+void DeleteAllContacts(vector <PersonalInformation> &ContactVect)
 {
     vector <char> UserChoice;
     bool ContactsNotDeletedFlag = true;
@@ -525,7 +522,7 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector)
             if (UserChoice[2] == 'S')
             {
                 ContactsNotDeletedFlag = false;
-                Vector.clear();
+                ContactVect.clear();
                 
                 cout << "\nAll contacts have been deleted.\n\n";
             }
@@ -536,7 +533,7 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector)
         cout << "\nContacts were not deleted.\n\n";
 }
 
-void DisplaySettingsMenu(const vector <PersonalInformation> &CV, int & DisplaySpeed, int & SpeedSelectionChoice, bool & EncryptionMode)
+void DisplaySettingsMenu(const vector <PersonalInformation> &ContactVect, int &DisplaySpeed, int &SpeedSelectionChoice, bool &EncryptionMode)
 {
     int Choice;
     
@@ -552,7 +549,7 @@ void DisplaySettingsMenu(const vector <PersonalInformation> &CV, int & DisplaySp
         switch (Choice)
         {
             case 1:
-                ScrollSpeedSettingsAndUserInput(CV, DisplaySpeed, SpeedSelectionChoice);
+                ScrollSpeedSettingsAndUserInput(ContactVect, DisplaySpeed, SpeedSelectionChoice);
                 break;
                 
             case 2:
@@ -568,7 +565,7 @@ void DisplaySettingsMenu(const vector <PersonalInformation> &CV, int & DisplaySp
     cout << endl;
 }
 
-void EncryptionOnOffSetting(bool & EncryptionMode)
+void EncryptionOnOffSetting(bool &EncryptionMode)
 {
     char UserChoice;
     
@@ -599,7 +596,7 @@ void EncryptionOnOffSetting(bool & EncryptionMode)
     cout << endl;
 }
 
-void ScrollSpeedSettingsAndUserInput(const vector <PersonalInformation> & CV, int & DisplaySpeed, int & SpeedSelectionChoice)
+void ScrollSpeedSettingsAndUserInput(const vector <PersonalInformation> &ContactVect, int &DisplaySpeed, int &SpeedSelectionChoice)
 {
     char LoopAgainOrNot = 'N';
     
@@ -656,7 +653,7 @@ void ScrollSpeedSettingsAndUserInput(const vector <PersonalInformation> & CV, in
         
         cout << "Preview of Speed:\n\n";
         
-        DisplayContacts(CV, DisplaySpeed);
+        DisplayContacts(ContactVect, DisplaySpeed);
         
         cout << "\nSet a different speeed? Y/N: ";
         cin >> LoopAgainOrNot;
@@ -667,7 +664,7 @@ void ScrollSpeedSettingsAndUserInput(const vector <PersonalInformation> & CV, in
     while (toupper(LoopAgainOrNot) == 'Y');
 }
 
-void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, const int & SpeedSelectionChoice)
+void ObtainSpeedSettingNumericalValues(int &DisplaySpeed, const int &SpeedSelectionChoice)
 {
     /* VARIABLES THAT HOLD THE VARIOUS SPEEDS, EASY TO MODIFY THESE HERE */
     
@@ -689,7 +686,7 @@ void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, const int & SpeedSele
     //settings for displaying birthday reminders or not
 }
 
-void PrintVectorToFile(const vector <char> &ContactVect, ofstream &FileOut, const bool & EncryptionMode)
+void PrintVectorToFile(const vector <char> &ContactVect, ofstream &FileOut, const bool &EncryptionMode)
 {
     for (int i = 0; i < ContactVect.size(); i++)
     {
@@ -705,7 +702,7 @@ void PrintVectorToScreen(const vector <char> &ContactVect)
     }
 }
 
-void InsertStringInVectorFromFile(vector <char> &ContactVect, ifstream &FileIn, const bool & EncryptionMode)
+void InsertStringInVectorFromFile(vector <char> &ContactVect, ifstream &FileIn, const bool &EncryptionMode)
 {
     char Insert = 1;//used for inserting characters into individual struct vectors
                     //initialized at 1 to allow while loop to execute
@@ -799,7 +796,7 @@ bool NamesInOrder(const vector <char> &LastNameVect1, const vector <char> &LastN
     //no swap will be made back in SortVector() function
 }
 
-void RebuildContactBook(vector <PersonalInformation> &ContactVect, const char Path[], int & SpeedSelectionChoice, bool & EncryptionMode)
+void RebuildContactBook(vector <PersonalInformation> &ContactVect, const char Path[], int &SpeedSelectionChoice, bool &EncryptionMode)
 {
     PersonalInformation Temporary;
     int AmountOfContactsInFile;
@@ -949,7 +946,7 @@ int BirthDayInput(PersonalInformation &TempPersonalInfoHolder)
     return CalculateCurrentAge(TempPersonalInfoHolder, TempPersonalInfoHolder.MonthBorn, TempPersonalInfoHolder.DayBorn, TempPersonalInfoHolder.YearBorn);
 }
 
-int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, const int & MonthBorn, const int & DayBorn, const int & YearBorn)
+int CalculateCurrentAge(PersonalInformation &TempPersonalInfoHolder, const int &MonthBorn, const int &DayBorn, const int &YearBorn)
 {
     int DayOfTheYearBirthdayLandsOn = 0;
     int UsersCurrentAge = 0;
@@ -1012,7 +1009,7 @@ int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, const int 
     return UsersCurrentAge;
 }
 
-int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthDay, const int & CurrentYear)
+int CalculateDayNumberFromMonthAndDay(const int &BirthMonth, const int &BirthDay, const int &CurrentYear)
 {
     int DayOfYearThatBirthdayIsOn = 0;
     int TemporaryDayHolder = 0;
@@ -1233,7 +1230,7 @@ int EncryptDecryptInt(int Input, const bool &EncryptionMode)
     return Input;
 }
 
-void SaveContactBookAndSettings(const vector <PersonalInformation> &CV, const char Path[], const int & SpeedSelectionChoice, const bool & EncryptionMode)
+void SaveContactBookAndSettings(const vector <PersonalInformation> &ContactVect, const char Path[], const int &SpeedSelectionChoice, const bool &EncryptionMode)
 {
     ofstream FileOut;
     
@@ -1256,31 +1253,31 @@ void SaveContactBookAndSettings(const vector <PersonalInformation> &CV, const ch
     
     FileOut << "Number of Contacts: ";
     
-    FileOut << CV.size() << endl << endl;
+    FileOut << ContactVect.size() << endl << endl;
     
-    for (int i = 0; i < CV.size(); i++)
+    for (int i = 0; i < ContactVect.size(); i++)
     {
         /* ENCRYPTION FOR VECTORS HAPPENS IN PRINTSTRINGSTRUCT... FUNCTIONS */
         
-        PrintVectorToFile(CV[i].FirstNameVector, FileOut, EncryptionMode);
+        PrintVectorToFile(ContactVect[i].FirstNameVector, FileOut, EncryptionMode);
         
-        PrintVectorToFile(CV[i].LastNameVector, FileOut, EncryptionMode);
+        PrintVectorToFile(ContactVect[i].LastNameVector, FileOut, EncryptionMode);
         
-        PrintVectorToFile(CV[i].AddressVector, FileOut, EncryptionMode);
+        PrintVectorToFile(ContactVect[i].AddressVector, FileOut, EncryptionMode);
         
-        PrintVectorToFile(CV[i].PhoneNumberVector, FileOut, EncryptionMode);
+        PrintVectorToFile(ContactVect[i].PhoneNumberVector, FileOut, EncryptionMode);
         
-        PrintVectorToFile(CV[i].DateOfBirth, FileOut, EncryptionMode);
+        PrintVectorToFile(ContactVect[i].DateOfBirth, FileOut, EncryptionMode);
         
         /* ENCRYPTION FOR INTS HAPPENS RIGHT HERE */
         
-        FileOut << EncryptDecryptInt(CV[i].CurrentAge, EncryptionMode) << endl;
+        FileOut << EncryptDecryptInt(ContactVect[i].CurrentAge, EncryptionMode) << endl;
         
-        FileOut << EncryptDecryptInt(CV[i].MonthBorn, EncryptionMode) << endl;
+        FileOut << EncryptDecryptInt(ContactVect[i].MonthBorn, EncryptionMode) << endl;
         
-        FileOut << EncryptDecryptInt(CV[i].DayBorn, EncryptionMode) << endl;
+        FileOut << EncryptDecryptInt(ContactVect[i].DayBorn, EncryptionMode) << endl;
         
-        FileOut << EncryptDecryptInt(CV[i].YearBorn, EncryptionMode);
+        FileOut << EncryptDecryptInt(ContactVect[i].YearBorn, EncryptionMode);
         
         FileOut << "\n\n";
     }
