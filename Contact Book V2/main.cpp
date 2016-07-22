@@ -17,13 +17,10 @@ struct PersonalInformation
     vector <char> AddressVector;
     vector <char> PhoneNumberVector;
     vector <char> DateOfBirth;
-
     int MonthBorn;
     int DayBorn;
     int YearBorn;
-    
     int CurrentAge;
-    
     short int BirthdayIsInXDays;
 };
 
@@ -58,7 +55,7 @@ bool NamesInOrder(const vector <char> &LastNameVect1, const vector <char> &LastN
 
 void RebuildContactBook(vector <PersonalInformation> &ContactVect, const char Path[], int &SpeedSelectionChoice, bool &EncryptionMode);
 void CreateFolderAndTextFile(char FullPath[]);
-bool EmptyFileChecker(const char Path[]);
+bool CheckIfFileExistsAndContainsInformation(const char Path[]);
 void ClearDataVectorsFromStructure(PersonalInformation &TemporaryStorage);
 
 /* FUNCTIONS FOR DYNAMIC AGE/BIRTHDAY */
@@ -123,22 +120,22 @@ string ObtainDateAndTime();
 
 int main()
 {
-    vector <PersonalInformation> ContactVector;
+    vector <PersonalInformation> ContactVector;//holds all contacts
     static int MainMenuPauseCounter = 0;//pauses main menu and waits for user to press enter
-    
-    char FullPath[180] = {0};
-    
-    int SwitchChoice;
-    int DisplaySpeed = 70000;//defaults at 60,000 - which is medium speed in the SettingsAndConfiguration() function
-    int SpeedSelectionChoice = 2;//defaults at medium speed
+    char FullPath[180] = {0};//holds the pathway to the .txt file that saves the information
+    int SwitchChoice;//
+    int DisplaySpeed;
+    int SpeedSelectionChoice = 2;//default medium speed setting / when program is first ran
     bool EncryptionMode;
+    //-------------------
     
+    /* CREATE THE LYONS' DEN LABS FOLDER AND TEXT FILE IN APPLICATOIN SUPPORT FOLDER IN LIBRARY */
     
-    CreateFolderAndTextFile(FullPath);//creates The Lyons' Den Labs folder in Application Support folder in Library
+    CreateFolderAndTextFile(FullPath);
     
     /* CHECK TO SEE IF FILE EXISTS AND HAS INFORMATION IN IT, IF SO, REBUILD THE LIST */
     
-    if(EmptyFileChecker(FullPath))
+    if(CheckIfFileExistsAndContainsInformation(FullPath))
     {
         RebuildContactBook(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);//restore contacts
         ObtainSpeedSettingNumericalValues(DisplaySpeed, SpeedSelectionChoice);//restore user settings
@@ -146,7 +143,7 @@ int main()
     
     do
     {
-        if (MainMenuPauseCounter++ > 0)//skip this set of commands for the first time in the menu, enter every time after
+        if (MainMenuPauseCounter++ > 0)//pauses the program before displaying the main menu again on second time and after
         {
             cout << "Press enter to go back to main menu: ";
             cin.ignore();//pause the program, wait for user to press enter
@@ -165,7 +162,7 @@ int main()
         cout << "\n\nChoice: ";
         
         cin >> SwitchChoice;
-        cin.ignore();
+        cin.ignore();//ignore newline in buffer after cin >> statement
         
         cout << "\n";
         
@@ -219,7 +216,7 @@ int main()
     while (SwitchChoice != 7);
 }
 
-void DisplayContacts(const vector<PersonalInformation> &ContactVect, const int &DisplaySpeed)
+void DisplayContacts(const vector<PersonalInformation> &ContactVect, const int &DisplaySpeed)//not cleaned up
 {
     cout << "======================\n\n";
     
@@ -271,7 +268,7 @@ void DisplayContacts(const vector<PersonalInformation> &ContactVect, const int &
     cout << "======================\n\n";
 }
 
-void AddContact(vector <PersonalInformation> &ContactVect)
+void AddContact(vector <PersonalInformation> &ContactVect)//not cleaned up
 {
     PersonalInformation Temporary;//temporary holding spot for input, used to store in vector
     char UserChoice;
@@ -313,7 +310,7 @@ void AddContact(vector <PersonalInformation> &ContactVect)
     cin.ignore();//removes 1 newline at the end of this function - needed for main loop to work correctly
 }
 
-void EditExistingContact(vector <PersonalInformation> &ContactVect, const int &DisplaySpeed)
+void EditExistingContact(vector <PersonalInformation> &ContactVect, const int &DisplaySpeed)//not cleaned up
 {
     int ContactNumberToEdit;
     char FieldToEdit = 0;
@@ -433,7 +430,7 @@ void EditExistingContact(vector <PersonalInformation> &ContactVect, const int &D
     SortContactVector(ContactVect);
 }
 
-void DeleteContact(vector <PersonalInformation> &ContactVect, const int &DisplaySpeed)
+void DeleteContact(vector <PersonalInformation> &ContactVect, const int &DisplaySpeed)//not cleaned up
 {
     int ContactNumberToDelete;
     char ConfirmDelete = 0;
@@ -504,7 +501,7 @@ void DeleteContact(vector <PersonalInformation> &ContactVect, const int &Display
     cout << "\n\n";
 }
 
-void DeleteAllContacts(vector <PersonalInformation> &ContactVect)
+void DeleteAllContacts(vector <PersonalInformation> &ContactVect)//not cleaned up
 {
     vector <char> UserChoice;
     bool ContactsNotDeletedFlag = true;
@@ -537,7 +534,7 @@ void DeleteAllContacts(vector <PersonalInformation> &ContactVect)
         cout << "\nContacts were not deleted.\n\n";
 }
 
-void DisplaySettingsMenu(const vector <PersonalInformation> &ContactVect, int &DisplaySpeed, int &SpeedSelectionChoice, bool &EncryptionMode)
+void DisplaySettingsMenu(const vector <PersonalInformation> &ContactVect, int &DisplaySpeed, int &SpeedSelectionChoice, bool &EncryptionMode)//not cleaned up
 {
     int Choice;
     
@@ -569,7 +566,7 @@ void DisplaySettingsMenu(const vector <PersonalInformation> &ContactVect, int &D
     cout << endl;
 }
 
-void EncryptionOnOffSetting(bool &EncryptionMode)
+void EncryptionOnOffSetting(bool &EncryptionMode)//not cleaned up
 {
     char UserChoice;
     
@@ -600,7 +597,7 @@ void EncryptionOnOffSetting(bool &EncryptionMode)
     cout << endl;
 }
 
-void ScrollSpeedSettingsAndUserInput(const vector <PersonalInformation> &ContactVect, int &DisplaySpeed, int &SpeedSelectionChoice)
+void ScrollSpeedSettingsAndUserInput(const vector <PersonalInformation> &ContactVect, int &DisplaySpeed, int &SpeedSelectionChoice)//not cleaned up
 {
     char LoopAgainOrNot = 'N';
     
@@ -668,7 +665,7 @@ void ScrollSpeedSettingsAndUserInput(const vector <PersonalInformation> &Contact
     while (toupper(LoopAgainOrNot) == 'Y');
 }
 
-void ObtainSpeedSettingNumericalValues(int &DisplaySpeed, const int &SpeedSelectionChoice)
+void ObtainSpeedSettingNumericalValues(int &DisplaySpeed, const int &SpeedSelectionChoice)//not cleaned up
 {
     /* VARIABLES THAT HOLD THE VARIOUS SPEEDS, EASY TO MODIFY THESE HERE */
     
@@ -690,7 +687,7 @@ void ObtainSpeedSettingNumericalValues(int &DisplaySpeed, const int &SpeedSelect
     //settings for displaying birthday reminders or not
 }
 
-void PrintVectorToFile(const vector <char> &ContactVect, ofstream &FileOut, const bool &EncryptionMode)
+void PrintVectorToFile(const vector <char> &ContactVect, ofstream &FileOut, const bool &EncryptionMode)//not cleaned up
 {
     for (int i = 0; i < ContactVect.size(); i++)
     {
@@ -698,7 +695,7 @@ void PrintVectorToFile(const vector <char> &ContactVect, ofstream &FileOut, cons
     }
 }
 
-void PrintVectorToScreen(const vector <char> &ContactVect)
+void PrintVectorToScreen(const vector <char> &ContactVect)//not cleaned up
 {
     for (int i = 0; i < ContactVect.size(); i++)
     {
@@ -706,7 +703,7 @@ void PrintVectorToScreen(const vector <char> &ContactVect)
     }
 }
 
-void InsertStringInVectorFromFile(vector <char> &ContactVect, ifstream &FileIn, const bool &EncryptionMode)
+void InsertStringInVectorFromFile(vector <char> &ContactVect, ifstream &FileIn, const bool &EncryptionMode)//not cleaned up
 {
     char Insert = 1;//used for inserting characters into individual struct vectors
                     //initialized at 1 to allow while loop to execute
@@ -721,7 +718,7 @@ void InsertStringInVectorFromFile(vector <char> &ContactVect, ifstream &FileIn, 
     }
 }
 
-void InsertStringDataVectorFromKeyboard(vector <char> &ContactVect)
+void InsertStringDataVectorFromKeyboard(vector <char> &ContactVect)//not cleaned up
 {
     char Insert = 0;//used for inserting characters into individual struct vectors
     //initialized at 0 to allow while loop to execute
@@ -752,7 +749,7 @@ void InsertStringDataVectorFromKeyboard(vector <char> &ContactVect)
         (ContactVect[0] = toupper(ContactVect[0]));//if not a number, always capitalize (for first name and last names)
 }
 
-void SortContactVector(vector <PersonalInformation> &ContactVect)//my modified bubble sort code I found online
+void SortContactVector(vector <PersonalInformation> &ContactVect)//my modified bubble sort code I found online//not cleaned up
 {
     bool SwapsMade = true;
     
@@ -772,7 +769,7 @@ void SortContactVector(vector <PersonalInformation> &ContactVect)//my modified b
     }
 }
 
-bool NamesInOrder(const vector <char> &LastNameVect1, const vector <char> &LastNameVect2, const vector <char> &FirstNameVect1, const vector <char> &FirstNameVect2)
+bool NamesInOrder(const vector <char> &LastNameVect1, const vector <char> &LastNameVect2, const vector <char> &FirstNameVect1, const vector <char> &FirstNameVect2)//not cleaned up
 {
     //checks to see which last name comes first
     
@@ -800,7 +797,7 @@ bool NamesInOrder(const vector <char> &LastNameVect1, const vector <char> &LastN
     //no swap will be made back in SortVector() function
 }
 
-void RebuildContactBook(vector <PersonalInformation> &ContactVect, const char Path[], int &SpeedSelectionChoice, bool &EncryptionMode)
+void RebuildContactBook(vector <PersonalInformation> &ContactVect, const char Path[], int &SpeedSelectionChoice, bool &EncryptionMode)//not cleaned up
 {
     PersonalInformation Temporary;
     int AmountOfContactsInFile;
@@ -879,7 +876,7 @@ void RebuildContactBook(vector <PersonalInformation> &ContactVect, const char Pa
     FileIn.close();
 }
 
-void CreateFolderAndTextFile(char FullPath[])
+void CreateFolderAndTextFile(char FullPath[])//not cleaned up
 {
     //optaining pathway on mac / making my custom folder - consider another implementation that uses vector?
     
@@ -895,7 +892,7 @@ void CreateFolderAndTextFile(char FullPath[])
     strcat(FullPath, RestOfPath);
 }
 
-bool EmptyFileChecker(const char Path[])//shouldn't be declaring a new variable, should be passing it in, but that would call for a major rewrite of the menu function and all the function parameters
+bool CheckIfFileExistsAndContainsInformation(const char Path[])//shouldn't be declaring a new variable, should be passing it in, but that would call for a major rewrite of the menu function and all the function parameters//not cleaned up
 {
     ifstream FileIn;
     
@@ -926,7 +923,7 @@ bool EmptyFileChecker(const char Path[])//shouldn't be declaring a new variable,
     }
 }
 
-void ClearDataVectorsFromStructure(PersonalInformation &TemporaryStorage)
+void ClearDataVectorsFromStructure(PersonalInformation &TemporaryStorage)//not cleaned up
 {
     /* REMOVE ALL CHARACTERS FROM EACH VECTOR OF TEMP STORAGE TO GET READY FOR NEXT */
     
@@ -937,7 +934,7 @@ void ClearDataVectorsFromStructure(PersonalInformation &TemporaryStorage)
     TemporaryStorage.DateOfBirth.clear();
 }
 
-int BirthDayInput(PersonalInformation &TempPersonalInfoHolder)
+int BirthDayInput(PersonalInformation &TempPersonalInfoHolder)//not cleaned up
 {
     /* USER ENTERS IN CONTACTS BIRTHDAY */
     
@@ -957,7 +954,7 @@ int BirthDayInput(PersonalInformation &TempPersonalInfoHolder)
     return CalculateCurrentAge(TempPersonalInfoHolder, TempPersonalInfoHolder.MonthBorn, TempPersonalInfoHolder.DayBorn, TempPersonalInfoHolder.YearBorn);
 }
 
-int CalculateCurrentAge(PersonalInformation &TempPersonalInfoHolder, const int &MonthBorn, const int &DayBorn, const int &YearBorn)
+int CalculateCurrentAge(PersonalInformation &TempPersonalInfoHolder, const int &MonthBorn, const int &DayBorn, const int &YearBorn)//not cleaned up
 {
     int DayOfTheYearBirthdayLandsOn = 0;
     int UsersCurrentAge = 0;
@@ -1020,7 +1017,7 @@ int CalculateCurrentAge(PersonalInformation &TempPersonalInfoHolder, const int &
     return UsersCurrentAge;
 }
 
-int CalculateDayNumberFromMonthAndDay(const int &BirthMonth, const int &BirthDay, const int &CurrentYear)
+int CalculateDayNumberFromMonthAndDay(const int &BirthMonth, const int &BirthDay, const int &CurrentYear)//not cleaned up
 {
     int DayOfYearThatBirthdayIsOn = 0;
     int TemporaryDayHolder = 0;
@@ -1130,7 +1127,7 @@ int CalculateDayNumberFromMonthAndDay(const int &BirthMonth, const int &BirthDay
     return DayOfYearThatBirthdayIsOn;
 }
 
-void StoreDateOfBirthInVector(PersonalInformation &TempPersonalInfoHolder)
+void StoreDateOfBirthInVector(PersonalInformation &TempPersonalInfoHolder)//not cleaned up
 {
     const char *MonthNames[12] = {"January",   "February", "March",    "April",
                                   "May",       "June",     "July",     "August",
@@ -1203,10 +1200,9 @@ void StoreDateOfBirthInVector(PersonalInformation &TempPersonalInfoHolder)
     for (int i = 0; YearArray[i]; i++)
         TempPersonalInfoHolder.DateOfBirth.push_back(YearArray[i]);
     
-    TempPersonalInfoHolder.DateOfBirth.push_back('\n');
-}
+    TempPersonalInfoHolder.DateOfBirth.push_back('\n');}
 
-char EncryptDecryptChar(char Input, const bool &EncryptionMode)
+char EncryptDecryptChar(char Input, const bool &EncryptionMode)//not cleaned up
 {
     /* USED TO ENCRYPT/DECRYPT THE VECTORS IN STRUCT: FIRSTNAME, LASTNAME, ADDRESS, PHONENUMBER,DATEOFBIRTH */
     /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
@@ -1223,7 +1219,7 @@ char EncryptDecryptChar(char Input, const bool &EncryptionMode)
     return Input;
 }
 
-int EncryptDecryptInt(int Input, const bool &EncryptionMode)
+int EncryptDecryptInt(int Input, const bool &EncryptionMode)//not cleaned up
 {
     /* USED TO ENCRYPT/DECRYPT INTS IN STRUCT: MONTHBORN, DAYBORN, YEARBORN AND CURRENTAGE */
     /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
@@ -1241,7 +1237,7 @@ int EncryptDecryptInt(int Input, const bool &EncryptionMode)
     return Input;
 }
 
-void SaveContactBookAndSettings(const vector <PersonalInformation> &ContactVect, const char Path[], const int &SpeedSelectionChoice, const bool &EncryptionMode)
+void SaveContactBookAndSettings(const vector <PersonalInformation> &ContactVect, const char Path[], const int &SpeedSelectionChoice, const bool &EncryptionMode)//not cleaned up
 {
     ofstream FileOut;
     

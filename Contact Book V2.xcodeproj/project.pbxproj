@@ -59,8 +59,7 @@
 			children = (
 				99AF77E21CF9531F005B8FE5 /* main.cpp */,
 			);
-			name = "Contact Book V2";
-			path = "Vector Practice";
+			path = "Contact Book V2";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
