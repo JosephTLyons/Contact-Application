@@ -37,46 +37,46 @@ void DeleteAllContacts(vector <PersonalInformation> &Vector);
 void DisplaySettingsMenu(const vector <PersonalInformation> &CV, int & DisplaySpeed, int & SpeedSelectionChoice, bool & EncryptionMode);
 
 /* USER SETTINGS FUNCTIONS */
+
 void EncryptionOnOffSetting(bool & EncryptionMode);
 void ScrollSpeedSettingsAndUserInput(const vector <PersonalInformation> & CV, int & DisplaySpeed, int & SpeedSelectionChoice);
-void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionChoice);
+void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, const int & SpeedSelectionChoice);
 
 /* FUNCTIONS FROM READING AND WRITING FROM FILES AND FROM KEYBOARD */
 
-void PrintVectorToFile(const vector <char> &Vector, ofstream &FileOut, const bool & EncryptionMode);
-void PrintVectorToScreen(const vector <char> &Vector);
-void InsertStringInVectorFromFile(vector <char> &Vector, ifstream &FileIn, const bool & EncryptionMode);
-void InsertStringDataVectorFromKeyboard(vector <char> &Vector);
+void PrintVectorToFile(const vector <char> &ContactVect, ofstream &FileOut, const bool & EncryptionMode);
+void PrintVectorToScreen(const vector <char> &ContactVect);
+void InsertStringInVectorFromFile(vector <char> &ContactVect, ifstream &FileIn, const bool & EncryptionMode);
+void InsertStringDataVectorFromKeyboard(vector <char> &ContactVect);
 
 /* SORTING FUNCTIONS */
 
-void SortContactVector(vector <PersonalInformation> &CV);
-bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vector <char> FirstNameVect1, vector <char>
-                  FirstNameVect2);
+void SortContactVector(vector <PersonalInformation> &ContactVect);
+bool NamesInOrder(const vector <char> &LastNameVect1, const vector <char> &LastNameVect2, const vector <char> &FirstNameVect1, const vector <char> &FirstNameVect2);
 
 /* MISCELLANEOUS FUNCTIONS */
 
-void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice, bool & EncryptionMode);
+void RebuildContactBook(vector <PersonalInformation> &ContactVect, const char Path[], int & SpeedSelectionChoice, bool & EncryptionMode);
 void CreateFolderAndTextFile(char FullPath[]);
 bool EmptyFileChecker(const char Path[]);
-void ClearDataVectorsFromStructure(PersonalInformation &X);
+void ClearDataVectorsFromStructure(PersonalInformation &TemporaryStorage);
 
 /* FUNCTIONS FOR DYNAMIC AGE/BIRTHDAY */
  
-int BirthDayInput(PersonalInformation & TempPersonalInfoHolder);
-int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & MonthBorn, int & DayBorn, int & YearBorn);
+int BirthDayInput(PersonalInformation &TempPersonalInfoHolder);
+int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, const int & MonthBorn, const int & DayBorn, const int & YearBorn);
 int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthDay, const int & CurrentYear);
-void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
+void StoreDateOfBirthInVector(PersonalInformation &TempPersonalInfoHolder);
 
 /* FUNCTIONS FOR ENCRYPTION/DECRYPTION */
 
-char EncryptDecryptChar(char Input, const bool & EncryptionMode);
-int EncryptDecryptInt(int Input, const bool & EncryptionMode);
+char EncryptDecryptChar(char Input, const bool &EncryptionMode);
+int EncryptDecryptInt(int Input, const bool &EncryptionMode);
 
 /* FUNCTIONS FOR SAVING */
 
 void SaveContactBookAndSettings(const vector <PersonalInformation> &CV, const char Path[], const int & SpeedSelectionChoice, const bool & EncryptionMode);
-string ObtainDate();
+string ObtainDateAndTime();
 
 /*
  -----------------------------BUGS AND FIXES------------------------------
@@ -86,30 +86,8 @@ string ObtainDate();
  but to use less memory
  
  clean up the placement of reference type & - make it consistent in all formal parameter lists
- 
- functions left to make parameters const
- -----
-void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionChoice);
-void PrintVectorToFile(const vector <char> &Vector, ofstream &FileOut, const bool & EncryptionMode);
-void PrintVectorToScreen(const vector <char> &Vector);
-void InsertStringInVectorFromFile(vector <char> &Vector, ifstream &FileIn, const bool & EncryptionMode);
-void InsertStringDataVectorFromKeyboard(vector <char> &Vector);
-void SortContactVector(vector <PersonalInformation> &CV);
-bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vector <char> FirstNameVect1, vector <char>
-                  FirstNameVect2);
-void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice, bool & EncryptionMode);
-void CreateFolderAndTextFile(char FullPath[]);
-bool EmptyFileChecker(const char Path[]);
-void ClearDataVectorsFromStructure(PersonalInformation &X);
-int BirthDayInput(PersonalInformation & TempPersonalInfoHolder);
-int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & MonthBorn, int & DayBorn, int & YearBorn);
-int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthDay, const int & CurrentYear);
-void StoreDateOfBirthInVector(PersonalInformation & PersonalInformationVector);
-char EncryptDecryptChar(char Input, const bool & EncryptionMode);
-int EncryptDecryptInt(int Input, const bool & EncryptionMode);
-string ObtainDate();
- -----
- 
+ clean up the parameter names like "contactvect"
+ ------
  
  how big to make array holding pathway? - any way to use vector for this field?
 
@@ -689,7 +667,7 @@ void ScrollSpeedSettingsAndUserInput(const vector <PersonalInformation> & CV, in
     while (toupper(LoopAgainOrNot) == 'Y');
 }
 
-void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionChoice)
+void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, const int & SpeedSelectionChoice)
 {
     /* VARIABLES THAT HOLD THE VARIOUS SPEEDS, EASY TO MODIFY THESE HERE */
     
@@ -711,23 +689,23 @@ void ObtainSpeedSettingNumericalValues(int & DisplaySpeed, int & SpeedSelectionC
     //settings for displaying birthday reminders or not
 }
 
-void PrintVectorToFile(const vector <char> &Vector, ofstream &FileOut, const bool & EncryptionMode)
+void PrintVectorToFile(const vector <char> &ContactVect, ofstream &FileOut, const bool & EncryptionMode)
 {
-    for (int i = 0; i < Vector.size(); i++)
+    for (int i = 0; i < ContactVect.size(); i++)
     {
-        FileOut << EncryptDecryptChar(Vector[i], EncryptionMode);
+        FileOut << EncryptDecryptChar(ContactVect[i], EncryptionMode);
     }
 }
 
-void PrintVectorToScreen(const vector <char> &Vector)
+void PrintVectorToScreen(const vector <char> &ContactVect)
 {
-    for (int i = 0; i < Vector.size(); i++)
+    for (int i = 0; i < ContactVect.size(); i++)
     {
-        cout << Vector[i];
+        cout << ContactVect[i];
     }
 }
 
-void InsertStringInVectorFromFile(vector <char> &Vector, ifstream &FileIn, const bool & EncryptionMode)
+void InsertStringInVectorFromFile(vector <char> &ContactVect, ifstream &FileIn, const bool & EncryptionMode)
 {
     char Insert = 1;//used for inserting characters into individual struct vectors
                     //initialized at 1 to allow while loop to execute
@@ -738,11 +716,11 @@ void InsertStringInVectorFromFile(vector <char> &Vector, ifstream &FileIn, const
         
         Insert = EncryptDecryptChar(Insert, EncryptionMode);
         
-        Vector.push_back(Insert);
+        ContactVect.push_back(Insert);
     }
 }
 
-void InsertStringDataVectorFromKeyboard(vector <char> &Vector)
+void InsertStringDataVectorFromKeyboard(vector <char> &ContactVect)
 {
     char Insert = 0;//used for inserting characters into individual struct vectors
     //initialized at 0 to allow while loop to execute
@@ -753,27 +731,27 @@ void InsertStringDataVectorFromKeyboard(vector <char> &Vector)
     {
         cin.get(Insert);//using cin.get, and not cin >>, so it stores the newline in Insert - allows to break out of loop
         
-        Vector.push_back(Insert);
+        ContactVect.push_back(Insert);
     }
     
-    if (Vector.size() <= 1)//if theres nothing in vector or just a newline, add "N/A" text in field
+    if (ContactVect.size() <= 1)//if theres nothing in vector or just a newline, add "N/A" text in field
     {
-        Vector.erase(Vector.begin());//erase newline stored
+        ContactVect.erase(ContactVect.begin());//erase newline stored
         
         for (int i = 0; NameOfEmptyField[i] != 0; i++)
         {
-            Vector.push_back(NameOfEmptyField[i]);//insert text for "N/A"
+            ContactVect.push_back(NameOfEmptyField[i]);//insert text for "N/A"
         }
     }
     
-    while (Vector[0] == ' ')//remove any leading whitespace from vector
-        Vector.erase(Vector.begin());//while first element is a space, delete first element
+    while (ContactVect[0] == ' ')//remove any leading whitespace from vector
+        ContactVect.erase(ContactVect.begin());//while first element is a space, delete first element
     
-    if (!isnumber(Vector[0]))
-        (Vector[0] = toupper(Vector[0]));//if not a number, always capitalize (for first name and last names)
+    if (!isnumber(ContactVect[0]))
+        (ContactVect[0] = toupper(ContactVect[0]));//if not a number, always capitalize (for first name and last names)
 }
 
-void SortContactVector(vector <PersonalInformation> &CV)//my modified bubble sort code I found online
+void SortContactVector(vector <PersonalInformation> &ContactVect)//my modified bubble sort code I found online
 {
     bool SwapsMade = true;
     
@@ -781,11 +759,11 @@ void SortContactVector(vector <PersonalInformation> &CV)//my modified bubble sor
     {
         SwapsMade = false;
         
-        for (int i = 0; i < CV.size()-1; i++)
+        for (int i = 0; i < ContactVect.size()-1; i++)
         {
-            if (!NamesInOrder(CV[i].LastNameVector, CV[i+1].LastNameVector, CV[i].FirstNameVector, CV[i+1].FirstNameVector))
+            if (!NamesInOrder(ContactVect[i].LastNameVector, ContactVect[i+1].LastNameVector, ContactVect[i].FirstNameVector, ContactVect[i+1].FirstNameVector))
             {
-                swap(CV[i], CV[i+1]);
+                swap(ContactVect[i], ContactVect[i+1]);
                 
                 SwapsMade = true;
             }
@@ -793,7 +771,7 @@ void SortContactVector(vector <PersonalInformation> &CV)//my modified bubble sor
     }
 }
 
-bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vector <char> FirstNameVect1, vector <char> FirstNameVect2)
+bool NamesInOrder(const vector <char> &LastNameVect1, const vector <char> &LastNameVect2, const vector <char> &FirstNameVect1, const vector <char> &FirstNameVect2)
 {
     //checks to see which last name comes first
     
@@ -821,7 +799,7 @@ bool NamesInOrder(vector <char> LastNameVect1, vector <char> LastNameVect2, vect
     //no swap will be made back in SortVector() function
 }
 
-void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int & SpeedSelectionChoice, bool & EncryptionMode)
+void RebuildContactBook(vector <PersonalInformation> &ContactVect, const char Path[], int & SpeedSelectionChoice, bool & EncryptionMode)
 {
     PersonalInformation Temporary;
     int AmountOfContactsInFile;
@@ -854,7 +832,7 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
     
     FileIn.ignore(2);// ignore two newlines after
     
-    for (int i = 0; CV.size() < AmountOfContactsInFile; i++)
+    for (int i = 0; ContactVect.size() < AmountOfContactsInFile; i++)
     {
         /* DECRYPTION FOR VECTORS HAPPENS IN INSERTSTRINGIN... FUNCTIONS */
         
@@ -886,7 +864,7 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
         
         Temporary.CurrentAge = CalculateCurrentAge(Temporary, Temporary.MonthBorn, Temporary.DayBorn, Temporary.YearBorn);
     
-        CV.push_back(Temporary);
+        ContactVect.push_back(Temporary);
         
         ClearDataVectorsFromStructure(Temporary);
         
@@ -895,7 +873,7 @@ void RebuildContactBook(vector <PersonalInformation> &CV, const char Path[], int
     
     /* SAVED CONTACTS AFTER READING IN CASE AGES WERE UPDATED AFTER RE-CALCULATING CURRENT AGE */
     
-    SaveContactBookAndSettings(CV, Path, SpeedSelectionChoice, EncryptionMode);
+    SaveContactBookAndSettings(ContactVect, Path, SpeedSelectionChoice, EncryptionMode);
     
     FileIn.close();
 }
@@ -940,16 +918,18 @@ bool EmptyFileChecker(const char Path[])//shouldn't be declaring a new variable,
     }
 }
 
-void ClearDataVectorsFromStructure(PersonalInformation &X)
+void ClearDataVectorsFromStructure(PersonalInformation &TemporaryStorage)
 {
-    X.FirstNameVector.clear();//clear out all vectors of temporary storage to get ready for next
-    X.LastNameVector.clear();
-    X.AddressVector.clear();
-    X.PhoneNumberVector.clear();
-    X.DateOfBirth.clear();
+    /* REMOVE ALL CHARACTERS FROM EACH VECTOR OF TEMP STORAGE TO GET READY FOR NEXT */
+    
+    TemporaryStorage.FirstNameVector.clear();
+    TemporaryStorage.LastNameVector.clear();
+    TemporaryStorage.AddressVector.clear();
+    TemporaryStorage.PhoneNumberVector.clear();
+    TemporaryStorage.DateOfBirth.clear();
 }
 
-int BirthDayInput(PersonalInformation & TempPersonalInfoHolder)
+int BirthDayInput(PersonalInformation &TempPersonalInfoHolder)
 {
     /* USER ENTERS IN CONTACTS BIRTHDAY */
     
@@ -969,7 +949,7 @@ int BirthDayInput(PersonalInformation & TempPersonalInfoHolder)
     return CalculateCurrentAge(TempPersonalInfoHolder, TempPersonalInfoHolder.MonthBorn, TempPersonalInfoHolder.DayBorn, TempPersonalInfoHolder.YearBorn);
 }
 
-int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, int & MonthBorn, int & DayBorn, int & YearBorn)
+int CalculateCurrentAge(PersonalInformation & TempPersonalInfoHolder, const int & MonthBorn, const int & DayBorn, const int & YearBorn)
 {
     int DayOfTheYearBirthdayLandsOn = 0;
     int UsersCurrentAge = 0;
@@ -1142,7 +1122,7 @@ int CalculateDayNumberFromMonthAndDay(const int & BirthMonth, const int & BirthD
     return DayOfYearThatBirthdayIsOn;
 }
 
-void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)
+void StoreDateOfBirthInVector(PersonalInformation &TempPersonalInfoHolder)
 {
     const char *MonthNames[12] = {"January",   "February", "March",    "April",
                                   "May",       "June",     "July",     "August",
@@ -1218,7 +1198,7 @@ void StoreDateOfBirthInVector(PersonalInformation& TempPersonalInfoHolder)
     TempPersonalInfoHolder.DateOfBirth.push_back('\n');
 }
 
-char EncryptDecryptChar(char Input, const bool & EncryptionMode)
+char EncryptDecryptChar(char Input, const bool &EncryptionMode)
 {
     /* USED TO ENCRYPT/DECRYPT THE VECTORS IN STRUCT: FIRSTNAME, LASTNAME, ADDRESS, PHONENUMBER,DATEOFBIRTH */
     /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
@@ -1235,7 +1215,7 @@ char EncryptDecryptChar(char Input, const bool & EncryptionMode)
     return Input;
 }
 
-int EncryptDecryptInt(int Input, const bool & EncryptionMode)
+int EncryptDecryptInt(int Input, const bool &EncryptionMode)
 {
     /* USED TO ENCRYPT/DECRYPT INTS IN STRUCT: MONTHBORN, DAYBORN, YEARBORN AND CURRENTAGE */
     /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
@@ -1305,12 +1285,12 @@ void SaveContactBookAndSettings(const vector <PersonalInformation> &CV, const ch
         FileOut << "\n\n";
     }
     
-    FileOut << "Contacts Last Altered: " << ObtainDate() << endl;
+    FileOut << "Contacts Last Altered: " << ObtainDateAndTime() << endl;
     
     FileOut.close();
 }
 
-string ObtainDate()//not my code here - modified it to display what I want and to read easier
+string ObtainDateAndTime()//not my code here - modified it to display what I want and to read easier
 {
     char Time[50];
     
