@@ -82,9 +82,12 @@ string ObtainDateAndTime();
  -----------------------------BUGS AND FIXES------------------------------
  REFACTOR CODE - make easier to read
  
+ add comments
  rename other formal parameters
- 
+ rename objects declared in functions
  ------
+ 
+ figure out how to remove extra newline between contacts with N/A for their birthdays
  
  how big to make array holding pathway? - any way to use vector for this field?
 
@@ -116,7 +119,6 @@ string ObtainDateAndTime();
     exactly how many days it is until their birthday
  
  search for contact function
- 
 */
 
 int main()
@@ -127,16 +129,18 @@ int main()
     char FullPath[180] = {0};
     
     int SwitchChoice;
-    int DisplaySpeed = 60000;//defaults at 60,000 - which is medium speed in the SettingsAndConfiguration() function
+    int DisplaySpeed = 70000;//defaults at 60,000 - which is medium speed in the SettingsAndConfiguration() function
     int SpeedSelectionChoice = 2;//defaults at medium speed
     bool EncryptionMode;
     
     
     CreateFolderAndTextFile(FullPath);//creates The Lyons' Den Labs folder in Application Support folder in Library
     
+    /* CHECK TO SEE IF FILE EXISTS AND HAS INFORMATION IN IT, IF SO, REBUILD THE LIST */
+    
     if(EmptyFileChecker(FullPath))
     {
-        RebuildContactBook(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);//restort contacts
+        RebuildContactBook(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);//restore contacts
         ObtainSpeedSettingNumericalValues(DisplaySpeed, SpeedSelectionChoice);//restore user settings
     }
     
@@ -897,20 +901,27 @@ bool EmptyFileChecker(const char Path[])//shouldn't be declaring a new variable,
     
     FileIn.open(Path);
     
+    /* CHECK TO MAKE SURE FILE OPENED */
+    
     if (FileIn.fail())
     {
         FileIn.close();
         return false;
     }
     
-    else if (FileIn.eof())//return false if file doesnt exist or if file is empty//replace with EndOfFile custom funct??
+    /* CHECK TO SEE IF FILE IS EMPTY */
+    
+    else if (FileIn.eof())
     {
         FileIn.close();
         return false;
     }
     
+    /* ONLY RETURN TRUE IF BOTH PREVIOUS CONDITIONS ARE NOT MET */
+    
     else
-    {   FileIn.close();
+    {
+        FileIn.close();
         return true;
     }
 }
