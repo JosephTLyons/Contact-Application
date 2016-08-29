@@ -118,6 +118,8 @@ string ObtainDateAndTime();
  search for contact function
 */
 
+// FIX ALL VECTOR CLEARS TO VECTOR SWAP, TO DEALLOCATE MEMORY AND GET IT BACK, SEARCH FOR "CLEAR" TO FIND OCCURANCES
+
 int main()
 {
     vector <PersonalInformation> ContactVector;//holds all contacts
@@ -261,6 +263,8 @@ void DisplayContacts(const vector<PersonalInformation> &ContactVect, const int &
         
         usleep(DisplaySpeed);
     }
+    
+    /* IF THERE ARE NO CONTACTS, DISPLAY CONTACT BOOK IS EMPTY */
     
     if (ContactVect.size() == 0)
         cout << "Contact Book is empty.\n\n";
@@ -925,7 +929,17 @@ bool CheckIfFileExistsAndContainsInformation(const char Path[])//shouldn't be de
 
 void ClearDataVectorsFromStructure(PersonalInformation &TemporaryStorage)//not cleaned up
 {
-    /* REMOVE ALL CHARACTERS FROM EACH VECTOR OF TEMP STORAGE TO GET READY FOR NEXT */
+    /* GET BACK THE MEMORY THAT WAS ASSIGNED TO THESE VECTORS */
+    /* USING SWAP METHOD ON VECTORS AS DESCRIBED IN MY STACK EXCHANGE QUESTION BELOW */
+    /* http://stackoverflow.com/questions/39090554/questions-about-vectors-and-deleting-memory-associated-with-them?noredirect=1#comment65529507_39090554 */
+    
+    vector<char>().swap(TemporaryStorage.FirstNameVector);
+    vector<char>().swap(TemporaryStorage.LastNameVector);
+    vector<char>().swap(TemporaryStorage.AddressVector);
+    vector<char>().swap(TemporaryStorage.PhoneNumberVector);
+    vector<char>().swap(TemporaryStorage.DateOfBirth);
+    
+    /* DESTROY ALL CHARACTERS FROM EACH VECTOR OF TEMP STORAGE TO GET READY FOR NEXT */
     
     TemporaryStorage.FirstNameVector.clear();
     TemporaryStorage.LastNameVector.clear();
