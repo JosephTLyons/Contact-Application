@@ -880,7 +880,7 @@ void RebuildContactBook(vector <PersonalInformation> &ContactVect, const char Pa
     FileIn.close();
 }
 
-void CreateFolderAndTextFile(char FullPath[])//not cleaned up
+void CreateFolderAndTextFile(char FullPath[])//not cleaned up - make full path a string in order to adjust size dynamically?
 {
     //optaining pathway on mac / making my custom folder - consider another implementation that uses vector?
     
