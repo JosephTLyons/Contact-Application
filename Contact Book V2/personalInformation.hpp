@@ -12,6 +12,7 @@ struct personalInformation
     vector<char> AddressVector;
     vector<char> PhoneNumberVector;
     vector<char> DateOfBirth;
+    
     int MonthBorn;
     int DayBorn;
     int YearBorn;

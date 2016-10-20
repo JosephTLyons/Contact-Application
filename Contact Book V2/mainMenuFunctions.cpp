@@ -11,7 +11,6 @@
 #include "miscellaneousFunctions.hpp"
 #include "userSettingFunctions.hpp"
 
-
 void DisplayContacts(const vector<personalInformation> &ContactVect, const int &DisplaySpeed)//not cleaned up
 {
     cout << "======================\n\n";
