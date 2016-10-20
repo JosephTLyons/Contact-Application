@@ -7,6 +7,14 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		99A5C5DF1DB8749F003B822A /* mainMenuFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99A5C5DD1DB8749F003B822A /* mainMenuFunctions.cpp */; };
+		99A5C5E21DB875A3003B822A /* readAndWriteFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99A5C5E01DB875A3003B822A /* readAndWriteFunctions.cpp */; };
+		99A5C5E51DB87662003B822A /* encryptDecryptFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99A5C5E31DB87662003B822A /* encryptDecryptFunctions.cpp */; };
+		99A5C5E81DB877F9003B822A /* dynamicBirthdayFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99A5C5E61DB877F9003B822A /* dynamicBirthdayFunctions.cpp */; };
+		99A5C5EB1DB878F4003B822A /* miscellaneousFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99A5C5E91DB878F4003B822A /* miscellaneousFunctions.cpp */; };
+		99A5C5EE1DB8795F003B822A /* userSettingFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99A5C5EC1DB8795F003B822A /* userSettingFunctions.cpp */; };
+		99A5C5F11DB87ABD003B822A /* sortingFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99A5C5EF1DB87ABD003B822A /* sortingFunctions.cpp */; };
+		99A5C5F41DB87B1D003B822A /* savingFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99A5C5F21DB87B1D003B822A /* savingFunctions.cpp */; };
 		99AF77E31CF9531F005B8FE5 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99AF77E21CF9531F005B8FE5 /* main.cpp */; };
 /* End PBXBuildFile section */
 
@@ -23,6 +31,23 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		99A5C5DB1DB8727D003B822A /* personalInformation.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = personalInformation.hpp; sourceTree = "<group>"; };
+		99A5C5DD1DB8749F003B822A /* mainMenuFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = mainMenuFunctions.cpp; sourceTree = "<group>"; };
+		99A5C5DE1DB8749F003B822A /* mainMenuFunctions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = mainMenuFunctions.hpp; sourceTree = "<group>"; };
+		99A5C5E01DB875A3003B822A /* readAndWriteFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = readAndWriteFunctions.cpp; sourceTree = "<group>"; };
+		99A5C5E11DB875A3003B822A /* readAndWriteFunctions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = readAndWriteFunctions.hpp; sourceTree = "<group>"; };
+		99A5C5E31DB87662003B822A /* encryptDecryptFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = encryptDecryptFunctions.cpp; sourceTree = "<group>"; };
+		99A5C5E41DB87662003B822A /* encryptDecryptFunctions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = encryptDecryptFunctions.hpp; sourceTree = "<group>"; };
+		99A5C5E61DB877F9003B822A /* dynamicBirthdayFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = dynamicBirthdayFunctions.cpp; sourceTree = "<group>"; };
+		99A5C5E71DB877F9003B822A /* dynamicBirthdayFunctions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = dynamicBirthdayFunctions.hpp; sourceTree = "<group>"; };
+		99A5C5E91DB878F4003B822A /* miscellaneousFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = miscellaneousFunctions.cpp; sourceTree = "<group>"; };
+		99A5C5EA1DB878F4003B822A /* miscellaneousFunctions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = miscellaneousFunctions.hpp; sourceTree = "<group>"; };
+		99A5C5EC1DB8795F003B822A /* userSettingFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = userSettingFunctions.cpp; sourceTree = "<group>"; };
+		99A5C5ED1DB8795F003B822A /* userSettingFunctions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = userSettingFunctions.hpp; sourceTree = "<group>"; };
+		99A5C5EF1DB87ABD003B822A /* sortingFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = sortingFunctions.cpp; sourceTree = "<group>"; };
+		99A5C5F01DB87ABD003B822A /* sortingFunctions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = sortingFunctions.hpp; sourceTree = "<group>"; };
+		99A5C5F21DB87B1D003B822A /* savingFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = savingFunctions.cpp; sourceTree = "<group>"; };
+		99A5C5F31DB87B1D003B822A /* savingFunctions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = savingFunctions.hpp; sourceTree = "<group>"; };
 		99AF77DF1CF9531F005B8FE5 /* Contact Book V2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Contact Book V2"; sourceTree = BUILT_PRODUCTS_DIR; };
 		99AF77E21CF9531F005B8FE5 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -58,6 +83,23 @@
 			isa = PBXGroup;
 			children = (
 				99AF77E21CF9531F005B8FE5 /* main.cpp */,
+				99A5C5DB1DB8727D003B822A /* personalInformation.hpp */,
+				99A5C5DE1DB8749F003B822A /* mainMenuFunctions.hpp */,
+				99A5C5DD1DB8749F003B822A /* mainMenuFunctions.cpp */,
+				99A5C5E11DB875A3003B822A /* readAndWriteFunctions.hpp */,
+				99A5C5E01DB875A3003B822A /* readAndWriteFunctions.cpp */,
+				99A5C5E41DB87662003B822A /* encryptDecryptFunctions.hpp */,
+				99A5C5E31DB87662003B822A /* encryptDecryptFunctions.cpp */,
+				99A5C5E71DB877F9003B822A /* dynamicBirthdayFunctions.hpp */,
+				99A5C5E61DB877F9003B822A /* dynamicBirthdayFunctions.cpp */,
+				99A5C5EA1DB878F4003B822A /* miscellaneousFunctions.hpp */,
+				99A5C5E91DB878F4003B822A /* miscellaneousFunctions.cpp */,
+				99A5C5ED1DB8795F003B822A /* userSettingFunctions.hpp */,
+				99A5C5EC1DB8795F003B822A /* userSettingFunctions.cpp */,
+				99A5C5F01DB87ABD003B822A /* sortingFunctions.hpp */,
+				99A5C5EF1DB87ABD003B822A /* sortingFunctions.cpp */,
+				99A5C5F31DB87B1D003B822A /* savingFunctions.hpp */,
+				99A5C5F21DB87B1D003B822A /* savingFunctions.cpp */,
 			);
 			path = "Contact Book V2";
 			sourceTree = "<group>";
@@ -118,7 +160,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				99A5C5EB1DB878F4003B822A /* miscellaneousFunctions.cpp in Sources */,
 				99AF77E31CF9531F005B8FE5 /* main.cpp in Sources */,
+				99A5C5E51DB87662003B822A /* encryptDecryptFunctions.cpp in Sources */,
+				99A5C5EE1DB8795F003B822A /* userSettingFunctions.cpp in Sources */,
+				99A5C5F11DB87ABD003B822A /* sortingFunctions.cpp in Sources */,
+				99A5C5E21DB875A3003B822A /* readAndWriteFunctions.cpp in Sources */,
+				99A5C5DF1DB8749F003B822A /* mainMenuFunctions.cpp in Sources */,
+				99A5C5F41DB87B1D003B822A /* savingFunctions.cpp in Sources */,
+				99A5C5E81DB877F9003B822A /* dynamicBirthdayFunctions.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
