@@ -36,7 +36,7 @@ void EncryptionOnOffSetting(bool &EncryptionMode)//not cleaned up
     }
     
     cout << endl;
-}
+} // EncryptionOnOffSetting()
 
 void ScrollSpeedSettingsAndUserInput(const vector <personalInformation> &ContactVect, int &DisplaySpeed, int &SpeedSelectionChoice)//not cleaned up
 {
@@ -104,7 +104,7 @@ void ScrollSpeedSettingsAndUserInput(const vector <personalInformation> &Contact
         cin.ignore();//remove one left over newline
     }
     while (toupper(LoopAgainOrNot) == 'Y');
-}
+} // ScrollSpeedSettingsAndUserInput()
 
 void ObtainSpeedSettingNumericalValues(int &DisplaySpeed, const int &SpeedSelectionChoice)//not cleaned up
 {
@@ -126,4 +126,4 @@ void ObtainSpeedSettingNumericalValues(int &DisplaySpeed, const int &SpeedSelect
         DisplaySpeed = Fast;
     
     //settings for displaying birthday reminders or not
-}
+} // ObtainSpeedSettingNumericalValues()

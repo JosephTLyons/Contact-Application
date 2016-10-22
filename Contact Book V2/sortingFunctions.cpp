@@ -20,7 +20,7 @@ void SortContactVector(vector <personalInformation> &ContactVect)//my modified b
             }
         }
     }
-}
+} // SortContactVector()
 
 bool NamesInOrder(const vector <char> &LastNameVect1, const vector <char> &LastNameVect2, const vector <char> &FirstNameVect1, const vector <char> &FirstNameVect2)//not cleaned up
 {
@@ -48,4 +48,4 @@ bool NamesInOrder(const vector <char> &LastNameVect1, const vector <char> &LastN
     
     return true;//if both names are identical, return true
     //no swap will be made back in SortVector() function
-}
+} // NamesInOrder()

@@ -10,8 +10,11 @@
 
 void RebuildContactBook(vector <personalInformation> &ContactVect, const char Path[],
                         int &SpeedSelectionChoice, bool &EncryptionMode);
+
 void CreateFolderAndTextFile(char FullPath[]);
+
 bool CheckIfFileExistsAndContainsInformation(const char Path[]);
+
 void ClearDataVectorsFromStructure(personalInformation &TemporaryStorage);
 
 #endif /* miscellaneousFunctions_hpp */

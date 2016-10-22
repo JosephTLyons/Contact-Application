@@ -89,7 +89,7 @@ void RebuildContactBook(vector <personalInformation> &ContactVect, const char Pa
     SaveContactBookAndSettings(ContactVect, Path, SpeedSelectionChoice, EncryptionMode);
     
     FileIn.close();
-}
+} // RebuildContactBook()
 
 void CreateFolderAndTextFile(char FullPath[])//not cleaned up - make full path a string in order to adjust size dynamically?
 {
@@ -105,7 +105,7 @@ void CreateFolderAndTextFile(char FullPath[])//not cleaned up - make full path a
     mkdir(FullPath, ACCESSPERMS);//make The Lyons' Den Labs folder
     
     strcat(FullPath, RestOfPath);
-}
+} // CreateFolderAndTextFile()
 
 bool CheckIfFileExistsAndContainsInformation(const char Path[])//shouldn't be declaring a new variable, should be passing it in, but that would call for a major rewrite of the menu function and all the function parameters//not cleaned up
 {
@@ -136,7 +136,7 @@ bool CheckIfFileExistsAndContainsInformation(const char Path[])//shouldn't be de
         FileIn.close();
         return true;
     }
-}
+} // CheckIfFileExistsAndContainsInformation()
 
 void ClearDataVectorsFromStructure(personalInformation &TemporaryStorage)//not cleaned up
 {
@@ -157,4 +157,4 @@ void ClearDataVectorsFromStructure(personalInformation &TemporaryStorage)//not c
     TemporaryStorage.AddressVector.clear();
     TemporaryStorage.PhoneNumberVector.clear();
     TemporaryStorage.DateOfBirth.clear();
-}
+} // ClearDataVectorsFromStructure()

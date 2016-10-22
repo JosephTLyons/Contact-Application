@@ -14,7 +14,7 @@ void PrintVectorToFile(const vector <char> &ContactVect, ofstream &FileOut, cons
     {
         FileOut << EncryptDecryptChar(ContactVect[i], EncryptionMode);
     }
-}
+} // PrintVectorToFile()
 
 void PrintVectorToScreen(const vector <char> &ContactVect)//not cleaned up
 {
@@ -22,7 +22,7 @@ void PrintVectorToScreen(const vector <char> &ContactVect)//not cleaned up
     {
         cout << ContactVect[i];
     }
-}
+} // PrintVectorToScreen
 
 void InsertStringInVectorFromFile(vector <char> &ContactVect, ifstream &FileIn, const bool &EncryptionMode)//not cleaned up
 {
@@ -37,7 +37,7 @@ void InsertStringInVectorFromFile(vector <char> &ContactVect, ifstream &FileIn, 
         
         ContactVect.push_back(Insert);
     }
-}
+} // InsertStringInVectorFromFile()
 
 void InsertStringDataVectorFromKeyboard(vector <char> &ContactVect)//not cleaned up
 {
@@ -68,4 +68,4 @@ void InsertStringDataVectorFromKeyboard(vector <char> &ContactVect)//not cleaned
     
     if (!isnumber(ContactVect[0]))
         (ContactVect[0] = toupper(ContactVect[0]));//if not a number, always capitalize (for first name and last names)
-}
+} // InsertStringDataVectorFromKeyboard

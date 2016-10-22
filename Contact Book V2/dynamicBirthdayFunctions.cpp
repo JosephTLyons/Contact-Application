@@ -20,7 +20,7 @@ int BirthDayInput(personalInformation &TempPersonalInfoHolder)//not cleaned up
     StoreDateOfBirthInVector(TempPersonalInfoHolder);
     
     return CalculateCurrentAge(TempPersonalInfoHolder, TempPersonalInfoHolder.MonthBorn, TempPersonalInfoHolder.DayBorn, TempPersonalInfoHolder.YearBorn);
-}
+} // BirthDayInput()
 
 int CalculateCurrentAge(personalInformation &TempPersonalInfoHolder, const int &MonthBorn, const int &DayBorn, const int &YearBorn)//not cleaned up
 {
@@ -83,7 +83,7 @@ int CalculateCurrentAge(personalInformation &TempPersonalInfoHolder, const int &
     TempPersonalInfoHolder.BirthdayIsInXDays = DayOfTheYearBirthdayLandsOn - CurrentDayOfThisYear;
     
     return UsersCurrentAge;
-}
+} // CalculateCurrentAge()
 
 int CalculateDayNumberFromMonthAndDay(const int &BirthMonth, const int &BirthDay, const int &CurrentYear)//not cleaned up
 {
@@ -193,7 +193,7 @@ int CalculateDayNumberFromMonthAndDay(const int &BirthMonth, const int &BirthDay
     DayOfYearThatBirthdayIsOn += BirthDay;
     
     return DayOfYearThatBirthdayIsOn;
-}
+} // CalculateDayNumberFromMonthAndDay()
 
 void StoreDateOfBirthInVector(personalInformation &TempPersonalInfoHolder)//not cleaned up
 {
@@ -269,4 +269,4 @@ void StoreDateOfBirthInVector(personalInformation &TempPersonalInfoHolder)//not 
         TempPersonalInfoHolder.DateOfBirth.push_back(YearArray[i]);
     
     TempPersonalInfoHolder.DateOfBirth.push_back('\n');
-}
+} // StoreDateOfBirthInVector()

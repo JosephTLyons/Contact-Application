@@ -11,6 +11,7 @@
 void SaveContactBookAndSettings(const vector <personalInformation> &ContactVect,
                                 const char Path[], const int &SpeedSelectionChoice,
                                 const bool &EncryptionMode);
+
 string ObtainDateAndTime();
 
 #endif /* savingFunctions_hpp */

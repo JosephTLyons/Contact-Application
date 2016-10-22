@@ -64,7 +64,7 @@ void SaveContactBookAndSettings(const vector <personalInformation> &ContactVect,
     FileOut << "Contacts Last Altered: " << ObtainDateAndTime() << endl;
     
     FileOut.close();
-}
+} // SaveContactBookAndSettings()
 
 string ObtainDateAndTime()//not my code here - modified it to display what I want and to read easier
 {
@@ -75,4 +75,4 @@ string ObtainDateAndTime()//not my code here - modified it to display what I wan
     strftime(Time, 50, "%D, %I:%M %p", localtime(&now));
     
     return string(Time);
-}
+} // ObtainDateAndTime()

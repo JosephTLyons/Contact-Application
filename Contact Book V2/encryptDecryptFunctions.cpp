@@ -15,7 +15,7 @@ char EncryptDecryptChar(char Input, const bool &EncryptionMode)//not cleaned up
     }
     
     return Input;
-}
+} // EncryptDecryptChar
 
 int EncryptDecryptInt(int Input, const bool &EncryptionMode)//not cleaned up
 {
@@ -33,4 +33,4 @@ int EncryptDecryptInt(int Input, const bool &EncryptionMode)//not cleaned up
     }
     
     return Input;
-}
+} // EncryptDecryptInt

@@ -361,4 +361,4 @@ void DisplaySettingsMenu(const vector <personalInformation> &ContactVect, int &D
     while (Choice >= 1 && Choice <= 2);
     
     cout << endl;
-}
+} // DisplaySettingsMenu()
