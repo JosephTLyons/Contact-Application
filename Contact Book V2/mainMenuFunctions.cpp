@@ -11,6 +11,24 @@
 #include "miscellaneousFunctions.hpp"
 #include "userSettingFunctions.hpp"
 
+// Simply displays the options for the main menu
+void displayMainMenuOptions()
+{
+    cout << "(1) Display List";
+    cout << "\n(2) Add Contact";
+    cout << "\n(3) Edit Existing Contact";
+    cout << "\n(4) Delete Contact";
+    cout << "\n(5) Delete All Contacts";
+    cout << "\n(6) Settings and Configuration";
+    cout << "\n(7) Exit";
+    
+    cout << "\n\nChoice: ";
+}
+
+/*
+ This function displays all the contacts, and related information,
+ that are within the personalInformation vector.
+*/
 void DisplayContacts(const vector<personalInformation> &ContactVect, const int &DisplaySpeed)//not cleaned up
 {
     cout << "======================\n\n";

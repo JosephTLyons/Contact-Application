@@ -5,6 +5,8 @@
 
 /* MAIN MENU FUNCTIONS */
 
+void displayMainMenuOptions();
+
 void DisplayContacts(const vector<personalInformation> &ContactVect, const int &DisplaySpeed);
 
 void AddContact(vector <personalInformation> &ContactVect);

@@ -84,7 +84,8 @@ int main()
     
     do
     {
-        if (MainMenuPauseCounter++ > 0)//pauses the program before displaying the main menu again on second time and after
+        //pauses the program before displaying the main menu again on second time and after
+        if (MainMenuPauseCounter++ > 0)
         {
             cout << "Press enter to go back to main menu: ";
             cin.ignore();//pause the program, wait for user to press enter
@@ -92,15 +93,7 @@ int main()
             cout << "\n======================\n";
         }
         
-        cout << "(1) Display List";
-        cout << "\n(2) Add Contact";
-        cout << "\n(3) Edit Existing Contact";
-        cout << "\n(4) Delete Contact";
-        cout << "\n(5) Delete All Contacts";
-        cout << "\n(6) Settings and Configuration";
-        cout << "\n(7) Exit";
-        
-        cout << "\n\nChoice: ";
+        displayMainMenuOptions();
         
         cin >> SwitchChoice;
         cin.ignore();//ignore newline in buffer after cin >> statement
