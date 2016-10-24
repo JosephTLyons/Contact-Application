@@ -61,31 +61,31 @@ using namespace std;
 
 int main()
 {
-    vector <personalInformation> ContactVector;//holds all contacts
-    static int MainMenuPauseCounter = 0;//pauses main menu and waits for user to press enter
-    char FullPath[180] = {0};//holds the pathway to the .txt file that saves the information
-    int SwitchChoice;//
-    int DisplaySpeed;
-    int SpeedSelectionChoice = 2;//default medium speed setting / when program is first ran
-    bool EncryptionMode;
+    vector <personalInformation> contactVector;//holds all contacts
+    static int mainMenuPauseCounter = 0;//pauses main menu and waits for user to press enter
+    char fullPath[180] = {0};//holds the pathway to the .txt file that saves the information
+    int switchChoice;//
+    int displaySpeed;
+    int speedSelectionChoice = 2;//default medium speed setting / when program is first ran
+    bool encryptionMode;
     //-------------------
     
     /* CREATE THE LYONS' DEN LABS FOLDER AND TEXT FILE IN APPLICATOIN SUPPORT FOLDER IN LIBRARY */
     
-    CreateFolderAndTextFile(FullPath);
+    CreateFolderAndTextFile(fullPath);
     
     /* CHECK TO SEE IF FILE EXISTS AND HAS INFORMATION IN IT, IF SO, REBUILD THE LIST */
     
-    if(CheckIfFileExistsAndContainsInformation(FullPath))
+    if(CheckIfFileExistsAndContainsInformation(fullPath))
     {
-        RebuildContactBook(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);//restore contacts
-        ObtainSpeedSettingNumericalValues(DisplaySpeed, SpeedSelectionChoice);//restore user settings
+        RebuildContactBook(contactVector, fullPath, speedSelectionChoice, encryptionMode);//restore contacts
+        ObtainSpeedSettingNumericalValues(displaySpeed, speedSelectionChoice);//restore user settings
     }
     
     do
     {
         //pauses the program before displaying the main menu again on second time and after
-        if (MainMenuPauseCounter++ > 0)
+        if (mainMenuPauseCounter++ > 0)
         {
             cout << "Press enter to go back to main menu: ";
             cin.ignore();//pause the program, wait for user to press enter
@@ -95,51 +95,51 @@ int main()
         
         displayMainMenuOptions();
         
-        cin >> SwitchChoice;
+        cin >> switchChoice;
         cin.ignore();//ignore newline in buffer after cin >> statement
         
         cout << "\n";
         
-        switch (SwitchChoice)
+        switch (switchChoice)
         {
             case 1:
             {
-                DisplayContacts(ContactVector, DisplaySpeed);
+                DisplayContacts(contactVector, displaySpeed);
                 break;
             }
                 
             case 2:
             {
-                AddContact(ContactVector);
-                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);
+                AddContact(contactVector);
+                SaveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
                 break;
             }
                 
             case 3:
             {
-                EditExistingContact(ContactVector, DisplaySpeed);
-                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);
+                EditExistingContact(contactVector, displaySpeed);
+                SaveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
                 break;
             }
                 
             case 4:
             {
-                DeleteContact(ContactVector, DisplaySpeed);
-                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);
+                DeleteContact(contactVector, displaySpeed);
+                SaveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
                 break;
             }
                 
             case 5:
             {
-                DeleteAllContacts(ContactVector);
-                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);
+                DeleteAllContacts(contactVector);
+                SaveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
                 break;
             }
                 
             case 6:
             {
-                DisplaySettingsMenu(ContactVector, DisplaySpeed, SpeedSelectionChoice, EncryptionMode);
-                SaveContactBookAndSettings(ContactVector, FullPath, SpeedSelectionChoice, EncryptionMode);
+                DisplaySettingsMenu(contactVector, displaySpeed, speedSelectionChoice, encryptionMode);
+                SaveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
                 break;
             }
                 
@@ -147,5 +147,5 @@ int main()
                 break;
         }
     }
-    while (SwitchChoice != 7);
+    while (switchChoice != 7);
 } // main()
