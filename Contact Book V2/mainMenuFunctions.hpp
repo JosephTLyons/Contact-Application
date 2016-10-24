@@ -9,6 +9,15 @@ void displayMainMenuOptions();
 
 void DisplayContacts(const vector<personalInformation> &ContactVect, const int &DisplaySpeed);
 
+void printDividingLine();
+
+void printContact(const vector<personalInformation> &ContactVect, const int &VectorPos,
+                  const int &displaySpeed);
+
+void displayAge(const vector<personalInformation> &ContactVect, const int &VectorPos);
+
+void daysUntilBirthday(const vector<personalInformation> &ContactVect, const int &VectorPos);
+
 void AddContact(vector <personalInformation> &ContactVect);
 
 void EditExistingContact(vector <personalInformation> &ContactVect, const int &DisplaySpeed);

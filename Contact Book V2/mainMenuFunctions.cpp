@@ -31,48 +31,11 @@ void displayMainMenuOptions()
 */
 void DisplayContacts(const vector<personalInformation> &ContactVect, const int &DisplaySpeed)//not cleaned up
 {
-    cout << "======================\n\n";
+    printDividingLine();
     
-    for (int i = 0; i < ContactVect.size(); i++)
+    for (int vectorPosition = 0; vectorPosition < ContactVect.size(); vectorPosition++)
     {
-        cout << "Contact Number: " << i+1;
-        cout << "\nFirst Name:     ";
-        PrintVectorToScreen(ContactVect[i].FirstNameVector);
-        
-        cout << "Last Name:      ";
-        PrintVectorToScreen(ContactVect[i].LastNameVector);
-        
-        cout << "Address:        ";
-        PrintVectorToScreen(ContactVect[i].AddressVector);
-        
-        cout << "Phone Number:   ";
-        PrintVectorToScreen(ContactVect[i].PhoneNumberVector);
-        
-        cout << "Date Of Birth:  ";
-        PrintVectorToScreen(ContactVect[i].DateOfBirth);
-        
-        /* ONLY DISPLAY CURRENT AGE IF N/A ISN'T IN DATEOFBIRTH FIELD */
-        
-        if (ContactVect[i].DateOfBirth[0] != 'N')
-        {
-            if (ContactVect[i].DateOfBirth[1] != '/')
-            {
-                if (ContactVect[i].DateOfBirth[2] != 'A')
-                {
-                    cout << "Current Age:    ";
-                    cout << ContactVect[i].CurrentAge;
-                }
-            }
-        }
-        
-        /* IF BIRTHDAY IS LESS THAN 7 DAYS AWAY, DISPLAY THAT INFORMATION TO THE SCREEEN */
-        
-        if (ContactVect[i].BirthdayIsInXDays >= 0 && ContactVect[i].BirthdayIsInXDays <= 7)
-            cout << "\n*BIRTHDAY IS IN " << ContactVect[i].BirthdayIsInXDays << " DAYS*";
-        
-        cout << "\n\n";
-        
-        usleep(DisplaySpeed);
+        printContact(ContactVect, vectorPosition, DisplaySpeed);
     }
     
     /* IF THERE ARE NO CONTACTS, DISPLAY CONTACT BOOK IS EMPTY */
@@ -80,7 +43,67 @@ void DisplayContacts(const vector<personalInformation> &ContactVect, const int &
     if (ContactVect.size() == 0)
         cout << "Contact Book is empty.\n\n";
     
+    printDividingLine();
+}
+
+void printDividingLine()
+{
     cout << "======================\n\n";
+}
+
+void printContact(const vector<personalInformation> &ContactVect, const int &VectorPos,
+                  const int &displaySpeed)
+{
+    cout << "Contact Number: " << VectorPos+1;
+    cout << "\nFirst Name:     ";
+    PrintVectorToScreen(ContactVect[VectorPos].FirstNameVector);
+    
+    cout << "Last Name:      ";
+    PrintVectorToScreen(ContactVect[VectorPos].LastNameVector);
+    
+    cout << "Address:        ";
+    PrintVectorToScreen(ContactVect[VectorPos].AddressVector);
+    
+    cout << "Phone Number:   ";
+    PrintVectorToScreen(ContactVect[VectorPos].PhoneNumberVector);
+    
+    cout << "Date Of Birth:  ";
+    PrintVectorToScreen(ContactVect[VectorPos].DateOfBirth);
+    
+    displayAge(ContactVect, VectorPos);
+    
+    /* IF BIRTHDAY IS LESS THAN 7 DAYS AWAY, DISPLAY THAT INFORMATION TO THE SCREEEN */
+    
+    daysUntilBirthday(ContactVect, VectorPos);
+    
+    cout << "\n\n";
+    
+    usleep(displaySpeed);
+}
+
+void displayAge(const vector<personalInformation> &ContactVect, const int &VectorPos)
+{
+    /* ONLY DISPLAY CURRENT AGE IF N/A ISN'T IN DATEOFBIRTH FIELD */
+    
+    if (ContactVect[VectorPos].DateOfBirth[0] != 'N')
+    {
+        if (ContactVect[VectorPos].DateOfBirth[1] != '/')
+        {
+            if (ContactVect[VectorPos].DateOfBirth[2] != 'A')
+            {
+                cout << "Current Age:    ";
+                cout << ContactVect[VectorPos].CurrentAge;
+            }
+        }
+    }
+}
+
+void daysUntilBirthday(const vector<personalInformation> &ContactVect, const int &VectorPos)
+{
+    /* IF BIRTHDAY IS LESS THAN 7 DAYS AWAY, DISPLAY THAT INFORMATION TO THE SCREEEN */
+    
+    if (ContactVect[VectorPos].BirthdayIsInXDays >= 0 && ContactVect[VectorPos].BirthdayIsInXDays <= 7)
+        cout << "\n*BIRTHDAY IS IN " << ContactVect[VectorPos].BirthdayIsInXDays << " DAYS*";
 }
 
 void AddContact(vector <personalInformation> &ContactVect)//not cleaned up
