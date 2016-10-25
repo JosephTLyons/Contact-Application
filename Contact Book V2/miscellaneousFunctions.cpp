@@ -91,7 +91,7 @@ void rebuildContactBook(vector<personalInformation> &contactVect, const char *pa
     fileIn.close();
 } // rebuildContactBook()
 
-void createFolderAndTextFile(char *fullPath)//not cleaned up - make full path a string in order to adjust size dynamically?
+void createFolderAndSettingsFile(char *fullPath)//not cleaned up - make full path a string in order to adjust size dynamically?
 {
     //optaining pathway on mac / making my custom folder - consider another implementation that uses vector?
     
@@ -105,7 +105,7 @@ void createFolderAndTextFile(char *fullPath)//not cleaned up - make full path a 
     mkdir(fullPath, ACCESSPERMS);//make The Lyons' Den Labs folder
     
     strcat(fullPath, restOfPath);
-} // createFolderAndTextFile()
+} // createFolderAndSettingsFile()
 
 bool checkIfFileExistsAndContainsInformation(const char *path)//shouldn't be declaring a new variable, should be passing it in, but that would call for a major rewrite of the menu function and all the function parameters//not cleaned up
 {

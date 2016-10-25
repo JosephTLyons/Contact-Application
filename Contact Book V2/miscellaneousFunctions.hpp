@@ -11,7 +11,7 @@
 void rebuildContactBook(vector<personalInformation> &contactVect, const char *path,
         int &speedSelectionChoice, bool &encryptionMode);
 
-void createFolderAndTextFile(char *fullPath);
+void createFolderAndSettingsFile(char *fullPath);
 
 bool checkIfFileExistsAndContainsInformation(const char *path);
 

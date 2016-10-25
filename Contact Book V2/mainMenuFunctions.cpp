@@ -348,7 +348,7 @@ void deleteAllContacts(vector<personalInformation> &contactVect)//not cleaned up
 {
     vector<char> userChoice;
     bool contactsNotDeletedFlag = true;
-    char insert;
+    char insert = 1; //initialized at 1 to allow while loop to execute
     
     cout << "Are you sure you'd like to delete all contacts? Type \"YES\" to confirm (Must be a capital YES): ";
     
