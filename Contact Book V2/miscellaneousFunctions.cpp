@@ -1,6 +1,5 @@
 #include <fstream>    //for reading from and saving to files
 #include <iostream>   //for input / output
-#include <string.h>   //for strcat function in pathway commands
 #include <sys/stat.h> //for mkdir functions
 
 #include "dynamicBirthdayFunctions.hpp"

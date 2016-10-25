@@ -24,82 +24,82 @@ int birthDayInput(personalInformation &tempPersonalInfoHolder)//not cleaned up
 
 int calculateCurrentAge(personalInformation &tempPersonalInfoHolder, const int &monthBorn, const int &dayBorn, const int &yearBorn)//not cleaned up
 {
-    int DayOfTheYearBirthdayLandsOn = 0;
-    int UsersCurrentAge = 0;
+    int dayOfTheYearBirthdayLandsOn = 0;
+    int usersCurrentAge = 0;
     
-    char CurrentMonthOfThisYearString[3];//only 2 digits, EX 11 (November), +1 for null
-    char CurrentDayOfThisYearString[4];//only 3 digits will ever be here, 365 days is 3 digits long, +1 for null
-    char CurrentYearString[5];//only 4 digits will ever be here, EX. 2016 is 4 digits long, +1 for null
+    char currentMonthOfThisYearString[3];//only 2 digits, EX 11 (November), +1 for null
+    char currentDayOfThisYearString[4];//only 3 digits will ever be here, 365 days is 3 digits long, +1 for null
+    char currentYearString[5];//only 4 digits will ever be here, EX. 2016 is 4 digits long, +1 for null
     
-    int CurrentMonthOfThisYear = 0;
-    int CurrentDayOfThisYear = 0;
-    int CurrentYear = 0;
+    int currentMonthOfThisYear = 0;
+    int currentDayOfThisYear = 0;
+    int currentYear = 0;
     
     time_t now = time(NULL);//Get current time/date
     
     /* GET CURRENT MONTH, CONVERT TO NUMBER, AND STORE IN THE ASSOCIATED INT */
     
-    strftime(CurrentMonthOfThisYearString, 3, "%m", localtime(&now));//store month number in string
+    strftime(currentMonthOfThisYearString, 3, "%m", localtime(&now));//store month number in string
     
-    for (int i = 0; CurrentMonthOfThisYearString[i]; i++)
+    for (int i = 0; currentMonthOfThisYearString[i]; i++)
     {
-        CurrentMonthOfThisYear *= 10;
-        CurrentMonthOfThisYear += (CurrentMonthOfThisYearString[i] - 48);
+        currentMonthOfThisYear *= 10;
+        currentMonthOfThisYear += (currentMonthOfThisYearString[i] - 48);
     }
     
     /* GET CURRENT DAY OF THIS YEAR, CONVERT TO NUMBER, AND STORE IN THE ASSOCIATED INT */
     
-    strftime(CurrentDayOfThisYearString, 4, "%j", localtime(&now));//store day of year in string
+    strftime(currentDayOfThisYearString, 4, "%j", localtime(&now));//store day of year in string
     
-    for (int i = 0; CurrentDayOfThisYearString[i]; i++)
+    for (int i = 0; currentDayOfThisYearString[i]; i++)
     {
-        CurrentDayOfThisYear *= 10;
-        CurrentDayOfThisYear += (CurrentDayOfThisYearString[i] - 48);
+        currentDayOfThisYear *= 10;
+        currentDayOfThisYear += (currentDayOfThisYearString[i] - 48);
     }
     
     /* GET CURRENT YEAR, CONVERT TO NUMBER, AND STORE IN THE ASSOCIATED INT */
     
-    strftime(CurrentYearString, 5, "%Y", localtime(&now));//store current year in string
+    strftime(currentYearString, 5, "%Y", localtime(&now));//store current year in string
     
-    for (int i = 0; CurrentYearString[i]; i++)
+    for (int i = 0; currentYearString[i]; i++)
     {
-        CurrentYear *= 10;
-        CurrentYear += (CurrentYearString[i] - 48);
+        currentYear *= 10;
+        currentYear += (currentYearString[i] - 48);
     }
     
     /* CALCULATE WHAT DAY OF THE YEAR THE USERS BIRTHDAY LANDS ON */
     
-    DayOfTheYearBirthdayLandsOn = calculateDayNumberFromMonthAndDay(monthBorn, dayBorn, CurrentYear);
+    dayOfTheYearBirthdayLandsOn = calculateDayNumberFromMonthAndDay(monthBorn, dayBorn, currentYear);
     
-    UsersCurrentAge = CurrentYear - yearBorn;//Obtain age
+    usersCurrentAge = currentYear - yearBorn;//Obtain age
     
     /* IF USERS BIRTHDAY HASN'T OCCURED THIS YEAR, THEN DECREMENT THEIR AGE BY 1 */
     
-    if (CurrentDayOfThisYear < DayOfTheYearBirthdayLandsOn)
-        --UsersCurrentAge;
+    if (currentDayOfThisYear < dayOfTheYearBirthdayLandsOn)
+        --usersCurrentAge;
     
     /* CALCULATE HOW CLOSE CONTACT'S BIRTHDAY IS */
     
-    tempPersonalInfoHolder.birthdayIsInXDays = DayOfTheYearBirthdayLandsOn - CurrentDayOfThisYear;
+    tempPersonalInfoHolder.birthdayIsInXDays = dayOfTheYearBirthdayLandsOn - currentDayOfThisYear;
     
-    return UsersCurrentAge;
+    return usersCurrentAge;
 } // calculateCurrentAge()
 
 int calculateDayNumberFromMonthAndDay(const int &birthMonth, const int &birthDay, const int &currentYear)//not cleaned up
 {
-    int DayOfYearThatBirthdayIsOn = 0;
-    int TemporaryDayHolder = 0;
+    int dayOfYearThatBirthdayIsOn = 0;
+    int temporaryDayHolder = 0;
     
     if (birthMonth >= 1)//January - 31
     {
-        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
-        TemporaryDayHolder = 31;
+        dayOfYearThatBirthdayIsOn += temporaryDayHolder;
+        temporaryDayHolder = 31;
     }
     
     if (birthMonth >= 2)//February - 28/29
     {
-        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
-        TemporaryDayHolder = 28;
+        dayOfYearThatBirthdayIsOn += temporaryDayHolder;
+        temporaryDayHolder = 28;
         
         /* CHECK TO SEE IF LEAP YEAR OR NOT */
         
@@ -108,11 +108,11 @@ int calculateDayNumberFromMonthAndDay(const int &birthMonth, const int &birthDay
             if (currentYear % 100 == 0)
             {
                 if (currentYear % 400 == 0)
-                    TemporaryDayHolder = 29;
+                    temporaryDayHolder = 29;
             }
             
             else
-                TemporaryDayHolder = 29;
+                temporaryDayHolder = 29;
             
         }
         
@@ -132,84 +132,84 @@ int calculateDayNumberFromMonthAndDay(const int &birthMonth, const int &birthDay
     
     if (birthMonth >= 3)//March - 31
     {
-        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
-        TemporaryDayHolder = 31;
+        dayOfYearThatBirthdayIsOn += temporaryDayHolder;
+        temporaryDayHolder = 31;
     }
     
     if (birthMonth >= 4)//April - 30
     {
-        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
-        TemporaryDayHolder = 30;
+        dayOfYearThatBirthdayIsOn += temporaryDayHolder;
+        temporaryDayHolder = 30;
     }
     
     if (birthMonth >= 5)//May - 31
     {
-        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
-        TemporaryDayHolder = 31;
+        dayOfYearThatBirthdayIsOn += temporaryDayHolder;
+        temporaryDayHolder = 31;
     }
     
     if (birthMonth >= 6)//June - 30
     {
-        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
-        TemporaryDayHolder = 30;
+        dayOfYearThatBirthdayIsOn += temporaryDayHolder;
+        temporaryDayHolder = 30;
     }
     
     if (birthMonth >= 7)//July - 31
     {
-        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
-        TemporaryDayHolder = 31;
+        dayOfYearThatBirthdayIsOn += temporaryDayHolder;
+        temporaryDayHolder = 31;
     }
     
     if (birthMonth >= 8)//August - 31
     {
-        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
-        TemporaryDayHolder = 31;
+        dayOfYearThatBirthdayIsOn += temporaryDayHolder;
+        temporaryDayHolder = 31;
     }
     
     if (birthMonth >= 9)//September - 30
     {
-        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
-        TemporaryDayHolder = 30;
+        dayOfYearThatBirthdayIsOn += temporaryDayHolder;
+        temporaryDayHolder = 30;
     }
     
     if (birthMonth >= 10)//October - 31
     {
-        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
-        TemporaryDayHolder = 31;
+        dayOfYearThatBirthdayIsOn += temporaryDayHolder;
+        temporaryDayHolder = 31;
     }
     
     if (birthMonth >= 11)//November - 30
     {
-        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
-        TemporaryDayHolder = 30;
+        dayOfYearThatBirthdayIsOn += temporaryDayHolder;
+        temporaryDayHolder = 30;
     }
     
     if (birthMonth >= 12)//December - 31
     {
-        DayOfYearThatBirthdayIsOn += TemporaryDayHolder;
-        TemporaryDayHolder = 31;
+        dayOfYearThatBirthdayIsOn += temporaryDayHolder;
+        temporaryDayHolder = 31;
     }
     
-    DayOfYearThatBirthdayIsOn += birthDay;
+    dayOfYearThatBirthdayIsOn += birthDay;
     
-    return DayOfYearThatBirthdayIsOn;
+    return dayOfYearThatBirthdayIsOn;
 } // calculateDayNumberFromMonthAndDay()
 
 void storeDateOfBirthInVector(personalInformation &tempPersonalInfoHolder)//not cleaned up
 {
-    const char *MonthNames[12] = {"January",   "February", "March",    "April",
+    const char *monthNames[12] = {"January",   "February", "March",    "April",
         "May",       "June",     "July",     "August",
         "September", "October",  "November", "December"};
     
     /* PLACING DATA MEMBERS INTO TEMPORARY VARIABLES BECAUSE THE VALUES OF THE VARIABLES WILL BE CHANGED */
     /* DONT WANT TO CHANGE THE DATA MEMBERS THOUGH */
     
-    int TempMonth = tempPersonalInfoHolder.monthBorn;
-    int TempDay   = tempPersonalInfoHolder.dayBorn;
-    int TempYear  = tempPersonalInfoHolder.yearBorn;
+    int tempMonth = tempPersonalInfoHolder.monthBorn;
+    int tempDay   = tempPersonalInfoHolder.dayBorn;
+    int tempYear  = tempPersonalInfoHolder.yearBorn;
     
-    char YearArray[5] = {0};//years limited to 4 digits - one day, we will have 5 digit years
-    char DayArray[3]  = {0};//days limited to 2 digits - this is ok, will never be larger
+    char yearArray[5] = {0};//years limited to 4 digits - one day, we will have 5 digit years
+    char dayArray[3]  = {0};//days limited to 2 digits - this is ok, will never be larger
     
     /* FIRST CHECK TO SEE IF BIRTHDAY WAS ENTERED - LATER CHANGE THIS TO JUST HITTING ENTER */
     
@@ -230,9 +230,9 @@ void storeDateOfBirthInVector(personalInformation &tempPersonalInfoHolder)//not 
     
     /* INSERT MONTH NAME INTO DATEOFBIRTH VECTOR */
     
-    for (int i = 0; MonthNames[TempMonth-1][i]; i++)
+    for (int i = 0; monthNames[tempMonth-1][i]; i++)
     {
-        tempPersonalInfoHolder.dateOfBirthVector.push_back(MonthNames[TempMonth-1][i]);
+        tempPersonalInfoHolder.dateOfBirthVector.push_back(monthNames[tempMonth-1][i]);
     }
     
     tempPersonalInfoHolder.dateOfBirthVector.push_back(' ');
@@ -241,15 +241,15 @@ void storeDateOfBirthInVector(personalInformation &tempPersonalInfoHolder)//not 
     
     for (int i = 1; i >= 0; i--)
     {
-        DayArray[i] *= 10;
-        DayArray[i] = (TempDay % 10) + 48;//convertion to char happens here
-        TempDay /= 10;
+        dayArray[i] *= 10;
+        dayArray[i] = (tempDay % 10) + 48;//convertion to char happens here
+        tempDay /= 10;
     }
     
     /* INSERT DAY INTO DATEOFBIRTH VECTOR */
     
-    for (int i = 0; DayArray[i]; i++)
-        tempPersonalInfoHolder.dateOfBirthVector.push_back(DayArray[i]);
+    for (int i = 0; dayArray[i]; i++)
+        tempPersonalInfoHolder.dateOfBirthVector.push_back(dayArray[i]);
     
     tempPersonalInfoHolder.dateOfBirthVector.push_back(',');
     tempPersonalInfoHolder.dateOfBirthVector.push_back(' ');
@@ -258,15 +258,15 @@ void storeDateOfBirthInVector(personalInformation &tempPersonalInfoHolder)//not 
     
     for (int i = 3; i >= 0; i--)
     {
-        YearArray[i] *= 10;
-        YearArray[i] = (TempYear % 10) + 48;//convertion happens here
-        TempYear /= 10;
+        yearArray[i] *= 10;
+        yearArray[i] = (tempYear % 10) + 48;//convertion happens here
+        tempYear /= 10;
     }
     
     /* INSERT YEAR INTO DATEOFBIRTH VECTOR */
     
-    for (int i = 0; YearArray[i]; i++)
-        tempPersonalInfoHolder.dateOfBirthVector.push_back(YearArray[i]);
+    for (int i = 0; yearArray[i]; i++)
+        tempPersonalInfoHolder.dateOfBirthVector.push_back(yearArray[i]);
     
     tempPersonalInfoHolder.dateOfBirthVector.push_back('\n');
 } // storeDateOfBirthInVector()

@@ -3,13 +3,8 @@
 
 #include "personalinformation.hpp"
 #include "mainMenuFunctions.hpp"
-#include "readAndWriteFunctions.hpp"
-#include "encryptDecryptFunctions.hpp"
-#include "dynamicBirthdayFunctions.hpp"
 #include "miscellaneousFunctions.hpp"
-#include "mainMenuFunctions.hpp"
 #include "userSettingFunctions.hpp"
-#include "sortingFunctions.hpp"
 #include "savingFunctions.hpp"
 
 using namespace std;
