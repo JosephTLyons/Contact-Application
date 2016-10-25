@@ -23,13 +23,13 @@ void displayMainMenuOptions()
     cout << "\n(7) Exit";
     
     cout << "\n\nChoice: ";
-}
+} // displayMainMenuOptions()
 
 /*
  This function displays all the contacts, and related information,
  that are within the personalInformation vector.
 */
-void DisplayContacts(const vector<personalInformation> &ContactVect, const int &DisplaySpeed)//not cleaned up
+void DisplayContacts(const vector<personalInformation> &ContactVect, const int &DisplaySpeed)//cleaned up
 {
     printDividingLine();
     
@@ -44,7 +44,7 @@ void DisplayContacts(const vector<personalInformation> &ContactVect, const int &
         cout << "Contact Book is empty.\n\n";
     
     printDividingLine();
-}
+} // DisplayContacts()
 
 void printDividingLine()
 {
@@ -79,7 +79,7 @@ void printContact(const vector<personalInformation> &ContactVect, const int &Vec
     cout << "\n\n";
     
     usleep(displaySpeed);
-}
+} // printContact()
 
 void displayAge(const vector<personalInformation> &ContactVect, const int &VectorPos)
 {
@@ -96,7 +96,7 @@ void displayAge(const vector<personalInformation> &ContactVect, const int &Vecto
             }
         }
     }
-}
+} // displayAge()
 
 void daysUntilBirthday(const vector<personalInformation> &ContactVect, const int &VectorPos)
 {
@@ -104,7 +104,7 @@ void daysUntilBirthday(const vector<personalInformation> &ContactVect, const int
     
     if (ContactVect[VectorPos].BirthdayIsInXDays >= 0 && ContactVect[VectorPos].BirthdayIsInXDays <= 7)
         cout << "\n*BIRTHDAY IS IN " << ContactVect[VectorPos].BirthdayIsInXDays << " DAYS*";
-}
+} // daysUntilBirthday()
 
 void AddContact(vector <personalInformation> &ContactVect)//not cleaned up
 {
