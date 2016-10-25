@@ -12,120 +12,121 @@
 
 using namespace std;
 
-void RebuildContactBook(vector <personalInformation> &ContactVect, const char Path[], int &SpeedSelectionChoice, bool &EncryptionMode)//not cleaned up
+void rebuildContactBook(vector<personalInformation> &contactVect, const char *path,
+                        int &speedSelectionChoice, bool &encryptionMode)//not cleaned up
 {
-    personalInformation Temporary;
-    int AmountOfContactsInFile;
+    personalInformation temporary;
+    int amountOfContactsInFile;
     
-    ifstream FileIn;
+    ifstream fileIn;
     
-    FileIn.open(Path);
+    fileIn.open(path);
     
     /* CHECK TO SEE IF FILE OPENS */
     
-    if (FileIn.fail())
+    if (fileIn.fail())
     {
         cout << "Couldn't Open File\n";
         return;
     }
     
-    FileIn.ignore(15);//ignore "Security Mode: " text
+    fileIn.ignore(15);//ignore "Security Mode: " text
     
-    FileIn >> EncryptionMode;
+    fileIn >> encryptionMode;
     
-    FileIn.ignore(24);//ignore "Speed Selection Choice: " text
+    fileIn.ignore(24);//ignore "Speed Selection Choice: " text
     
-    FileIn >> SpeedSelectionChoice;
+    fileIn >> speedSelectionChoice;
     
-    FileIn.ignore();// ignore single newline between numbers
+    fileIn.ignore();// ignore single newline between numbers
     
-    FileIn.ignore(20);// ignore "Number of Contacts: " text
+    fileIn.ignore(20);// ignore "Number of Contacts: " text
     
-    AmountOfContactsInFile = FileIn.get() - 48;// convert from char to number
+    amountOfContactsInFile = fileIn.get() - 48;// convert from char to number
     
-    FileIn.ignore(2);// ignore two newlines after
+    fileIn.ignore(2);// ignore two newlines after
     
-    for (int i = 0; ContactVect.size() < AmountOfContactsInFile; i++)
+    for (int i = 0; contactVect.size() < amountOfContactsInFile; i++)
     {
         /* DECRYPTION FOR VECTORS HAPPENS IN INSERTSTRINGIN... FUNCTIONS */
-        
-        InsertStringInVectorFromFile(Temporary.FirstNameVector, FileIn, EncryptionMode);
-        
-        InsertStringInVectorFromFile(Temporary.LastNameVector, FileIn, EncryptionMode);
-        
-        InsertStringInVectorFromFile(Temporary.AddressVector, FileIn, EncryptionMode);
-        
-        InsertStringInVectorFromFile(Temporary.PhoneNumberVector, FileIn, EncryptionMode);
-        
-        InsertStringInVectorFromFile(Temporary.DateOfBirth, FileIn, EncryptionMode);
+
+        insertStringInVectorFromFile(temporary.firstNameVector, fileIn, encryptionMode);
+
+        insertStringInVectorFromFile(temporary.lastNameVector, fileIn, encryptionMode);
+
+        insertStringInVectorFromFile(temporary.addressVector, fileIn, encryptionMode);
+
+        insertStringInVectorFromFile(temporary.phoneNumberVector, fileIn, encryptionMode);
+
+        insertStringInVectorFromFile(temporary.dateOfBirthVector, fileIn, encryptionMode);
         
         /* DECRYPTION FOR INTS HAPPENS RIGHT HERE */
         
-        FileIn >> Temporary.CurrentAge;
-        Temporary.CurrentAge = EncryptDecryptInt(Temporary.CurrentAge, EncryptionMode);
+        fileIn >> temporary.currentAge;
+        temporary.currentAge = encryptDecryptInt(temporary.currentAge, encryptionMode);
         
-        FileIn >> Temporary.MonthBorn;
-        Temporary.MonthBorn = EncryptDecryptInt(Temporary.MonthBorn, EncryptionMode);
+        fileIn >> temporary.monthBorn;
+        temporary.monthBorn = encryptDecryptInt(temporary.monthBorn, encryptionMode);
         
-        FileIn >> Temporary.DayBorn;
-        Temporary.DayBorn = EncryptDecryptInt(Temporary.DayBorn, EncryptionMode);
+        fileIn >> temporary.dayBorn;
+        temporary.dayBorn = encryptDecryptInt(temporary.dayBorn, encryptionMode);
         
-        FileIn >> Temporary.YearBorn;
-        Temporary.YearBorn = EncryptDecryptInt(Temporary.YearBorn, EncryptionMode);
+        fileIn >> temporary.yearBorn;
+        temporary.yearBorn = encryptDecryptInt(temporary.yearBorn, encryptionMode);
         
         /* AUTOMATICALLY RECALCULATE CURRENT YEAR EVERY TIME LIST IS REBUILT */
         
-        Temporary.CurrentAge = CalculateCurrentAge(Temporary, Temporary.MonthBorn, Temporary.DayBorn, Temporary.YearBorn);
+        temporary.currentAge = calculateCurrentAge(temporary, temporary.monthBorn, temporary.dayBorn, temporary.yearBorn);
         
-        ContactVect.push_back(Temporary);
+        contactVect.push_back(temporary);
+
+        clearDataVectorsFromStructure(temporary);
         
-        ClearDataVectorsFromStructure(Temporary);
-        
-        FileIn.ignore(2);//ignore two newlines between contacts (two newlines because last item is an int and doesn't store the newline like the vectors do)
+        fileIn.ignore(2);//ignore two newlines between contacts (two newlines because last item is an int and doesn't store the newline like the vectors do)
     }
     
     /* SAVED CONTACTS AFTER READING IN CASE AGES WERE UPDATED AFTER RE-CALCULATING CURRENT AGE */
-    
-    SaveContactBookAndSettings(ContactVect, Path, SpeedSelectionChoice, EncryptionMode);
-    
-    FileIn.close();
-} // RebuildContactBook()
 
-void CreateFolderAndTextFile(char FullPath[])//not cleaned up - make full path a string in order to adjust size dynamically?
+    saveContactBookAndSettings(contactVect, path, speedSelectionChoice, encryptionMode);
+    
+    fileIn.close();
+} // rebuildContactBook()
+
+void createFolderAndTextFile(char *fullPath)//not cleaned up - make full path a string in order to adjust size dynamically?
 {
     //optaining pathway on mac / making my custom folder - consider another implementation that uses vector?
     
-    const char *HomeAndUserNamePath = getenv("HOME");//get home/username path - finds username
-    const char *MorePath = "/Library/Application Support/The Lyons' Den Labs";
-    const char *RestOfPath = "/TheLyons'DenContactInformation2.txt";
+    const char *homeAndUserNamePath = getenv("HOME");//get home/username path - finds username
+    const char *morePath = "/Library/Application Support/The Lyons' Den Labs";
+    const char *restOfPath = "/TheLyons'DenContactInformation2.txt";
     
-    strcat(FullPath, HomeAndUserNamePath);
-    strcat(FullPath, MorePath);
+    strcat(fullPath, homeAndUserNamePath);
+    strcat(fullPath, morePath);
     
-    mkdir(FullPath, ACCESSPERMS);//make The Lyons' Den Labs folder
+    mkdir(fullPath, ACCESSPERMS);//make The Lyons' Den Labs folder
     
-    strcat(FullPath, RestOfPath);
-} // CreateFolderAndTextFile()
+    strcat(fullPath, restOfPath);
+} // createFolderAndTextFile()
 
-bool CheckIfFileExistsAndContainsInformation(const char Path[])//shouldn't be declaring a new variable, should be passing it in, but that would call for a major rewrite of the menu function and all the function parameters//not cleaned up
+bool checkIfFileExistsAndContainsInformation(const char *path)//shouldn't be declaring a new variable, should be passing it in, but that would call for a major rewrite of the menu function and all the function parameters//not cleaned up
 {
-    ifstream FileIn;
+    ifstream fileIn;
     
-    FileIn.open(Path);
+    fileIn.open(path);
     
     /* CHECK TO MAKE SURE FILE OPENED */
     
-    if (FileIn.fail())
+    if (fileIn.fail())
     {
-        FileIn.close();
+        fileIn.close();
         return false;
     }
     
     /* CHECK TO SEE IF FILE IS EMPTY */
     
-    else if (FileIn.eof())
+    else if (fileIn.eof())
     {
-        FileIn.close();
+        fileIn.close();
         return false;
     }
     
@@ -133,28 +134,28 @@ bool CheckIfFileExistsAndContainsInformation(const char Path[])//shouldn't be de
     
     else
     {
-        FileIn.close();
+        fileIn.close();
         return true;
     }
-} // CheckIfFileExistsAndContainsInformation()
+} // checkIfFileExistsAndContainsInformation()
 
-void ClearDataVectorsFromStructure(personalInformation &TemporaryStorage)//not cleaned up
+void clearDataVectorsFromStructure(personalInformation &temporaryStorage)//not cleaned up
 {
     /* GET BACK THE MEMORY THAT WAS ASSIGNED TO THESE VECTORS */
     /* USING SWAP METHOD ON VECTORS AS DESCRIBED IN MY STACK EXCHANGE QUESTION BELOW */
     /* http://stackoverflow.com/questions/39090554/questions-about-vectors-and-deleting-memory-associated-with-them?noredirect=1#comment65529507_39090554 */
     
-    vector<char>().swap(TemporaryStorage.FirstNameVector);
-    vector<char>().swap(TemporaryStorage.LastNameVector);
-    vector<char>().swap(TemporaryStorage.AddressVector);
-    vector<char>().swap(TemporaryStorage.PhoneNumberVector);
-    vector<char>().swap(TemporaryStorage.DateOfBirth);
+    vector<char>().swap(temporaryStorage.firstNameVector);
+    vector<char>().swap(temporaryStorage.lastNameVector);
+    vector<char>().swap(temporaryStorage.addressVector);
+    vector<char>().swap(temporaryStorage.phoneNumberVector);
+    vector<char>().swap(temporaryStorage.dateOfBirthVector);
     
     /* DESTROY ALL CHARACTERS FROM EACH VECTOR OF TEMP STORAGE TO GET READY FOR NEXT */
     
-    TemporaryStorage.FirstNameVector.clear();
-    TemporaryStorage.LastNameVector.clear();
-    TemporaryStorage.AddressVector.clear();
-    TemporaryStorage.PhoneNumberVector.clear();
-    TemporaryStorage.DateOfBirth.clear();
-} // ClearDataVectorsFromStructure()
+    temporaryStorage.firstNameVector.clear();
+    temporaryStorage.lastNameVector.clear();
+    temporaryStorage.addressVector.clear();
+    temporaryStorage.phoneNumberVector.clear();
+    temporaryStorage.dateOfBirthVector.clear();
+} // clearDataVectorsFromStructure()

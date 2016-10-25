@@ -71,15 +71,15 @@ int main()
     //-------------------
     
     /* CREATE THE LYONS' DEN LABS FOLDER AND TEXT FILE IN APPLICATOIN SUPPORT FOLDER IN LIBRARY */
-    
-    CreateFolderAndTextFile(fullPath);
+
+    createFolderAndTextFile(fullPath);
     
     /* CHECK TO SEE IF FILE EXISTS AND HAS INFORMATION IN IT, IF SO, REBUILD THE LIST */
     
-    if(CheckIfFileExistsAndContainsInformation(fullPath))
+    if(checkIfFileExistsAndContainsInformation(fullPath))
     {
-        RebuildContactBook(contactVector, fullPath, speedSelectionChoice, encryptionMode);//restore contacts
-        ObtainSpeedSettingNumericalValues(displaySpeed, speedSelectionChoice);//restore user settings
+        rebuildContactBook(contactVector, fullPath, speedSelectionChoice, encryptionMode);//restore contacts
+        obtainSpeedSettingNumericalValues(displaySpeed, speedSelectionChoice);//restore user settings
     }
     
     do
@@ -104,42 +104,42 @@ int main()
         {
             case 1:
             {
-                DisplayContacts(contactVector, displaySpeed);
+                displayContacts(contactVector, displaySpeed);
                 break;
             }
                 
             case 2:
             {
-                AddContact(contactVector);
-                SaveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
+                addContact(contactVector);
+                saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
                 break;
             }
                 
             case 3:
             {
-                EditExistingContact(contactVector, displaySpeed);
-                SaveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
+                editExistingContact(contactVector, displaySpeed);
+                saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
                 break;
             }
                 
             case 4:
             {
-                DeleteContact(contactVector, displaySpeed);
-                SaveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
+                deleteContact(contactVector, displaySpeed);
+                saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
                 break;
             }
                 
             case 5:
             {
-                DeleteAllContacts(contactVector);
-                SaveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
+                deleteAllContacts(contactVector);
+                saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
                 break;
             }
                 
             case 6:
             {
-                DisplaySettingsMenu(contactVector, displaySpeed, speedSelectionChoice, encryptionMode);
-                SaveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
+                displaySettingsMenu(contactVector, displaySpeed, speedSelectionChoice, encryptionMode);
+                saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
                 break;
             }
                 

@@ -5,14 +5,14 @@
 
 /* FUNCTIONS FOR DYNAMIC AGE/BIRTHDAY */
 
-int BirthDayInput(personalInformation &TempPersonalInfoHolder);
+int birthDayInput(personalInformation &tempPersonalInfoHolder);
 
-int CalculateCurrentAge(personalInformation &TempPersonalInfoHolder, const int &MonthBorn,
-                        const int &DayBorn, const int &YearBorn);
+int calculateCurrentAge(personalInformation &tempPersonalInfoHolder, const int &monthBorn,
+        const int &dayBorn, const int &yearBorn);
 
-int CalculateDayNumberFromMonthAndDay(const int &BirthMonth, const int &BirthDay,
-                                      const int &CurrentYear);
+int calculateDayNumberFromMonthAndDay(const int &birthMonth, const int &birthDay,
+        const int &currentYear);
 
-void StoreDateOfBirthInVector(personalInformation &TempPersonalInfoHolder);
+void storeDateOfBirthInVector(personalInformation &tempPersonalInfoHolder);
 
 #endif /* dynamicBirthdayFunctions_hpp */

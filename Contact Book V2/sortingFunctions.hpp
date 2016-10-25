@@ -7,9 +7,9 @@
 
 /* SORTING FUNCTIONS */
 
-void SortContactVector(vector <personalInformation> &ContactVect);
+void sortContactVector(vector<personalInformation> &contactVect);
 
-bool NamesInOrder(const vector <char> &LastNameVect1, const vector <char> &LastNameVect2,
-                  const vector <char> &FirstNameVect1, const vector <char> &FirstNameVect2);
+bool namesInOrder(const vector<char> &LastNameVect1, const vector<char> &LastNameVect2,
+        const vector<char> &FirstNameVect1, const vector<char> &FirstNameVect2);
 
 #endif /* sortingFunctions_hpp */

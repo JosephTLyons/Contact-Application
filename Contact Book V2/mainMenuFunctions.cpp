@@ -29,143 +29,148 @@ void displayMainMenuOptions()
  This function displays all the contacts, and related information,
  that are within the personalInformation vector.
 */
-void DisplayContacts(const vector<personalInformation> &ContactVect, const int &DisplaySpeed)//cleaned up
+void displayContacts(const vector<personalInformation> &contactVect, const int &displaySpeed)//cleaned up
 {
     printDividingLine();
     
-    for (int vectorPosition = 0; vectorPosition < ContactVect.size(); vectorPosition++)
+    for (int vectorPosition = 0; vectorPosition < contactVect.size(); vectorPosition++)
     {
-        printContact(ContactVect, vectorPosition, DisplaySpeed);
+        printContact(contactVect, vectorPosition, displaySpeed);
     }
     
     /* IF THERE ARE NO CONTACTS, DISPLAY CONTACT BOOK IS EMPTY */
     
-    if (ContactVect.size() == 0)
+    if (contactVect.size() == 0)
         cout << "Contact Book is empty.\n\n";
     
     printDividingLine();
-} // DisplayContacts()
+} // displayContacts()
 
 void printDividingLine()
 {
     cout << "======================\n\n";
-}
+} // printDividingLine()
 
-void printContact(const vector<personalInformation> &ContactVect, const int &VectorPos,
+void printContact(const vector<personalInformation> &contactVect, const int &vectorPos,
                   const int &displaySpeed)
 {
-    cout << "Contact Number: " << VectorPos+1;
-    cout << "\nFirst Name:     ";
-    PrintVectorToScreen(ContactVect[VectorPos].FirstNameVector);
-    
-    cout << "Last Name:      ";
-    PrintVectorToScreen(ContactVect[VectorPos].LastNameVector);
-    
-    cout << "Address:        ";
-    PrintVectorToScreen(ContactVect[VectorPos].AddressVector);
-    
-    cout << "Phone Number:   ";
-    PrintVectorToScreen(ContactVect[VectorPos].PhoneNumberVector);
-    
-    cout << "Date Of Birth:  ";
-    PrintVectorToScreen(ContactVect[VectorPos].DateOfBirth);
-    
-    displayAge(ContactVect, VectorPos);
-    
+    displayVectors(contactVect, vectorPos);
+
     /* IF BIRTHDAY IS LESS THAN 7 DAYS AWAY, DISPLAY THAT INFORMATION TO THE SCREEEN */
     
-    daysUntilBirthday(ContactVect, VectorPos);
+    daysUntilBirthday(contactVect, vectorPos);
     
     cout << "\n\n";
     
     usleep(displaySpeed);
 } // printContact()
 
-void displayAge(const vector<personalInformation> &ContactVect, const int &VectorPos)
+void displayVectors(const vector<personalInformation> &contactVect, const int &vectorPos)
+{
+    cout << "Contact Number: " << vectorPos+1;
+    cout << "\nFirst Name:     ";
+    printVectorToScreen(contactVect[vectorPos].firstNameVector);
+
+    cout << "Last Name:      ";
+    printVectorToScreen(contactVect[vectorPos].lastNameVector);
+
+    cout << "Address:        ";
+    printVectorToScreen(contactVect[vectorPos].addressVector);
+
+    cout << "Phone Number:   ";
+    printVectorToScreen(contactVect[vectorPos].phoneNumberVector);
+
+    cout << "Date Of Birth:  ";
+    printVectorToScreen(contactVect[vectorPos].dateOfBirthVector);
+
+    displayAge(contactVect, vectorPos);
+} // printContact()
+
+void displayAge(const vector<personalInformation> &contactVect, const int &vectorPos)
 {
     /* ONLY DISPLAY CURRENT AGE IF N/A ISN'T IN DATEOFBIRTH FIELD */
     
-    if (ContactVect[VectorPos].DateOfBirth[0] != 'N')
+    if (contactVect[vectorPos].dateOfBirthVector[0] != 'N')
     {
-        if (ContactVect[VectorPos].DateOfBirth[1] != '/')
+        if (contactVect[vectorPos].dateOfBirthVector[1] != '/')
         {
-            if (ContactVect[VectorPos].DateOfBirth[2] != 'A')
+            if (contactVect[vectorPos].dateOfBirthVector[2] != 'A')
             {
                 cout << "Current Age:    ";
-                cout << ContactVect[VectorPos].CurrentAge;
+                cout << contactVect[vectorPos].currentAge;
             }
         }
     }
 } // displayAge()
 
-void daysUntilBirthday(const vector<personalInformation> &ContactVect, const int &VectorPos)
+void daysUntilBirthday(const vector<personalInformation> &contactVect, const int &vectorPos)
 {
     /* IF BIRTHDAY IS LESS THAN 7 DAYS AWAY, DISPLAY THAT INFORMATION TO THE SCREEEN */
     
-    if (ContactVect[VectorPos].BirthdayIsInXDays >= 0 && ContactVect[VectorPos].BirthdayIsInXDays <= 7)
-        cout << "\n*BIRTHDAY IS IN " << ContactVect[VectorPos].BirthdayIsInXDays << " DAYS*";
+    if (contactVect[vectorPos].birthdayIsInXDays >= 0 && contactVect[vectorPos].birthdayIsInXDays <= 7)
+        cout << "\n*BIRTHDAY IS IN " << contactVect[vectorPos].birthdayIsInXDays << " DAYS*";
 } // daysUntilBirthday()
 
-void AddContact(vector <personalInformation> &ContactVect)//not cleaned up
+void addContact(vector<personalInformation> &contactVect)//not cleaned up
 {
-    personalInformation Temporary;//temporary holding spot for input, used to store in vector
-    char UserChoice;
+    personalInformation temporary;//temporary holding spot for input, used to store in vector
+    char userChoice;
     
-    while (toupper(UserChoice) != 'N' && toupper(UserChoice) != 'Q')
+    while (toupper(userChoice) != 'N' && toupper(userChoice) != 'Q')
     {
         cout << "Enter First Name:   ";
-        InsertStringDataVectorFromKeyboard(Temporary.FirstNameVector);
+        insertStringDataVectorFromKeyboard(temporary.firstNameVector);
         
         cout << "Enter Last Name:    ";
-        InsertStringDataVectorFromKeyboard(Temporary.LastNameVector);
+        insertStringDataVectorFromKeyboard(temporary.lastNameVector);
         
         cout << "Enter Address:      ";
-        InsertStringDataVectorFromKeyboard(Temporary.AddressVector);
+        insertStringDataVectorFromKeyboard(temporary.addressVector);
         
         cout << "Enter Phone Number: ";
-        InsertStringDataVectorFromKeyboard(Temporary.PhoneNumberVector);
+        insertStringDataVectorFromKeyboard(temporary.phoneNumberVector);
         
         cout << "Enter Birthday:";
         
-        Temporary.CurrentAge = BirthDayInput(Temporary);
+        temporary.currentAge = birthDayInput(temporary);
         
-        ContactVect.push_back(Temporary);//store Temp in ContactVector Vector
+        contactVect.push_back(temporary);//store Temp in ContactVector Vector
+
+        clearDataVectorsFromStructure(temporary);
         
-        ClearDataVectorsFromStructure(Temporary);
-        
-        if (ContactVect.size() > 1)//don't go into sort function if only one name is in vector
-            SortContactVector(ContactVect);
+        if (contactVect.size() > 1)//don't go into sort function if only one name is in vector
+            sortContactVector(contactVect);
         
         cout << "\nAdd another contact? Y/N: ";
-        cin >> UserChoice;
+        cin >> userChoice;
         
-        if (toupper(UserChoice) == 'Y')//dont cin.ignore() if user doesn't repeat loop, used to keep main from pausing too many times
+        if (toupper(userChoice) == 'Y')//dont cin.ignore() if user doesn't repeat loop, used to keep main from pausing too many times
             cin.ignore();//clear newline from cin >> statement above
         
         cout << "\n";
     }
     
     cin.ignore();//removes 1 newline at the end of this function - needed for main loop to work correctly
-}
+} // addContact()
 
-void EditExistingContact(vector <personalInformation> &ContactVect, const int &DisplaySpeed)//not cleaned up
+void editExistingContact(vector<personalInformation> &contactVect, const int &displaySpeed)//not cleaned up
 {
-    int ContactNumberToEdit;
-    char FieldToEdit = 0;
-    
-    DisplayContacts(ContactVect, DisplaySpeed);
+    int contactNumberToEdit;
+    char fieldToEdit = 0;
+
+    displayContacts(contactVect, displaySpeed);
     
     cout << "Which contact would you like to edit: ";
-    cin >> ContactNumberToEdit;
+    cin >> contactNumberToEdit;
     cin.ignore();//remove newline left over from cin >> statement above
     
-    ContactNumberToEdit--;//decrement value here to work with vector/array notation
+    contactNumberToEdit--;//decrement value here to work with vector/array notation
     
-    if (ContactNumberToEdit < ContactVect.size())//error will occur if tries to erase number outside of vector bound
+    if (contactNumberToEdit < contactVect.size())//error will occur if tries to erase number outside of vector bound
     {
         cout << "\n\nContact you wish to edit: ";
-        
-        PrintVectorToScreen(ContactVect[ContactNumberToEdit].FirstNameVector);
+
+        printVectorToScreen(contactVect[contactNumberToEdit].firstNameVector);
         
         cout << "\nPress enter to skip editing a field.";
         cout << "\nPress \"Y\" + enter to edit a field.";
@@ -173,208 +178,209 @@ void EditExistingContact(vector <personalInformation> &ContactVect, const int &D
         cout << "\n\n======================\n\n";
         
         cout << "Original First Name:    ";
-        PrintVectorToScreen(ContactVect[ContactNumberToEdit].FirstNameVector);
+        printVectorToScreen(contactVect[contactNumberToEdit].firstNameVector);
         
         cout << "Edit Field?: ";
-        cin.get(FieldToEdit);//using cin.get() so that newlines are stored
+        cin.get(fieldToEdit);//using cin.get() so that newlines are stored
         
-        if (toupper(FieldToEdit) == 'Y')
+        if (toupper(fieldToEdit) == 'Y')
         {
             cin.ignore();//clear left over newline in input buffer
             
-            ContactVect[ContactNumberToEdit].FirstNameVector.clear();
+            contactVect[contactNumberToEdit].firstNameVector.clear();
             
             cout << "\nEnter New First Name:   ";
-            InsertStringDataVectorFromKeyboard(ContactVect[ContactNumberToEdit].FirstNameVector);
+            insertStringDataVectorFromKeyboard(contactVect[contactNumberToEdit].firstNameVector);
             
-            FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
+            fieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
         cout << "\nOriginal Last Name:     ";
-        PrintVectorToScreen(ContactVect[ContactNumberToEdit].LastNameVector);
+        printVectorToScreen(contactVect[contactNumberToEdit].lastNameVector);
         
         cout << "Edit Field?: ";
-        cin.get(FieldToEdit);//using cin.get() so that newlines are stored
+        cin.get(fieldToEdit);//using cin.get() so that newlines are stored
         
-        if (toupper(FieldToEdit) == 'Y')
+        if (toupper(fieldToEdit) == 'Y')
         {
             cin.ignore();//clear left over newline in input buffer
             
-            ContactVect[ContactNumberToEdit].LastNameVector.clear();
+            contactVect[contactNumberToEdit].lastNameVector.clear();
             
             cout << "\nEnter New Last Name:    ";
-            InsertStringDataVectorFromKeyboard(ContactVect[ContactNumberToEdit].LastNameVector);
+            insertStringDataVectorFromKeyboard(contactVect[contactNumberToEdit].lastNameVector);
             
-            FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
+            fieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
         cout << "\nOriginal Address:       ";
-        PrintVectorToScreen(ContactVect[ContactNumberToEdit].AddressVector);
+        printVectorToScreen(contactVect[contactNumberToEdit].addressVector);
         
         cout << "Edit Field?: ";
-        cin.get(FieldToEdit);//using cin.get() so that newlines are stored
+        cin.get(fieldToEdit);//using cin.get() so that newlines are stored
         
-        if (toupper(FieldToEdit) == 'Y')
+        if (toupper(fieldToEdit) == 'Y')
         {
             cin.ignore();//clear left over newline in input buffer
             
-            ContactVect[ContactNumberToEdit].AddressVector.clear();
+            contactVect[contactNumberToEdit].addressVector.clear();
             
             cout << "\nEnter New Address:      ";
-            InsertStringDataVectorFromKeyboard(ContactVect[ContactNumberToEdit].AddressVector);
+            insertStringDataVectorFromKeyboard(contactVect[contactNumberToEdit].addressVector);
             
-            FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
+            fieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
         cout << "\nOriginal Phone Number:  ";
-        PrintVectorToScreen(ContactVect[ContactNumberToEdit].PhoneNumberVector);
+        printVectorToScreen(contactVect[contactNumberToEdit].phoneNumberVector);
         
         cout << "Edit Field?: ";
-        cin.get(FieldToEdit);//using cin.get() so that newlines are stored
+        cin.get(fieldToEdit);//using cin.get() so that newlines are stored
         
-        if (toupper(FieldToEdit) == 'Y')
+        if (toupper(fieldToEdit) == 'Y')
         {
             cin.ignore();//clear left over newline in input buffer
             
-            ContactVect[ContactNumberToEdit].PhoneNumberVector.clear();
+            contactVect[contactNumberToEdit].phoneNumberVector.clear();
             
             cout << "\nEnter New Phone Number: ";
-            InsertStringDataVectorFromKeyboard(ContactVect[ContactNumberToEdit].PhoneNumberVector);
+            insertStringDataVectorFromKeyboard(contactVect[contactNumberToEdit].phoneNumberVector);
             
-            FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
+            fieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
         cout << "\nOriginal Date of Birth: ";
-        PrintVectorToScreen(ContactVect[ContactNumberToEdit].DateOfBirth);
+        printVectorToScreen(contactVect[contactNumberToEdit].dateOfBirthVector);
         
         cout << "Edit Field?: ";
-        cin.get(FieldToEdit);//using cin.get() so that newlines are stored
+        cin.get(fieldToEdit);//using cin.get() so that newlines are stored
         
-        if (toupper(FieldToEdit) == 'Y')
+        if (toupper(fieldToEdit) == 'Y')
         {
             cin.ignore();//clear left over newline in input buffer
             
-            ContactVect[ContactNumberToEdit].DateOfBirth.clear();
+            contactVect[contactNumberToEdit].dateOfBirthVector.clear();
             
             cout << "\nEnter New Date of Birth:";
-            ContactVect[ContactNumberToEdit].CurrentAge = BirthDayInput(ContactVect[ContactNumberToEdit]);
+            contactVect[contactNumberToEdit].currentAge = birthDayInput(contactVect[contactNumberToEdit]);
             
-            FieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
+            fieldToEdit = 0;//reset back to zero so next if condition isn't automatically met
         }
         
         cout << "\n\n======================\n\n";
     }
-    
-    SortContactVector(ContactVect);
-}
 
-void DeleteContact(vector <personalInformation> &ContactVect, const int &DisplaySpeed)//not cleaned up
+    sortContactVector(contactVect);
+} // editExistingContact
+
+void deleteContact(vector<personalInformation> &contactVect, const int &displaySpeed)//not cleaned up
 {
-    int ContactNumberToDelete;
-    char ConfirmDelete = 0;
-    char DeleteAnotherContactChoice;
+    int contactNumberToDelete;
+    char confirmDelete = 0;
+    char deleteAnotherContactChoice;
     
     do
     {
-        DisplayContacts(ContactVect, DisplaySpeed);//display list again
+        displayContacts(contactVect, displaySpeed);//display list again
         
         cout << "Type in the number of the contact you wish to delete: ";
-        cin >> ContactNumberToDelete;
+        cin >> contactNumberToDelete;
         
-        if (ContactNumberToDelete >= 0 && ContactNumberToDelete <= ContactVect.size())//error will occur if tries to erase number outside of vector bound
+        if (contactNumberToDelete >= 0 && contactNumberToDelete <= contactVect.size())//error will occur if tries to erase number outside of vector bound
         {
-            ContactNumberToDelete--;//decrement to work with vector/array notation
+            contactNumberToDelete--;//decrement to work with vector/array notation
             
             cout << "\nYou are trying to delete: ";
             
             cout << "\n\n======================\n\n";
             
             cout << "First Name:    ";
-            PrintVectorToScreen(ContactVect[ContactNumberToDelete].FirstNameVector);
+            printVectorToScreen(contactVect[contactNumberToDelete].firstNameVector);
             
             cout << "Last Name:     ";
-            PrintVectorToScreen(ContactVect[ContactNumberToDelete].LastNameVector);
+            printVectorToScreen(contactVect[contactNumberToDelete].lastNameVector);
             
             cout << "Address:       ";
-            PrintVectorToScreen(ContactVect[ContactNumberToDelete].AddressVector);
+            printVectorToScreen(contactVect[contactNumberToDelete].addressVector);
             
             cout << "Phone Number:  ";
-            PrintVectorToScreen(ContactVect[ContactNumberToDelete].PhoneNumberVector);
+            printVectorToScreen(contactVect[contactNumberToDelete].phoneNumberVector);
             
             cout << "Date of Birth: ";
-            PrintVectorToScreen(ContactVect[ContactNumberToDelete].DateOfBirth);
+            printVectorToScreen(contactVect[contactNumberToDelete].dateOfBirthVector);
             
             cout << "Current Age:   ";
-            cout << ContactVect[ContactNumberToDelete].CurrentAge;
+            cout << contactVect[contactNumberToDelete].currentAge;
             
             cout << "\n======================\n\n";
             
             
             cout << "\nAre you sure you want to delete ";
             
-            for (int i = 0; ContactVect[ContactNumberToDelete].FirstNameVector[i] != '\n'; i++)//display name of contact being deleted
+            for (int i = 0; contactVect[contactNumberToDelete].firstNameVector[i] != '\n'; i++)//display name of contact being deleted
             {
-                cout << ContactVect[ContactNumberToDelete].FirstNameVector[i];
+                cout << contactVect[contactNumberToDelete].firstNameVector[i];
             }
             
             cout << "? Y/N: ";
-            cin >> ConfirmDelete;
+            cin >> confirmDelete;
             
-            if (toupper(ConfirmDelete) == 'Y')
-                ContactVect.erase(ContactVect.begin() + ContactNumberToDelete);
+            if (toupper(confirmDelete) == 'Y')
+                contactVect.erase(contactVect.begin() + contactNumberToDelete);
         }
         
         else
             cout << "\nNo contact located at this number";
         
-        if (toupper(ConfirmDelete) == 'N' && ++ContactNumberToDelete <= ContactVect.size())//increment Contact to work properly with size()function
+        if (toupper(confirmDelete) == 'N' && ++contactNumberToDelete <= contactVect.size())//increment Contact to work properly with size()function
             cout << "\nNo contact deleted.";//if user chooses to not delete the contact
         
         cout << "\n\nDelete another contact? Y/N: ";
-        cin >> DeleteAnotherContactChoice;
+        cin >> deleteAnotherContactChoice;
         cin.ignore();//removes 1 newline at the end of this function - needed for main loop to work correctly
     }
-    while (toupper(DeleteAnotherContactChoice) == 'Y' && ContactVect.size() > 0);//don't try to delete when nothing is left in vector
+    while (toupper(deleteAnotherContactChoice) == 'Y' && contactVect.size() > 0);//don't try to delete when nothing is left in vector
     
     cout << "\n\n";
-}
+} // deleteContact()
 
-void DeleteAllContacts(vector <personalInformation> &ContactVect)//not cleaned up
+void deleteAllContacts(vector<personalInformation> &contactVect)//not cleaned up
 {
-    vector <char> UserChoice;
-    bool ContactsNotDeletedFlag = true;
-    char Insert;
+    vector<char> userChoice;
+    bool contactsNotDeletedFlag = true;
+    char insert;
     
     cout << "Are you sure you'd like to delete all contacts? Type \"YES\" to confirm (Must be a capital YES): ";
     
     do
     {
-        cin.get(Insert);
-        UserChoice.push_back(Insert);
+        cin.get(insert);
+        userChoice.push_back(insert);
     }
-    while (Insert != '\n');
+    while (insert != '\n');
     
-    if (UserChoice[0] == 'Y')
+    if (userChoice[0] == 'Y')
     {
-        if (UserChoice[1] == 'E')
+        if (userChoice[1] == 'E')
         {
-            if (UserChoice[2] == 'S')
+            if (userChoice[2] == 'S')
             {
-                ContactsNotDeletedFlag = false;
-                ContactVect.clear();
+                contactsNotDeletedFlag = false;
+                contactVect.clear();
                 
                 cout << "\nAll contacts have been deleted.\n\n";
             }
         }
     }
     
-    if (ContactsNotDeletedFlag == true)
+    if (contactsNotDeletedFlag == true)
         cout << "\nContacts were not deleted.\n\n";
-}
+} // deleteAllContacts()
 
-void DisplaySettingsMenu(const vector <personalInformation> &ContactVect, int &DisplaySpeed, int &SpeedSelectionChoice, bool &EncryptionMode)//not cleaned up
+void displaySettingsMenu(const vector<personalInformation> &contactVect, int &displaySpeed,
+                         int &speedSelectionChoice, bool &encryptionMode)//not cleaned up
 {
-    int Choice;
+    int choice;
     
     do
     {
@@ -382,24 +388,24 @@ void DisplaySettingsMenu(const vector <personalInformation> &ContactVect, int &D
         cout << "\n(2) Encryption";
         cout << "\n(3) Quit Settings";
         
-        cout << "\n\nChoice: ";
-        cin >> Choice;
+        cout << "\n\nchoice: ";
+        cin >> choice;
         
-        switch (Choice)
+        switch (choice)
         {
             case 1:
-                ScrollSpeedSettingsAndUserInput(ContactVect, DisplaySpeed, SpeedSelectionChoice);
+                scrollSpeedSettingsAndUserInput(contactVect, displaySpeed, speedSelectionChoice);
                 break;
                 
             case 2:
-                EncryptionOnOffSetting(EncryptionMode);
+                encryptionOnOffSetting(encryptionMode);
                 break;
                 
             default:
                 break;
         }
     }
-    while (Choice >= 1 && Choice <= 2);
+    while (choice >= 1 && choice <= 2);
     
     cout << endl;
-} // DisplaySettingsMenu()
+} // displaySettingsMenu()

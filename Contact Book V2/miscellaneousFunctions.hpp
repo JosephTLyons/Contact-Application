@@ -8,13 +8,13 @@
 
 /* MISCELLANEOUS FUNCTIONS */
 
-void RebuildContactBook(vector <personalInformation> &ContactVect, const char Path[],
-                        int &SpeedSelectionChoice, bool &EncryptionMode);
+void rebuildContactBook(vector<personalInformation> &contactVect, const char *path,
+        int &speedSelectionChoice, bool &encryptionMode);
 
-void CreateFolderAndTextFile(char FullPath[]);
+void createFolderAndTextFile(char *fullPath);
 
-bool CheckIfFileExistsAndContainsInformation(const char Path[]);
+bool checkIfFileExistsAndContainsInformation(const char *path);
 
-void ClearDataVectorsFromStructure(personalInformation &TemporaryStorage);
+void clearDataVectorsFromStructure(personalInformation &TemporaryStorage);
 
 #endif /* miscellaneousFunctions_hpp */

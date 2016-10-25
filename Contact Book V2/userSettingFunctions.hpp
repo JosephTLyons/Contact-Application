@@ -9,11 +9,11 @@ using namespace std;
 
 /* USER SETTINGS FUNCTIONS */
 
-void EncryptionOnOffSetting(bool &EncryptionMode);
+void encryptionOnOffSetting(bool &encryptionMode);
 
-void ScrollSpeedSettingsAndUserInput(const vector <personalInformation> &ContactVect,
-                                     int &DisplaySpeed, int &SpeedSelectionChoice);
+void scrollSpeedSettingsAndUserInput(const vector<personalInformation> &contactVect,
+        int &displaySpeed, int &speedSelectionChoice);
 
-void ObtainSpeedSettingNumericalValues(int &DisplaySpeed, const int &SpeedSelectionChoice);
+void obtainSpeedSettingNumericalValues(int &displaySpeed, const int &speedSelectionChoice);
 
 #endif /* userSettingFunctions_hpp */

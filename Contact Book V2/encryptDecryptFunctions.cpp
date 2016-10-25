@@ -1,36 +1,36 @@
 #include "encryptDecryptFunctions.hpp"
 
-char EncryptDecryptChar(char Input, const bool &EncryptionMode)//not cleaned up
+char encryptDecryptChar(char input, const bool &encryptionMode)//not cleaned up
 {
     /* USED TO ENCRYPT/DECRYPT THE VECTORS IN STRUCT: FIRSTNAME, LASTNAME, ADDRESS, PHONENUMBER,DATEOFBIRTH */
     /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
     
-    char CharKey = 'J';
+    char charKey = 'J';
     
     /* ONLY ENCRYPT TEXT IF ENCRYPT MODE IS TRUE (TURNED ON), ELSE, SKIP IT AND PRINT NORMAL */
     
-    if (EncryptionMode == true)
+    if (encryptionMode == true)
     {
-        Input ^= CharKey;
+        input ^= charKey;
     }
     
-    return Input;
-} // EncryptDecryptChar
+    return input;
+} // encryptDecryptChar
 
-int EncryptDecryptInt(int Input, const bool &EncryptionMode)//not cleaned up
+int encryptDecryptInt(int input, const bool &encryptionMode)//not cleaned up
 {
     /* USED TO ENCRYPT/DECRYPT INTS IN STRUCT: MONTHBORN, DAYBORN, YEARBORN AND CURRENTAGE */
     /* FIRST USE A SIMPLE, HARDCODED VALUE FOR ENCRYPTION, THEN MAKE IT MORE COMPLEX */
     /* USE A DIFFERENT METHOD OF ENCRYPTION FOR THE INTS */
     
-    char IntKey = 'z';
+    char intKey = 'z';
     
     /* ONLY ENCRYPT TEXT IF ENCRYPT MODE IS TRUE (TURNED ON), ELSE, SKIP IT AND PRINT NORMAL */
     
-    if (EncryptionMode == true)
+    if (encryptionMode == true)
     {
-        Input ^= IntKey;
+        input ^= intKey;
     }
     
-    return Input;
-} // EncryptDecryptInt
+    return input;
+} // encryptDecryptInt

@@ -9,70 +9,71 @@
 
 using namespace std;
 
-void SaveContactBookAndSettings(const vector <personalInformation> &ContactVect, const char Path[], const int &SpeedSelectionChoice, const bool &EncryptionMode)//not cleaned up
+void saveContactBookAndSettings(const vector<personalInformation> &contactVect, const char *path,
+                                const int &speedSelectionChoice, const bool &encryptionMode)//not cleaned up
 {
-    ofstream FileOut;
+    ofstream fileOut;
     
     
-    FileOut.open(Path);
+    fileOut.open(path);
     
-    if (FileOut.fail())//check to see if file opened
+    if (fileOut.fail())//check to see if file opened
         cout << "Couldn't Open File\n";
     
     
-    FileOut << "Security Mode: ";
+    fileOut << "Security Mode: ";
     
-    FileOut << EncryptionMode << endl;
+    fileOut << encryptionMode << endl;
     
-    FileOut << "Speed Selection Choice: ";
+    fileOut << "Speed Selection Choice: ";
     
-    FileOut << SpeedSelectionChoice << endl;
+    fileOut << speedSelectionChoice << endl;
     
     /* SAVE NUMBER OF CONTACTS TO .TXT FILE SO WE KNOW HOW MANY WE ARE READING IN IN THE REBUILD FUNCTION */
     
-    FileOut << "Number of Contacts: ";
+    fileOut << "Number of Contacts: ";
     
-    FileOut << ContactVect.size() << endl << endl;
+    fileOut << contactVect.size() << endl << endl;
     
-    for (int i = 0; i < ContactVect.size(); i++)
+    for (int i = 0; i < contactVect.size(); i++)
     {
         /* ENCRYPTION FOR VECTORS HAPPENS IN PRINTSTRINGSTRUCT... FUNCTIONS */
-        
-        PrintVectorToFile(ContactVect[i].FirstNameVector, FileOut, EncryptionMode);
-        
-        PrintVectorToFile(ContactVect[i].LastNameVector, FileOut, EncryptionMode);
-        
-        PrintVectorToFile(ContactVect[i].AddressVector, FileOut, EncryptionMode);
-        
-        PrintVectorToFile(ContactVect[i].PhoneNumberVector, FileOut, EncryptionMode);
-        
-        PrintVectorToFile(ContactVect[i].DateOfBirth, FileOut, EncryptionMode);
+
+        printVectorToFile(contactVect[i].firstNameVector, fileOut, encryptionMode);
+
+        printVectorToFile(contactVect[i].lastNameVector, fileOut, encryptionMode);
+
+        printVectorToFile(contactVect[i].addressVector, fileOut, encryptionMode);
+
+        printVectorToFile(contactVect[i].phoneNumberVector, fileOut, encryptionMode);
+
+        printVectorToFile(contactVect[i].dateOfBirthVector, fileOut, encryptionMode);
         
         /* ENCRYPTION FOR INTS HAPPENS RIGHT HERE */
         
-        FileOut << EncryptDecryptInt(ContactVect[i].CurrentAge, EncryptionMode) << endl;
+        fileOut << encryptDecryptInt(contactVect[i].currentAge, encryptionMode) << endl;
         
-        FileOut << EncryptDecryptInt(ContactVect[i].MonthBorn, EncryptionMode) << endl;
+        fileOut << encryptDecryptInt(contactVect[i].monthBorn, encryptionMode) << endl;
         
-        FileOut << EncryptDecryptInt(ContactVect[i].DayBorn, EncryptionMode) << endl;
+        fileOut << encryptDecryptInt(contactVect[i].dayBorn, encryptionMode) << endl;
         
-        FileOut << EncryptDecryptInt(ContactVect[i].YearBorn, EncryptionMode);
+        fileOut << encryptDecryptInt(contactVect[i].yearBorn, encryptionMode);
         
-        FileOut << "\n\n";
+        fileOut << "\n\n";
     }
     
-    FileOut << "Contacts Last Altered: " << ObtainDateAndTime() << endl;
+    fileOut << "Contacts Last Altered: " << obtainDateAndTime() << endl;
     
-    FileOut.close();
-} // SaveContactBookAndSettings()
+    fileOut.close();
+} // saveContactBookAndSettings()
 
-string ObtainDateAndTime()//not my code here - modified it to display what I want and to read easier
+string obtainDateAndTime()//not my code here - modified it to display what I want and to read easier
 {
-    char Time[50];
+    char timeArray[50];
     
     time_t now = time(NULL);
     
-    strftime(Time, 50, "%D, %I:%M %p", localtime(&now));
+    strftime(timeArray, 50, "%D, %I:%M %p", localtime(&now));
     
-    return string(Time);
-} // ObtainDateAndTime()
+    return string(timeArray);
+} // obtainDateAndTime()

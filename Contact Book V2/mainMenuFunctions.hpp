@@ -7,26 +7,28 @@
 
 void displayMainMenuOptions();
 
-void DisplayContacts(const vector<personalInformation> &ContactVect, const int &DisplaySpeed);
+void displayContacts(const vector<personalInformation> &contactVect, const int &displaySpeed);
 
 void printDividingLine();
 
-void printContact(const vector<personalInformation> &ContactVect, const int &VectorPos,
+void printContact(const vector<personalInformation> &contactVect, const int &vectorPos,
                   const int &displaySpeed);
 
-void displayAge(const vector<personalInformation> &ContactVect, const int &VectorPos);
+void displayVectors(const vector<personalInformation> &contactVect, const int &vectorPos);
 
-void daysUntilBirthday(const vector<personalInformation> &ContactVect, const int &VectorPos);
+void displayAge(const vector<personalInformation> &contactVect, const int &vectorPos);
 
-void AddContact(vector <personalInformation> &ContactVect);
+void daysUntilBirthday(const vector<personalInformation> &contactVect, const int &vectorPos);
 
-void EditExistingContact(vector <personalInformation> &ContactVect, const int &DisplaySpeed);
+void addContact(vector<personalInformation> &contactVect);
 
-void DeleteContact(vector <personalInformation> &ContactVect, const int &DisplaySpeed);
+void editExistingContact(vector<personalInformation> &contactVect, const int &displaySpeed);
 
-void DeleteAllContacts(vector <personalInformation> &ContactVect);
+void deleteContact(vector<personalInformation> &contactVect, const int &displaySpeed);
 
-void DisplaySettingsMenu(const vector <personalInformation> &ContactVect,
-                         int &DisplaySpeed, int &SpeedSelectionChoice, bool &EncryptionMode);
+void deleteAllContacts(vector<personalInformation> &contactVect);
+
+void displaySettingsMenu(const vector<personalInformation> &contactVect,
+        int &displaySpeed, int &speedSelectionChoice, bool &encryptionMode);
 
 #endif /* mainMenuFunctions_hpp */

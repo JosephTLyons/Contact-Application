@@ -8,64 +8,64 @@
 
 using namespace std;
 
-void PrintVectorToFile(const vector <char> &ContactVect, ofstream &FileOut, const bool &EncryptionMode)//not cleaned up
+void printVectorToFile(const vector<char> &contactVect, ofstream &fileOut, const bool &encryptionMode)//not cleaned up
 {
-    for (int i = 0; i < ContactVect.size(); i++)
+    for (int i = 0; i < contactVect.size(); i++)
     {
-        FileOut << EncryptDecryptChar(ContactVect[i], EncryptionMode);
+        fileOut << encryptDecryptChar(contactVect[i], encryptionMode);
     }
-} // PrintVectorToFile()
+} // printVectorToFile()
 
-void PrintVectorToScreen(const vector <char> &ContactVect)//not cleaned up
+void printVectorToScreen(const vector<char> &contactVect)//not cleaned up
 {
-    for (int i = 0; i < ContactVect.size(); i++)
+    for (int i = 0; i < contactVect.size(); i++)
     {
-        cout << ContactVect[i];
+        cout << contactVect[i];
     }
-} // PrintVectorToScreen
+} // printVectorToScreen
 
-void InsertStringInVectorFromFile(vector <char> &ContactVect, ifstream &FileIn, const bool &EncryptionMode)//not cleaned up
+void insertStringInVectorFromFile(vector<char> &contactVect, ifstream &fileIn, const bool &encryptionMode)//not cleaned up
 {
-    char Insert = 1;//used for inserting characters into individual struct vectors
+    char insert = 1;//used for inserting characters into individual struct vectors
     //initialized at 1 to allow while loop to execute
     
-    while (Insert != '\n')
+    while (insert != '\n')
     {
-        FileIn.get(Insert);
+        fileIn.get(insert);
         
-        Insert = EncryptDecryptChar(Insert, EncryptionMode);
+        insert = encryptDecryptChar(insert, encryptionMode);
         
-        ContactVect.push_back(Insert);
+        contactVect.push_back(insert);
     }
-} // InsertStringInVectorFromFile()
+} // insertStringInVectorFromFile()
 
-void InsertStringDataVectorFromKeyboard(vector <char> &ContactVect)//not cleaned up
+void insertStringDataVectorFromKeyboard(vector<char> &contactVect)//not cleaned up
 {
-    char Insert = 0;//used for inserting characters into individual struct vectors
+    char insert = 0;//used for inserting characters into individual struct vectors
     //initialized at 0 to allow while loop to execute
     
-    char NameOfEmptyField[] = {"N/A\n"};
+    char nameOfEmptyField[] = {"N/A\n"};
     
-    while (Insert != '\n')
+    while (insert != '\n')
     {
-        cin.get(Insert);//using cin.get, and not cin >>, so it stores the newline in Insert - allows to break out of loop
+        cin.get(insert);//using cin.get, and not cin >>, so it stores the newline in insert - allows to break out of loop
         
-        ContactVect.push_back(Insert);
+        contactVect.push_back(insert);
     }
     
-    if (ContactVect.size() <= 1)//if theres nothing in vector or just a newline, add "N/A" text in field
+    if (contactVect.size() <= 1)//if theres nothing in vector or just a newline, add "N/A" text in field
     {
-        ContactVect.erase(ContactVect.begin());//erase newline stored
+        contactVect.erase(contactVect.begin());//erase newline stored
         
-        for (int i = 0; NameOfEmptyField[i] != 0; i++)
+        for (int i = 0; nameOfEmptyField[i] != 0; i++)
         {
-            ContactVect.push_back(NameOfEmptyField[i]);//insert text for "N/A"
+            contactVect.push_back(nameOfEmptyField[i]);//insert text for "N/A"
         }
     }
     
-    while (ContactVect[0] == ' ')//remove any leading whitespace from vector
-        ContactVect.erase(ContactVect.begin());//while first element is a space, delete first element
+    while (contactVect[0] == ' ')//remove any leading whitespace from vector
+        contactVect.erase(contactVect.begin());//while first element is a space, delete first element
     
-    if (!isnumber(ContactVect[0]))
-        (ContactVect[0] = toupper(ContactVect[0]));//if not a number, always capitalize (for first name and last names)
-} // InsertStringDataVectorFromKeyboard
+    if (!isnumber(contactVect[0]))
+        (contactVect[0] = toupper(contactVect[0]));//if not a number, always capitalize (for first name and last names)
+} // insertStringDataVectorFromKeyboard

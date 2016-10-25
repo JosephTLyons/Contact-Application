@@ -7,21 +7,21 @@
 
 using namespace std;
 
-void EncryptionOnOffSetting(bool &EncryptionMode)//not cleaned up
+void encryptionOnOffSetting(bool &encryptionMode)//not cleaned up
 {
-    char UserChoice;
+    char userChoice;
     
     cout << "\nEncyption ";
     
-    if (EncryptionMode == true)
+    if (encryptionMode == true)
     {
         cout << "[on] / off";
         cout << "\n\nWould you like to turn encryption off? Y/N?: ";
         
-        cin >> UserChoice;
+        cin >> userChoice;
         
-        if (toupper(UserChoice) == 'Y')
-            EncryptionMode = false;
+        if (toupper(userChoice) == 'Y')
+            encryptionMode = false;
     }
     
     else
@@ -29,18 +29,19 @@ void EncryptionOnOffSetting(bool &EncryptionMode)//not cleaned up
         cout << "on / [off]";
         cout << "\n\nWould you like to turn encryption on? Y/N?: ";
         
-        cin >> UserChoice;
+        cin >> userChoice;
         
-        if (toupper(UserChoice) == 'Y')
-            EncryptionMode = true;
+        if (toupper(userChoice) == 'Y')
+            encryptionMode = true;
     }
     
     cout << endl;
-} // EncryptionOnOffSetting()
+} // encryptionOnOffSetting()
 
-void ScrollSpeedSettingsAndUserInput(const vector <personalInformation> &ContactVect, int &DisplaySpeed, int &SpeedSelectionChoice)//not cleaned up
+void scrollSpeedSettingsAndUserInput(const vector<personalInformation> &contactVect,
+                                     int &displaySpeed, int &speedSelectionChoice)//not cleaned up
 {
-    char LoopAgainOrNot = 'N';
+    char loopAgainOrNot = 'N';
     
     do
     {
@@ -52,7 +53,7 @@ void ScrollSpeedSettingsAndUserInput(const vector <personalInformation> &Contact
         
         cout << "\n\n(1)";
         
-        if (SpeedSelectionChoice == 1)
+        if (speedSelectionChoice == 1)
             cout << " [*]";
         else
             cout << " [ ]";
@@ -63,7 +64,7 @@ void ScrollSpeedSettingsAndUserInput(const vector <personalInformation> &Contact
         
         cout << "\n(2)";
         
-        if (SpeedSelectionChoice == 2)
+        if (speedSelectionChoice == 2)
             cout << " [*]";
         else
             cout << " [ ]";
@@ -74,7 +75,7 @@ void ScrollSpeedSettingsAndUserInput(const vector <personalInformation> &Contact
         
         cout << "\n(3)";
         
-        if (SpeedSelectionChoice == 3)
+        if (speedSelectionChoice == 3)
             cout << " [*]";
         else
             cout << " [ ]";
@@ -89,41 +90,41 @@ void ScrollSpeedSettingsAndUserInput(const vector <personalInformation> &Contact
         
         cout << "\n\nSpeed Selection: ";
         
-        cin >> SpeedSelectionChoice;
-        
-        ObtainSpeedSettingNumericalValues(DisplaySpeed, SpeedSelectionChoice);
+        cin >> speedSelectionChoice;
+
+        obtainSpeedSettingNumericalValues(displaySpeed, speedSelectionChoice);
         
         cout << "Preview of Speed:\n\n";
-        
-        DisplayContacts(ContactVect, DisplaySpeed);
+
+        displayContacts(contactVect, displaySpeed);
         
         cout << "\nSet a different speeed? Y/N: ";
-        cin >> LoopAgainOrNot;
+        cin >> loopAgainOrNot;
         
         cout << "\n";
         cin.ignore();//remove one left over newline
     }
-    while (toupper(LoopAgainOrNot) == 'Y');
-} // ScrollSpeedSettingsAndUserInput()
+    while (toupper(loopAgainOrNot) == 'Y');
+} // scrollSpeedSettingsAndUserInput()
 
-void ObtainSpeedSettingNumericalValues(int &DisplaySpeed, const int &SpeedSelectionChoice)//not cleaned up
+void obtainSpeedSettingNumericalValues(int &displaySpeed, const int &speedSelectionChoice)//not cleaned up
 {
     /* VARIABLES THAT HOLD THE VARIOUS SPEEDS, EASY TO MODIFY THESE HERE */
     
-    int Slow   = 140000;
-    int Medium = 70000;
-    int Fast   = 20000;
+    int slow   = 140000;
+    int medium = 70000;
+    int fast   = 20000;
     
     /* INPUT CHOICE OF SPEED AND STORE SPEED IN DISPLAYSPEED */
     
-    if (SpeedSelectionChoice == 1)
-        DisplaySpeed = Slow;
+    if (speedSelectionChoice == 1)
+        displaySpeed = slow;
     
-    else if (SpeedSelectionChoice == 2)
-        DisplaySpeed = Medium;
+    else if (speedSelectionChoice == 2)
+        displaySpeed = medium;
     
     else
-        DisplaySpeed = Fast;
+        displaySpeed = fast;
     
     //settings for displaying birthday reminders or not
-} // ObtainSpeedSettingNumericalValues()
+} // obtainSpeedSettingNumericalValues()

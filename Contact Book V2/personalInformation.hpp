@@ -7,17 +7,17 @@ using namespace std;
 
 struct personalInformation
 {
-    vector<char> FirstNameVector;
-    vector<char> LastNameVector;
-    vector<char> AddressVector;
-    vector<char> PhoneNumberVector;
-    vector<char> DateOfBirth;
+    vector<char> firstNameVector;
+    vector<char> lastNameVector;
+    vector<char> addressVector;
+    vector<char> phoneNumberVector;
+    vector<char> dateOfBirthVector;
     
-    int MonthBorn;
-    int DayBorn;
-    int YearBorn;
-    int CurrentAge;
-    short int BirthdayIsInXDays;
+    int monthBorn;
+    int dayBorn;
+    int yearBorn;
+    int currentAge;
+    short int birthdayIsInXDays;
 };
 
 #endif /* personalinformation_hpp */

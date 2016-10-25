@@ -8,10 +8,10 @@
 
 /* FUNCTIONS FOR SAVING */
 
-void SaveContactBookAndSettings(const vector <personalInformation> &ContactVect,
-                                const char Path[], const int &SpeedSelectionChoice,
-                                const bool &EncryptionMode);
+void saveContactBookAndSettings(const vector<personalInformation> &contactVect,
+        const char *path, const int &speedSelectionChoice,
+        const bool &encryptionMode);
 
-string ObtainDateAndTime();
+string obtainDateAndTime();
 
 #endif /* savingFunctions_hpp */

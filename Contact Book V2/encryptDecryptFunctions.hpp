@@ -3,8 +3,8 @@
 
 /* FUNCTIONS FOR ENCRYPTION/DECRYPTION */
 
-char EncryptDecryptChar(char Input, const bool &EncryptionMode);
+char encryptDecryptChar(char input, const bool &encryptionMode);
 
-int EncryptDecryptInt(int Input, const bool &EncryptionMode);
+int encryptDecryptInt(int input, const bool &encryptionMode);
 
 #endif /* encryptDecryptFunctions_hpp */
