@@ -12,6 +12,9 @@ void saveContactBookAndSettings(const vector<personalInformation> &contactVect,
         const char *path, const int &speedSelectionChoice,
         const bool &encryptionMode);
 
+void printContactToFile(const bool &encryptionMode, int contactNumber,
+                        const vector<personalInformation> &contactVect, ofstream &fileOut);
+
 string obtainDateAndTime();
 
 #endif /* savingFunctions_hpp */

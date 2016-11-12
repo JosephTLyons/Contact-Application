@@ -28,23 +28,9 @@ void rebuildContactBook(vector<personalInformation> &contactVect, const char *pa
         cout << "Couldn't Open File\n";
         return;
     }
-    
-    fileIn.ignore(15);//ignore "Security Mode: " text
-    
-    fileIn >> encryptionMode;
-    
-    fileIn.ignore(24);//ignore "Speed Selection Choice: " text
-    
-    fileIn >> speedSelectionChoice;
-    
-    fileIn.ignore();// ignore single newline between numbers
-    
-    fileIn.ignore(20);// ignore "Number of Contacts: " text
-    
-    amountOfContactsInFile = fileIn.get() - 48;// convert from char to number
-    
-    fileIn.ignore(2);// ignore two newlines after
-    
+
+    readInUserSettings(speedSelectionChoice, encryptionMode, amountOfContactsInFile, fileIn);
+
     for (int i = 0; contactVect.size() < amountOfContactsInFile; i++)
     {
         /* DECRYPTION FOR VECTORS HAPPENS IN INSERTSTRINGIN... FUNCTIONS */
@@ -89,6 +75,26 @@ void rebuildContactBook(vector<personalInformation> &contactVect, const char *pa
     saveContactBookAndSettings(contactVect, path, speedSelectionChoice, encryptionMode);
     
     fileIn.close();
+}
+
+void readInUserSettings(int &speedSelectionChoice, bool &encryptionMode, int &amountOfContactsInFile, ifstream &fileIn)
+{
+    fileIn.ignore(15);//ignore "Security Mode: " text
+
+    fileIn >> encryptionMode;
+
+    fileIn.ignore(24);//ignore "Speed Selection Choice: " text
+
+    fileIn >> speedSelectionChoice;
+
+    fileIn.ignore();// ignore single newline between numbers
+
+    fileIn.ignore(20);// ignore "Number of Contacts: " text
+
+    amountOfContactsInFile = fileIn.get() - 48;// convert from char to number
+
+    fileIn.ignore(2);// ignore two newlines after
+
 } // rebuildContactBook()
 
 void createFolderAndSettingsFile(char *fullPath)//not cleaned up - make full path a string in order to adjust size dynamically?

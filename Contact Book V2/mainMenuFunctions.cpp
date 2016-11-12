@@ -3,10 +3,10 @@
 #include <unistd.h>   //for usleep functions
 #include <vector>     //for using vectors
 
-#include "readAndWriteFunctions.hpp"
+#include "mainMenuFunctions.hpp"
 
 #include "personalInformation.hpp"
-#include "mainMenuFunctions.hpp"
+#include "readAndWriteFunctions.hpp"
 #include "dynamicBirthdayFunctions.hpp"
 #include "miscellaneousFunctions.hpp"
 #include "userSettingFunctions.hpp"
@@ -29,30 +29,29 @@ void displayMainMenuOptions()
  This function displays all the contacts, and related information,
  that are within the personalInformation vector.
 */
-void displayContacts(const vector<personalInformation> &contactVect, const int &displaySpeed)//cleaned up
+void displayAllContacts(const vector<personalInformation> &contactVect, const int &displaySpeed)
 {
     printDividingLine();
     
     for (int vectorPosition = 0; vectorPosition < contactVect.size(); vectorPosition++)
     {
-        printContact(contactVect, vectorPosition, displaySpeed);
+        printSingleContact(contactVect, vectorPosition, displaySpeed);
     }
     
-    /* IF THERE ARE NO CONTACTS, DISPLAY CONTACT BOOK IS EMPTY */
-    
+    // IF THERE ARE NO CONTACTS, DISPLAY CONTACT BOOK IS EMPTY
     if (contactVect.size() == 0)
         cout << "Contact Book is empty.\n\n";
     
     printDividingLine();
-} // displayContacts()
+} // displayAllContacts()
 
 void printDividingLine()
 {
     cout << "======================\n\n";
 } // printDividingLine()
 
-void printContact(const vector<personalInformation> &contactVect, const int &vectorPos,
-                  const int &displaySpeed)
+void printSingleContact(const vector<personalInformation> &contactVect, const int &vectorPos,
+        const int &displaySpeed)
 {
     displayVectors(contactVect, vectorPos);
 
@@ -63,7 +62,7 @@ void printContact(const vector<personalInformation> &contactVect, const int &vec
     cout << "\n\n";
     
     usleep(displaySpeed);
-} // printContact()
+} // printContactToFile()
 
 void displayVectors(const vector<personalInformation> &contactVect, const int &vectorPos)
 {
@@ -84,7 +83,7 @@ void displayVectors(const vector<personalInformation> &contactVect, const int &v
     printVectorToScreen(contactVect[vectorPos].dateOfBirthVector);
 
     displayAge(contactVect, vectorPos);
-} // printContact()
+} // printContactToFile()
 
 void displayAge(const vector<personalInformation> &contactVect, const int &vectorPos)
 {
@@ -118,27 +117,13 @@ void addContact(vector<personalInformation> &contactVect)//not cleaned up
     
     while (toupper(userChoice) != 'N' && toupper(userChoice) != 'Q')
     {
-        cout << "Enter First Name:   ";
-        insertStringDataVectorFromKeyboard(temporary.firstNameVector);
-        
-        cout << "Enter Last Name:    ";
-        insertStringDataVectorFromKeyboard(temporary.lastNameVector);
-        
-        cout << "Enter Address:      ";
-        insertStringDataVectorFromKeyboard(temporary.addressVector);
-        
-        cout << "Enter Phone Number: ";
-        insertStringDataVectorFromKeyboard(temporary.phoneNumberVector);
-        
-        cout << "Enter Birthday:";
-        
-        temporary.currentAge = birthDayInput(temporary);
-        
+        getContactInfoFromUser(temporary);
+
         contactVect.push_back(temporary);//store Temp in ContactVector Vector
 
         clearDataVectorsFromStructure(temporary);
         
-        if (contactVect.size() > 1)//don't go into sort function if only one name is in vector
+        if (contactVect.size() > 1)//don't go into sort function if only one contact is in vector
             sortContactVector(contactVect);
         
         cout << "\nAdd another contact? Y/N: ";
@@ -153,12 +138,31 @@ void addContact(vector<personalInformation> &contactVect)//not cleaned up
     cin.ignore();//removes 1 newline at the end of this function - needed for main loop to work correctly
 } // addContact()
 
+void getContactInfoFromUser(personalInformation &temporary)
+{
+    cout << "Enter First Name:   ";
+    insertStringDataVectorFromKeyboard(temporary.firstNameVector);
+
+    cout << "Enter Last Name:    ";
+    insertStringDataVectorFromKeyboard(temporary.lastNameVector);
+
+    cout << "Enter Address:      ";
+    insertStringDataVectorFromKeyboard(temporary.addressVector);
+
+    cout << "Enter Phone Number: ";
+    insertStringDataVectorFromKeyboard(temporary.phoneNumberVector);
+
+    cout << "Enter Birthday:";
+
+    temporary.currentAge = birthDayInput(temporary);
+}
+
 void editExistingContact(vector<personalInformation> &contactVect, const int &displaySpeed)//not cleaned up
 {
     int contactNumberToEdit;
     char fieldToEdit = 0;
 
-    displayContacts(contactVect, displaySpeed);
+    displayAllContacts(contactVect, displaySpeed);
     
     cout << "Which contact would you like to edit: ";
     cin >> contactNumberToEdit;
@@ -281,7 +285,7 @@ void deleteContact(vector<personalInformation> &contactVect, const int &displayS
     
     do
     {
-        displayContacts(contactVect, displaySpeed);//display list again
+        displayAllContacts(contactVect, displaySpeed);//display list again
         
         cout << "Type in the number of the contact you wish to delete: ";
         cin >> contactNumberToDelete;

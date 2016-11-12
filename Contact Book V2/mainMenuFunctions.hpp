@@ -7,12 +7,12 @@
 
 void displayMainMenuOptions();
 
-void displayContacts(const vector<personalInformation> &contactVect, const int &displaySpeed);
+void displayAllContacts(const vector<personalInformation> &contactVect, const int &displaySpeed);
 
 void printDividingLine();
 
-void printContact(const vector<personalInformation> &contactVect, const int &vectorPos,
-                  const int &displaySpeed);
+void printSingleContact(const vector<personalInformation> &contactVect, const int &vectorPos,
+        const int &displaySpeed);
 
 void displayVectors(const vector<personalInformation> &contactVect, const int &vectorPos);
 
@@ -21,6 +21,8 @@ void displayAge(const vector<personalInformation> &contactVect, const int &vecto
 void daysUntilBirthday(const vector<personalInformation> &contactVect, const int &vectorPos);
 
 void addContact(vector<personalInformation> &contactVect);
+
+void getContactInfoFromUser(personalInformation &temporary);
 
 void editExistingContact(vector<personalInformation> &contactVect, const int &displaySpeed);
 

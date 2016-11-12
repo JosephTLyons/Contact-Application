@@ -14,7 +14,6 @@ void saveContactBookAndSettings(const vector<personalInformation> &contactVect, 
 {
     ofstream fileOut;
     
-    
     fileOut.open(path);
     
     if (fileOut.fail())//check to see if file opened
@@ -37,35 +36,41 @@ void saveContactBookAndSettings(const vector<personalInformation> &contactVect, 
     
     for (int i = 0; i < contactVect.size(); i++)
     {
-        /* ENCRYPTION FOR VECTORS HAPPENS IN PRINTSTRINGSTRUCT... FUNCTIONS */
-
-        printVectorToFile(contactVect[i].firstNameVector, fileOut, encryptionMode);
-
-        printVectorToFile(contactVect[i].lastNameVector, fileOut, encryptionMode);
-
-        printVectorToFile(contactVect[i].addressVector, fileOut, encryptionMode);
-
-        printVectorToFile(contactVect[i].phoneNumberVector, fileOut, encryptionMode);
-
-        printVectorToFile(contactVect[i].dateOfBirthVector, fileOut, encryptionMode);
-        
-        /* ENCRYPTION FOR INTS HAPPENS RIGHT HERE */
-        
-        fileOut << encryptDecryptInt(contactVect[i].currentAge, encryptionMode) << endl;
-        
-        fileOut << encryptDecryptInt(contactVect[i].monthBorn, encryptionMode) << endl;
-        
-        fileOut << encryptDecryptInt(contactVect[i].dayBorn, encryptionMode) << endl;
-        
-        fileOut << encryptDecryptInt(contactVect[i].yearBorn, encryptionMode);
-        
-        fileOut << "\n\n";
+        printContactToFile(encryptionMode, i, contactVect, fileOut);
     }
     
     fileOut << "Contacts Last Altered: " << obtainDateAndTime() << endl;
     
     fileOut.close();
-} // saveContactBookAndSettings()
+}
+
+void printContactToFile(const bool &encryptionMode, int contactNumber,
+                        const vector<personalInformation> &contactVect, ofstream &fileOut)
+{
+    /* ENCRYPTION FOR VECTORS HAPPENS IN PRINTSTRINGSTRUCT... FUNCTIONS */
+
+    printVectorToFile(contactVect[contactNumber].firstNameVector, fileOut, encryptionMode);
+
+    printVectorToFile(contactVect[contactNumber].lastNameVector, fileOut, encryptionMode);
+
+    printVectorToFile(contactVect[contactNumber].addressVector, fileOut, encryptionMode);
+
+    printVectorToFile(contactVect[contactNumber].phoneNumberVector, fileOut, encryptionMode);
+
+    printVectorToFile(contactVect[contactNumber].dateOfBirthVector, fileOut, encryptionMode);
+
+    /* ENCRYPTION FOR INTS HAPPENS RIGHT HERE */
+
+    fileOut << encryptDecryptInt(contactVect[contactNumber].currentAge, encryptionMode) << endl;
+
+    fileOut << encryptDecryptInt(contactVect[contactNumber].monthBorn, encryptionMode) << endl;
+
+    fileOut << encryptDecryptInt(contactVect[contactNumber].dayBorn, encryptionMode) << endl;
+
+    fileOut << encryptDecryptInt(contactVect[contactNumber].yearBorn, encryptionMode);
+
+    fileOut << "\n\n";
+} // printContactToFile()
 
 string obtainDateAndTime()//not my code here - modified it to display what I want and to read easier
 {

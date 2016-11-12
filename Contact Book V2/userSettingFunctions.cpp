@@ -96,7 +96,7 @@ void scrollSpeedSettingsAndUserInput(const vector<personalInformation> &contactV
         
         cout << "Preview of Speed:\n\n";
 
-        displayContacts(contactVect, displaySpeed);
+        displayAllContacts(contactVect, displaySpeed);
         
         cout << "\nSet a different speeed? Y/N: ";
         cin >> loopAgainOrNot;

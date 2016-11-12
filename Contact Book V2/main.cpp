@@ -54,7 +54,7 @@ int main()
         {
             case 1:
             {
-                displayContacts(contactVector, displaySpeed);
+                displayAllContacts(contactVector, displaySpeed);
                 break;
             }
                 
@@ -97,8 +97,8 @@ int main()
             {
                 cout << "Not a valid choice.\n";
                 main();
-            }
                 break;
+            }
         }
     }
     while (switchChoice != 7);
