@@ -362,24 +362,30 @@ void deleteAllContacts(vector<personalInformation> &contactVect)//not cleaned up
         userChoice.push_back(insert);
     }
     while (insert != '\n');
-    
-    if (userChoice[0] == 'Y')
+
+    if (userWantsToDelete(userChoice))
     {
-        if (userChoice[1] == 'E')
-        {
-            if (userChoice[2] == 'S')
-            {
-                contactsNotDeletedFlag = false;
-                contactVect.clear();
-                
-                cout << "\nAll contacts have been deleted.\n\n";
-            }
-        }
+        contactsNotDeletedFlag = false;
+        contactVect.clear();
+        
+        cout << "\nAll contacts have been deleted.\n\n";
     }
-    
+
     if (contactsNotDeletedFlag == true)
         cout << "\nContacts were not deleted.\n\n";
 } // deleteAllContacts()
+
+bool userWantsToDelete(const vector<char> &userChoice)
+{
+    if((userChoice[0] == 'Y') &&
+       (userChoice[1] == 'E') &&
+       (userChoice[2] == 'S'))
+        
+        return true;
+    
+    else
+        return false;
+} // userWantsToDelete()
 
 void displaySettingsMenu(const vector<personalInformation> &contactVect, int &displaySpeed,
                          int &speedSelectionChoice, bool &encryptionMode)//not cleaned up

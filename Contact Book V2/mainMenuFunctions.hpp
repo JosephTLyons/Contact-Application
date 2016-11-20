@@ -30,6 +30,8 @@ void deleteContact(vector<personalInformation> &contactVect, const int &displayS
 
 void deleteAllContacts(vector<personalInformation> &contactVect);
 
+bool userWantsToDelete(const vector<char> &userChoice);
+
 void displaySettingsMenu(const vector<personalInformation> &contactVect,
         int &displaySpeed, int &speedSelectionChoice, bool &encryptionMode);
 
