@@ -222,7 +222,10 @@ void storeDateOfBirthInVector(personalInformation &tempPersonalInfoHolder)//not 
                 tempPersonalInfoHolder.dateOfBirthVector.push_back('N');
                 tempPersonalInfoHolder.dateOfBirthVector.push_back('/');
                 tempPersonalInfoHolder.dateOfBirthVector.push_back('A');
-                tempPersonalInfoHolder.dateOfBirthVector.push_back('\n');
+                
+                // Dont not push a newline (\n) here, as it will cause one too many spaces to
+                // Print when the "current age" field is skipped
+                
                 return;
             }
         }
@@ -267,6 +270,6 @@ void storeDateOfBirthInVector(personalInformation &tempPersonalInfoHolder)//not 
     
     for (int i = 0; yearArray[i]; i++)
         tempPersonalInfoHolder.dateOfBirthVector.push_back(yearArray[i]);
-    
+
     tempPersonalInfoHolder.dateOfBirthVector.push_back('\n');
 } // storeDateOfBirthInVector()
