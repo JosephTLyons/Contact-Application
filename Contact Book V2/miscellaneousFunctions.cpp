@@ -77,7 +77,8 @@ void rebuildContactBook(vector<personalInformation> &contactVect, const char *pa
     fileIn.close();
 }
 
-void readInUserSettings(int &speedSelectionChoice, bool &encryptionMode, int &amountOfContactsInFile, ifstream &fileIn)
+void readInUserSettings(int &speedSelectionChoice, bool &encryptionMode,
+                        int &amountOfContactsInFile, ifstream &fileIn)
 {
     fileIn.ignore(15);//ignore "Security Mode: " text
 

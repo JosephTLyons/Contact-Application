@@ -93,6 +93,12 @@ int main()
                 break;
             }
                 
+            case 7:
+            {
+                // End the program
+                break;
+            }
+                
             default:
             {
                 cout << "Not a valid choice.\n";

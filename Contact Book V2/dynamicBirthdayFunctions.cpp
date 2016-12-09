@@ -222,10 +222,7 @@ void storeDateOfBirthInVector(personalInformation &tempPersonalInfoHolder)//not 
                 tempPersonalInfoHolder.dateOfBirthVector.push_back('N');
                 tempPersonalInfoHolder.dateOfBirthVector.push_back('/');
                 tempPersonalInfoHolder.dateOfBirthVector.push_back('A');
-                
-                // Dont not push a newline (\n) here, as it will cause one too many spaces to
-                // Print when the "current age" field is skipped
-                
+                tempPersonalInfoHolder.dateOfBirthVector.push_back('\n');
                 return;
             }
         }

@@ -11,7 +11,8 @@
 void rebuildContactBook(vector<personalInformation> &contactVect, const char *path,
         int &speedSelectionChoice, bool &encryptionMode);
 
-void readInUserSettings(int &speedSelectionChoice, bool &encryptionMode, int &amountOfContactsInFile, ifstream &fileIn);
+void readInUserSettings(int &speedSelectionChoice, bool &encryptionMode,
+                        int &amountOfContactsInFile, ifstream &fileIn);
 
 void createFolderAndSettingsFile(char *fullPath);
 
