@@ -20,4 +20,6 @@ bool checkIfFileExistsAndContainsInformation(const char *path);
 
 void clearDataVectorsFromStructure(personalInformation &TemporaryStorage);
 
+void searchForContacts(const vector<personalInformation> &contactVect, const int &displaySpeed);
+
 #endif /* miscellaneousFunctions_hpp */

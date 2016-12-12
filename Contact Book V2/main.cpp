@@ -74,26 +74,32 @@ int main()
                 
             case 4:
             {
-                deleteContact(contactVector, displaySpeed);
-                saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
+                searchForContacts(contactVector, displaySpeed);
                 break;
             }
                 
             case 5:
             {
-                deleteAllContacts(contactVector);
+                deleteContact(contactVector, displaySpeed);
                 saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
                 break;
             }
                 
             case 6:
             {
-                displaySettingsMenu(contactVector, displaySpeed, speedSelectionChoice, encryptionMode);
+                deleteAllContacts(contactVector);
                 saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
                 break;
             }
                 
             case 7:
+            {
+                displaySettingsMenu(contactVector, displaySpeed, speedSelectionChoice, encryptionMode);
+                saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
+                break;
+            }
+                
+            case 8:
             {
                 // End the program
                 break;
@@ -107,5 +113,5 @@ int main()
             }
         }
     }
-    while (switchChoice != 7);
+    while (switchChoice != 8);
 } // main()

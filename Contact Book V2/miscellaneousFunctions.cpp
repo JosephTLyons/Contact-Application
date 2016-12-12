@@ -1,12 +1,15 @@
+
 #include <fstream>    //for reading from and saving to files
 #include <iostream>   //for input / output
 #include <sys/stat.h> //for mkdir functions
 
 #include "dynamicBirthdayFunctions.hpp"
-
-#include "readAndWriteFunctions.hpp"
 #include "encryptDecryptFunctions.hpp"
+
+#include "mainMenuFunctions.hpp"
+
 #include "miscellaneousFunctions.hpp"
+#include "readAndWriteFunctions.hpp"
 #include "savingFunctions.hpp"
 
 using namespace std;
@@ -67,7 +70,7 @@ void rebuildContactBook(vector<personalInformation> &contactVect, const char *pa
 
         clearDataVectorsFromStructure(temporary);
         
-        fileIn.ignore(2);//ignore two newlines between contacts (two newlines because last item is an int and doesn't store the newline like the vectors do)
+        fileIn.ignore(1);//ignore two newlines between contacts (two newlines because last item is an int and doesn't store the newline like the vectors do)
     }
     
     /* SAVED CONTACTS AFTER READING IN CASE AGES WERE UPDATED AFTER RE-CALCULATING CURRENT AGE */
@@ -156,3 +159,51 @@ void clearDataVectorsFromStructure(personalInformation &temporaryStorage)//not c
     temporaryStorage.phoneNumberVector.clear();
     temporaryStorage.dateOfBirthVector.clear();
 } // clearDataVectorsFromStructure()
+
+void searchForContacts(const vector<personalInformation> &contactVect, const int &displaySpeed)
+{
+    vector<char> searchField;
+    bool contactsFound = false;
+    bool contactsPrinted = false;
+    
+    cout << "Contact's last name: ";
+    insertStringDataVectorFromKeyboard(searchField);
+    cout << "\n\n";
+    
+    // Look through all contacs
+    for (int i = 0; i < contactVect.size(); i++)
+    {
+        // Compare letters in searchField to letters in contact's last name
+        // searchField.size() - 1 so that we dont count the newline in the vector
+        for (int j = 0; j < searchField.size() - 1; j++)
+        {
+            // Check each letter, but at the uppercase level so all text is the same
+            if (toupper(contactVect[i].lastNameVector[j]) == toupper(searchField[j]))
+            {
+                contactsFound = true;
+            }
+            
+            else
+            {
+                contactsFound = false;
+                break;
+            }
+        }
+        
+        // Display found contact/s or no contacts found
+        if (contactsFound == true)
+        {
+            printSingleContact(contactVect, i, displaySpeed);
+            contactsPrinted = true;
+        }
+    }
+    
+    if (contactsPrinted == false)
+    {
+        cout << "No contacts found with this criteria\n\n";
+    }
+} // searchForContacts()
+
+
+
+
