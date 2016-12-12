@@ -120,17 +120,8 @@ bool checkIfFileExistsAndContainsInformation(const char *path)//shouldn't be dec
     
     fileIn.open(path);
     
-    /* CHECK TO MAKE SURE FILE OPENED */
-    
-    if (fileIn.fail())
-    {
-        fileIn.close();
-        return false;
-    }
-    
-    /* CHECK TO SEE IF FILE IS EMPTY */
-    
-    else if (fileIn.eof())
+    // CHECK TO MAKE SURE FILE OPENED AND CHECK TO SEE IF FILE IS EMPTY
+    if ((fileIn.fail()) || (fileIn.peek() == EOF))
     {
         fileIn.close();
         return false;
