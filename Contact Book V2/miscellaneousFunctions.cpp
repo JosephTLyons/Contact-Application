@@ -70,7 +70,7 @@ void rebuildContactBook(vector<personalInformation> &contactVect, const char *pa
 
         clearDataVectorsFromStructure(temporary);
         
-        fileIn.ignore(1);//ignore two newlines between contacts (two newlines because last item is an int and doesn't store the newline like the vectors do)
+        fileIn.ignore(2);//ignore two newlines between contacts (two newlines because last item is an int and doesn't store the newline like the vectors do)
     }
     
     /* SAVED CONTACTS AFTER READING IN CASE AGES WERE UPDATED AFTER RE-CALCULATING CURRENT AGE */
@@ -162,12 +162,13 @@ void clearDataVectorsFromStructure(personalInformation &temporaryStorage)//not c
 
 void searchForContacts(const vector<personalInformation> &contactVect, const int &displaySpeed)
 {
-    vector<char> searchField;
+    vector<char> nameToSearchFor;
+    
     bool contactsFound = false;
     bool contactsPrinted = false;
     
     cout << "Contact's last name: ";
-    insertStringDataVectorFromKeyboard(searchField);
+    insertStringDataVectorFromKeyboard(nameToSearchFor);
     cout << "\n\n";
     
     // Look through all contacs
@@ -175,10 +176,10 @@ void searchForContacts(const vector<personalInformation> &contactVect, const int
     {
         // Compare letters in searchField to letters in contact's last name
         // searchField.size() - 1 so that we dont count the newline in the vector
-        for (int j = 0; j < searchField.size() - 1; j++)
+        for (int j = 0; j < nameToSearchFor.size() - 1; j++)
         {
             // Check each letter, but at the uppercase level so all text is the same
-            if (toupper(contactVect[i].lastNameVector[j]) == toupper(searchField[j]))
+            if (toupper(contactVect[i].lastNameVector[j]) == toupper(nameToSearchFor[j]))
             {
                 contactsFound = true;
             }
@@ -200,7 +201,7 @@ void searchForContacts(const vector<personalInformation> &contactVect, const int
     
     if (contactsPrinted == false)
     {
-        cout << "No contacts found with this criteria\n\n";
+        cout << "No contacts found with this criteria.\n\n";
     }
 } // searchForContacts()
 
