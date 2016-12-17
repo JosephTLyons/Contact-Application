@@ -68,7 +68,7 @@ void rebuildContactBook(vector<personalInformation> &contactVect, const char *pa
         
         contactVect.push_back(temporary);
 
-        clearDataVectorsFromStructure(temporary);
+        emptyVectorsInStruct(temporary);
         
         fileIn.ignore(2);//ignore two newlines between contacts (two newlines because last item is an int and doesn't store the newline like the vectors do)
     }
@@ -139,26 +139,24 @@ bool checkIfFileExistsAndContainsInformation(const char *path)//shouldn't be dec
     }
 } // checkIfFileExistsAndContainsInformation()
 
-void clearDataVectorsFromStructure(personalInformation &temporaryStorage)//not cleaned up
+void emptyVectorsInStruct(personalInformation &temporaryStorage)//not cleaned up
+{
+    deleteVectorMemoryAndClear(temporaryStorage.firstNameVector);
+    deleteVectorMemoryAndClear(temporaryStorage.lastNameVector);
+    deleteVectorMemoryAndClear(temporaryStorage.addressVector);
+    deleteVectorMemoryAndClear(temporaryStorage.phoneNumberVector);
+    deleteVectorMemoryAndClear(temporaryStorage.dateOfBirthVector);
+    
+} // emptyVectorsInStruct()
+
+void deleteVectorMemoryAndClear(vector<char> &vect)
 {
     /* GET BACK THE MEMORY THAT WAS ASSIGNED TO THESE VECTORS */
     /* USING SWAP METHOD ON VECTORS AS DESCRIBED IN MY STACK EXCHANGE QUESTION BELOW */
     /* http://stackoverflow.com/questions/39090554/questions-about-vectors-and-deleting-memory-associated-with-them?noredirect=1#comment65529507_39090554 */
     
-    vector<char>().swap(temporaryStorage.firstNameVector);
-    vector<char>().swap(temporaryStorage.lastNameVector);
-    vector<char>().swap(temporaryStorage.addressVector);
-    vector<char>().swap(temporaryStorage.phoneNumberVector);
-    vector<char>().swap(temporaryStorage.dateOfBirthVector);
-    
-    /* DESTROY ALL CHARACTERS FROM EACH VECTOR OF TEMP STORAGE TO GET READY FOR NEXT */
-    
-    temporaryStorage.firstNameVector.clear();
-    temporaryStorage.lastNameVector.clear();
-    temporaryStorage.addressVector.clear();
-    temporaryStorage.phoneNumberVector.clear();
-    temporaryStorage.dateOfBirthVector.clear();
-} // clearDataVectorsFromStructure()
+    vector<char>().swap(vect);
+} // deleteVectorMemoryAndClear()
 
 void searchForContacts(const vector<personalInformation> &contactVect, const int &displaySpeed)
 {

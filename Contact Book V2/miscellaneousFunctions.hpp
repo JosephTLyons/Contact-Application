@@ -18,7 +18,9 @@ void createFolderAndSettingsFile(char *fullPath);
 
 bool checkIfFileExistsAndContainsInformation(const char *path);
 
-void clearDataVectorsFromStructure(personalInformation &TemporaryStorage);
+void emptyVectorsInStruct(personalInformation &TemporaryStorage);
+
+void deleteVectorMemoryAndClear(vector<char> &vect);
 
 void searchForContacts(const vector<personalInformation> &contactVect, const int &displaySpeed);
 

@@ -122,7 +122,7 @@ void addContact(vector<personalInformation> &contactVect)//not cleaned up
 
         contactVect.push_back(temporary);//store Temp in ContactVector Vector
 
-        clearDataVectorsFromStructure(temporary);
+        emptyVectorsInStruct(temporary);
         
         if (contactVect.size() > 1)//don't go into sort function if only one contact is in vector
             sortContactVector(contactVect);
@@ -192,7 +192,7 @@ void editExistingContact(vector<personalInformation> &contactVect, const int &di
         {
             cin.ignore();//clear left over newline in input buffer
             
-            contactVect[contactNumberToEdit].firstNameVector.clear();
+            deleteVectorMemoryAndClear(contactVect[contactNumberToEdit].firstNameVector);
             
             cout << "\nEnter New First Name:   ";
             insertStringDataVectorFromKeyboard(contactVect[contactNumberToEdit].firstNameVector);
@@ -210,7 +210,7 @@ void editExistingContact(vector<personalInformation> &contactVect, const int &di
         {
             cin.ignore();//clear left over newline in input buffer
             
-            contactVect[contactNumberToEdit].lastNameVector.clear();
+            deleteVectorMemoryAndClear(contactVect[contactNumberToEdit].lastNameVector);
             
             cout << "\nEnter New Last Name:    ";
             insertStringDataVectorFromKeyboard(contactVect[contactNumberToEdit].lastNameVector);
@@ -228,7 +228,7 @@ void editExistingContact(vector<personalInformation> &contactVect, const int &di
         {
             cin.ignore();//clear left over newline in input buffer
             
-            contactVect[contactNumberToEdit].addressVector.clear();
+            deleteVectorMemoryAndClear(contactVect[contactNumberToEdit].addressVector);
             
             cout << "\nEnter New Address:      ";
             insertStringDataVectorFromKeyboard(contactVect[contactNumberToEdit].addressVector);
@@ -246,7 +246,7 @@ void editExistingContact(vector<personalInformation> &contactVect, const int &di
         {
             cin.ignore();//clear left over newline in input buffer
             
-            contactVect[contactNumberToEdit].phoneNumberVector.clear();
+            deleteVectorMemoryAndClear(contactVect[contactNumberToEdit].phoneNumberVector);
             
             cout << "\nEnter New Phone Number: ";
             insertStringDataVectorFromKeyboard(contactVect[contactNumberToEdit].phoneNumberVector);
@@ -264,7 +264,7 @@ void editExistingContact(vector<personalInformation> &contactVect, const int &di
         {
             cin.ignore();//clear left over newline in input buffer
             
-            contactVect[contactNumberToEdit].dateOfBirthVector.clear();
+            deleteVectorMemoryAndClear(contactVect[contactNumberToEdit].dateOfBirthVector);
             
             cout << "\nEnter New Date of Birth:";
             contactVect[contactNumberToEdit].currentAge = birthDayInput(contactVect[contactNumberToEdit]);
@@ -367,7 +367,11 @@ void deleteAllContacts(vector<personalInformation> &contactVect)//not cleaned up
     if (userWantsToDelete(userChoice))
     {
         contactsNotDeletedFlag = false;
-        contactVect.clear();
+        
+        // Using swap method to clear and deallocate memory in contactVect
+        vector<personalInformation>().swap(contactVect);
+        
+        cout << endl << endl << contactVect.size() << endl;
         
         cout << "\nAll contacts have been deleted.\n\n";
     }
