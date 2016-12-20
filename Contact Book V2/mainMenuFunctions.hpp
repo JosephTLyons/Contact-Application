@@ -11,8 +11,8 @@ void displayAllContacts(const vector<personalInformation> &contactVect, const in
 
 void printDividingLine();
 
-void printSingleContact(const vector<personalInformation> &contactVect, const int &vectorPos,
-        const int &displaySpeed);
+void printSingleContact(const vector<personalInformation> &contactVect,
+                        const int &vectorPos, const int &displaySpeed);
 
 void displayVectors(const vector<personalInformation> &contactVect, const int &vectorPos);
 

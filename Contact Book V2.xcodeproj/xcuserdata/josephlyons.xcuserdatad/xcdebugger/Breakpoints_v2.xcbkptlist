@@ -9,13 +9,13 @@
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Contact Book V2/mainMenuFunctions.cpp"
-            timestampString = "503659747.476489"
+            filePath = "Contact Book V2/encryptDecryptFunctions.cpp"
+            timestampString = "503894673.436462"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "372"
-            endingLineNumber = "372"
-            landmarkName = "deleteAllContacts(vector&lt;personalInformation&gt; &amp;contactVect)"
+            startingLineNumber = "10"
+            endingLineNumber = "10"
+            landmarkName = "encryptDecryptChar(char input, const bool &amp;encryptionMode)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>

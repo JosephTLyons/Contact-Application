@@ -51,13 +51,14 @@ void printDividingLine()
     cout << "======================\n\n";
 } // printDividingLine()
 
-void printSingleContact(const vector<personalInformation> &contactVect, const int &vectorPos,
-        const int &displaySpeed)
+void printSingleContact(const vector<personalInformation> &contactVect,
+                        const int &vectorPos, const int &displaySpeed)
 {
+    cout << "Contact Number: " << vectorPos+1;
+    
     displayVectors(contactVect, vectorPos);
 
-    /* IF BIRTHDAY IS LESS THAN 7 DAYS AWAY, DISPLAY THAT INFORMATION TO THE SCREEEN */
-    
+    // IF BIRTHDAY IS LESS THAN 7 DAYS AWAY, DISPLAY THAT INFORMATION TO THE SCREEEN
     daysUntilBirthday(contactVect, vectorPos);
     
     cout << "\n\n";
@@ -67,7 +68,6 @@ void printSingleContact(const vector<personalInformation> &contactVect, const in
 
 void displayVectors(const vector<personalInformation> &contactVect, const int &vectorPos)
 {
-    cout << "Contact Number: " << vectorPos+1;
     cout << "\nFirst Name:     ";
     printVectorToScreen(contactVect[vectorPos].firstNameVector);
 
@@ -299,31 +299,14 @@ void deleteContact(vector<personalInformation> &contactVect, const int &displayS
             
             cout << "\n\n======================\n\n";
             
-            cout << "First Name:    ";
-            printVectorToScreen(contactVect[contactNumberToDelete].firstNameVector);
-            
-            cout << "Last Name:     ";
-            printVectorToScreen(contactVect[contactNumberToDelete].lastNameVector);
-            
-            cout << "Address:       ";
-            printVectorToScreen(contactVect[contactNumberToDelete].addressVector);
-            
-            cout << "Phone Number:  ";
-            printVectorToScreen(contactVect[contactNumberToDelete].phoneNumberVector);
-            
-            cout << "Date of Birth: ";
-            printVectorToScreen(contactVect[contactNumberToDelete].dateOfBirthVector);
-            
-            cout << "Current Age:   ";
-            cout << contactVect[contactNumberToDelete].currentAge;
+            displayVectors(contactVect, contactNumberToDelete);
             
             cout << "\n======================\n\n";
             
-            
             cout << "\nAre you sure you want to delete ";
             
-            for (int i = 0; contactVect[contactNumberToDelete].firstNameVector[i] != '\n'; i++)//display name of contact being deleted
-            {
+            //display name of contact being deleted
+            for (int i = 0; contactVect[contactNumberToDelete].firstNameVector[i] != '\n'; i++)            {
                 cout << contactVect[contactNumberToDelete].firstNameVector[i];
             }
             

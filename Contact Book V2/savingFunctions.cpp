@@ -16,7 +16,8 @@ void saveContactBookAndSettings(const vector<personalInformation> &contactVect, 
     
     fileOut.open(path);
     
-    if (fileOut.fail())//check to see if file opened
+    // Check to see if file opened
+    if (fileOut.fail())
         cout << "Couldn't Open File\n";
     
     
@@ -28,8 +29,8 @@ void saveContactBookAndSettings(const vector<personalInformation> &contactVect, 
     
     fileOut << speedSelectionChoice << endl;
     
-    /* SAVE NUMBER OF CONTACTS TO .TXT FILE SO WE KNOW HOW MANY WE ARE READING IN IN THE REBUILD FUNCTION */
-    
+    // SAVE NUMBER OF CONTACTS TO .TXT FILE SO WE KNOW
+    // HOW MANY WE ARE READING IN IN THE REBUILD FUNCTION
     fileOut << "Number of Contacts: ";
     
     fileOut << contactVect.size() << endl << endl;

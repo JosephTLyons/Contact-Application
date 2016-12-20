@@ -129,9 +129,8 @@ bool checkIfFileExistsAndContainsInformation(const char *path)//shouldn't be dec
         fileIn.close();
         return false;
     }
-    
-    /* ONLY RETURN TRUE IF BOTH PREVIOUS CONDITIONS ARE NOT MET */
-    
+
+    // ONLY RETURN TRUE IF BOTH PREVIOUS CONDITIONS ARE NOT MET
     else
     {
         fileIn.close();
@@ -165,7 +164,7 @@ void searchForContacts(const vector<personalInformation> &contactVect, const int
     bool contactsFound = false;
     bool contactsPrinted = false;
     
-    cout << "Contact's last name: ";
+    cout << "Search criteria: ";
     insertStringDataVectorFromKeyboard(nameToSearchFor);
     cout << "\n\n";
     
@@ -177,7 +176,14 @@ void searchForContacts(const vector<personalInformation> &contactVect, const int
         for (int j = 0; j < nameToSearchFor.size() - 1; j++)
         {
             // Check each letter, but at the uppercase level so all text is the same
+            // Last name check
             if (toupper(contactVect[i].lastNameVector[j]) == toupper(nameToSearchFor[j]))
+            {
+                contactsFound = true;
+            }
+            
+            // First name check
+            else if (toupper(contactVect[i].firstNameVector[j]) == toupper(nameToSearchFor[j]))
             {
                 contactsFound = true;
             }
