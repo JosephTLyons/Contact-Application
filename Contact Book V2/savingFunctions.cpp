@@ -48,27 +48,29 @@ void saveContactBookAndSettings(const vector<personalInformation> &contactVect, 
 void printContactToFile(const bool &encryptionMode, int contactNumber,
                         const vector<personalInformation> &contactVect, ofstream &fileOut)
 {
-    /* ENCRYPTION FOR VECTORS HAPPENS IN PRINTSTRINGSTRUCT... FUNCTIONS */
-
+    // Encryption for vectors happens in printVectorToFile functions
     printVectorToFile(contactVect[contactNumber].firstNameVector, fileOut, encryptionMode);
-
     printVectorToFile(contactVect[contactNumber].lastNameVector, fileOut, encryptionMode);
-
     printVectorToFile(contactVect[contactNumber].addressVector, fileOut, encryptionMode);
-
     printVectorToFile(contactVect[contactNumber].phoneNumberVector, fileOut, encryptionMode);
-
     printVectorToFile(contactVect[contactNumber].dateOfBirthVector, fileOut, encryptionMode);
 
-    /* ENCRYPTION FOR INTS HAPPENS RIGHT HERE */
-
-    fileOut << encryptDecryptInt(contactVect[contactNumber].currentAge, encryptionMode) << endl;
-
-    fileOut << encryptDecryptInt(contactVect[contactNumber].monthBorn, encryptionMode) << endl;
-
-    fileOut << encryptDecryptInt(contactVect[contactNumber].dayBorn, encryptionMode) << endl;
-
-    fileOut << encryptDecryptInt(contactVect[contactNumber].yearBorn, encryptionMode);
+    // Encryption for ints happens here
+    if (encryptionMode == true)
+    {
+        fileOut << encryptDecryptInt(contactVect[contactNumber].currentAge) << endl;
+        fileOut << encryptDecryptInt(contactVect[contactNumber].monthBorn)  << endl;
+        fileOut << encryptDecryptInt(contactVect[contactNumber].dayBorn)    << endl;
+        fileOut << encryptDecryptInt(contactVect[contactNumber].yearBorn);
+    }
+    
+    else
+    {
+        fileOut << contactVect[contactNumber].currentAge << endl;
+        fileOut << contactVect[contactNumber].monthBorn  << endl;
+        fileOut << contactVect[contactNumber].dayBorn    << endl;
+        fileOut << contactVect[contactNumber].yearBorn;
+    }
 
     fileOut << "\n\n";
 } // printContactToFile()

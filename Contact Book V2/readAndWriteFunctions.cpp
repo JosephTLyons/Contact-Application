@@ -12,7 +12,11 @@ void printVectorToFile(const vector<char> &contactVect, ofstream &fileOut, const
 {
     for (int i = 0; i < contactVect.size(); i++)
     {
-        fileOut << encryptDecryptChar(contactVect[i], encryptionMode);
+        if (encryptionMode == true)
+            fileOut << encryptDecryptChar(contactVect[i]);
+        
+        else
+            fileOut << contactVect[i];
     }
 } // printVectorToFile()
 
@@ -33,7 +37,8 @@ void insertStringInVectorFromFile(vector<char> &contactVect, ifstream &fileIn, c
     {
         fileIn.get(insert);
         
-        insert = encryptDecryptChar(insert, encryptionMode);
+        if (encryptionMode == true)
+            insert = encryptDecryptChar(insert);
         
         contactVect.push_back(insert);
     }

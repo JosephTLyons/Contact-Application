@@ -43,7 +43,7 @@ int main()
             cout << "\n======================\n";
         }
         
-        displayMainMenuOptions();
+        displayMainMenuOptions(contactVector.size());
         
         cin >> switchChoice;
         cin.ignore();//ignore newline in buffer after cin >> statement

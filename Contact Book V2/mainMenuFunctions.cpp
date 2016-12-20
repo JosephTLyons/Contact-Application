@@ -12,9 +12,9 @@
 #include "userSettingFunctions.hpp"
 
 // Simply displays the options for the main menu
-void displayMainMenuOptions()
+void displayMainMenuOptions(const long int &numberOfContacts)
 {
-    cout << "(1) Display List";
+    cout << "(1) Display Contacts (" << numberOfContacts << ")";
     cout << "\n(2) Add Contact";
     cout << "\n(3) Edit Existing Contact";
     cout << "\n(4) Search for a Contact";

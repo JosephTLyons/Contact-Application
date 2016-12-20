@@ -5,7 +5,7 @@
 
 /* MAIN MENU FUNCTIONS */
 
-void displayMainMenuOptions();
+void displayMainMenuOptions(const long int &numberOfContacts);
 
 void displayAllContacts(const vector<personalInformation> &contactVect, const int &displaySpeed);
 
