@@ -1,6 +1,7 @@
 
 #include <fstream>    //for reading from and saving to files
 #include <iostream>   //for input / output
+#include <string>     //for using strings
 #include <sys/stat.h> //for mkdir functions
 
 #include "dynamicBirthdayFunctions.hpp"
@@ -159,13 +160,13 @@ void deleteVectorMemoryAndClear(vector<char> &vect)
 
 void searchForContacts(const vector<personalInformation> &contactVect, const int &displaySpeed)
 {
-    vector<char> nameToSearchFor;
+    vector<char> criteriaToSearchFor;
     
-    bool contactsFound = false;
+    bool criteriaFound   = false;
     bool contactsPrinted = false;
     
     cout << "Search criteria: ";
-    insertStringDataVectorFromKeyboard(nameToSearchFor);
+    insertStringDataVectorFromKeyboard(criteriaToSearchFor);
     cout << "\n\n";
     
     // Look through all contacs
@@ -173,30 +174,17 @@ void searchForContacts(const vector<personalInformation> &contactVect, const int
     {
         // Compare letters in searchField to letters in contact's last name
         // searchField.size() - 1 so that we dont count the newline in the vector
-        for (int j = 0; j < nameToSearchFor.size() - 1; j++)
+        for (int j = 0; j < criteriaToSearchFor.size() - 1; j++)
         {
-            // Check each letter, but at the uppercase level so all text is the same
-            // Last name check
-            if (toupper(contactVect[i].lastNameVector[j]) == toupper(nameToSearchFor[j]))
-            {
-                contactsFound = true;
-            }
+            criteriaFound = searchContactsBasedOnCriteria(contactVect[i], criteriaToSearchFor, i, j);
             
-            // First name check
-            else if (toupper(contactVect[i].firstNameVector[j]) == toupper(nameToSearchFor[j]))
-            {
-                contactsFound = true;
-            }
-            
-            else
-            {
-                contactsFound = false;
+            // Skip searching rest of letters for matches if 
+            if (criteriaFound == false)
                 break;
-            }
         }
         
         // Display found contact/s or no contacts found
-        if (contactsFound == true)
+        if (criteriaFound == true)
         {
             printSingleContact(contactVect, i, displaySpeed);
             contactsPrinted = true;
@@ -209,6 +197,26 @@ void searchForContacts(const vector<personalInformation> &contactVect, const int
     }
 } // searchForContacts()
 
+bool searchContactsBasedOnCriteria(const personalInformation &contact,
+                                   const vector<char> criteriaToSearchFor,
+                                   const int &i, const int &j)
+{
+    // Check each letter, but at the uppercase level so all text is the same
+    // Last name check
+    if (toupper(contact.lastNameVector[j]) == toupper(criteriaToSearchFor[j]))
+        return true;
+    
+    // First name check
+    else if (toupper(contact.firstNameVector[j]) == toupper(criteriaToSearchFor[j]))
+        return true;
+    
+    else
+        return false;
+}
 
+bool compareVectors(const vector<char> &vector1, const vector<char> &vector2)
+{
+    
+}
 
 
