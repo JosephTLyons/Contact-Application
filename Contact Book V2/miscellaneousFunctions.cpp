@@ -172,16 +172,7 @@ void searchForContacts(const vector<personalInformation> &contactVect, const int
     // Look through all contacs
     for (int i = 0; i < contactVect.size(); i++)
     {
-        // Compare letters in searchField to letters in contact's last name
-        // searchField.size() - 1 so that we dont count the newline in the vector
-        for (int j = 0; j < criteriaToSearchFor.size() - 1; j++)
-        {
-            criteriaFound = searchContactsBasedOnCriteria(contactVect[i], criteriaToSearchFor, i, j);
-            
-            // Skip searching rest of letters for matches if 
-            if (criteriaFound == false)
-                break;
-        }
+        criteriaFound = searchContactsBasedOnCriteria(contactVect[i], criteriaToSearchFor);
         
         // Display found contact/s or no contacts found
         if (criteriaFound == true)
@@ -198,25 +189,31 @@ void searchForContacts(const vector<personalInformation> &contactVect, const int
 } // searchForContacts()
 
 bool searchContactsBasedOnCriteria(const personalInformation &contact,
-                                   const vector<char> criteriaToSearchFor,
-                                   const int &i, const int &j)
+                                   const vector<char> criteriaToSearchFor)
 {
-    // Check each letter, but at the uppercase level so all text is the same
     // Last name check
-    if (toupper(contact.lastNameVector[j]) == toupper(criteriaToSearchFor[j]))
+    if (vectorsAreSame(contact.lastNameVector, criteriaToSearchFor))
         return true;
     
     // First name check
-    else if (toupper(contact.firstNameVector[j]) == toupper(criteriaToSearchFor[j]))
+    if (vectorsAreSame(contact.firstNameVector, criteriaToSearchFor))
         return true;
     
     else
         return false;
 }
 
-bool compareVectors(const vector<char> &vector1, const vector<char> &vector2)
+bool vectorsAreSame(const vector<char> &contact, const vector<char> &search)
 {
+    // Check each letter, but at the uppercase level so all text is the same
+    // - 1 so that we dont count the newline in the vector
+    for (int i = 0; i < search.size() - 1; i++)
+    {
+        if (toupper(contact[i]) != toupper(search[i]))
+            return false;
+    }
     
+    return true;
 }
 
 

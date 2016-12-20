@@ -25,9 +25,8 @@ void deleteVectorMemoryAndClear(vector<char> &vect);
 void searchForContacts(const vector<personalInformation> &contactVect, const int &displaySpeed);
 
 bool searchContactsBasedOnCriteria(const personalInformation &contact,
-                                   const vector<char> criteriaToSearchFor,
-                                   const int &i, const int &j);
+                                   const vector<char> criteriaToSearchFor);
 
-bool compareVectors(const vector<char> &vector1, const vector<char> &vector2);
+bool vectorsAreSame(const vector<char> &contact, const vector<char> &search);
 
 #endif /* miscellaneousFunctions_hpp */
