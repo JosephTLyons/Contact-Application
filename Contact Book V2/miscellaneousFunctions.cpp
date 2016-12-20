@@ -203,6 +203,9 @@ bool searchContactsBasedOnCriteria(const personalInformation &contact,
         return false;
 }
 
+// This function doesn't actually test if the vectors are identical, but actually
+// Checks to see if the contact vector has at least the same string as the search vector
+// I.E. If searching for "Jos", "Joseph" will return true, as it has "Jos" in it.
 bool vectorsAreSame(const vector<char> &contact, const vector<char> &search)
 {
     // Check each letter, but at the uppercase level so all text is the same

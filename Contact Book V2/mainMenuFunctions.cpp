@@ -384,7 +384,7 @@ void displaySettingsMenu(const vector<personalInformation> &contactVect, int &di
     {
         cout <<   "(1) Display Scroll Speed";
         cout << "\n(2) Encryption";
-        cout << "\n(3) Quit Settings";
+        cout << "\n(3) Quit and Save Settings";
         
         cout << "\n\nchoice: ";
         cin >> choice;
