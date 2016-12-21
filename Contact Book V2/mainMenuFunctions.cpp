@@ -26,10 +26,8 @@ void displayMainMenuOptions(const long int &numberOfContacts)
     cout << "\n\nChoice: ";
 } // displayMainMenuOptions()
 
-/*
- This function displays all the contacts, and related information,
- that are within the personalInformation vector.
-*/
+// This function displays all the contacts, and related information,
+// that are within the personalInformation vector.
 void displayAllContacts(const vector<personalInformation> &contactVect, const int &displaySpeed)
 {
     printDividingLine();
@@ -39,7 +37,7 @@ void displayAllContacts(const vector<personalInformation> &contactVect, const in
         printSingleContact(contactVect, vectorPosition, displaySpeed);
     }
     
-    // IF THERE ARE NO CONTACTS, DISPLAY CONTACT BOOK IS EMPTY
+    // If there are no contacts, display that the contact book is empty
     if (contactVect.size() == 0)
         cout << "Contact Book is empty.\n\n";
     
@@ -156,7 +154,7 @@ void getContactInfoFromUser(personalInformation &temporary)
     cout << "Enter Birthday:";
 
     temporary.currentAge = birthDayInput(temporary);
-}
+} // getContactInfoFromUser()
 
 void editExistingContact(vector<personalInformation> &contactVect, const int &displaySpeed)//not cleaned up
 {
@@ -407,3 +405,65 @@ void displaySettingsMenu(const vector<personalInformation> &contactVect, int &di
     
     cout << endl;
 } // displaySettingsMenu()
+
+void searchForContacts(const vector<personalInformation> &contactVect, const int &displaySpeed)
+{
+    vector<char> criteriaToSearchFor;
+    
+    bool criteriaFound   = false;
+    bool contactsPrinted = false;
+    
+    cout << "Search criteria: ";
+    insertStringDataVectorFromKeyboard(criteriaToSearchFor);
+    cout << "\n\n";
+    
+    // Look through all contacs
+    for (int i = 0; i < contactVect.size(); i++)
+    {
+        criteriaFound = searchContactsBasedOnCriteria(contactVect[i], criteriaToSearchFor);
+        
+        // Display found contact/s or no contacts found
+        if (criteriaFound == true)
+        {
+            printSingleContact(contactVect, i, displaySpeed);
+            contactsPrinted = true;
+        }
+    }
+    
+    if (contactsPrinted == false)
+    {
+        cout << "No contacts found with this criteria.\n\n";
+    }
+} // searchForContacts()
+
+bool searchContactsBasedOnCriteria(const personalInformation &contact,
+                                   const vector<char> criteriaToSearchFor)
+{
+    // Last name check
+    if (vectorsAreSame(contact.lastNameVector, criteriaToSearchFor))
+        return true;
+    
+    // First name check
+    if (vectorsAreSame(contact.firstNameVector, criteriaToSearchFor))
+        return true;
+    
+    else
+        return false;
+} // searchContactsBasedOnCriteria()
+
+// This function doesn't actually test if the vectors are identical, but actually
+// Checks to see if the contact vector has at least the same string as the search vector
+// I.E. If searching for "Jos", "Joseph" will return true, as it has "Jos" in it.
+bool vectorsAreSame(const vector<char> &contact, const vector<char> &search)
+{
+    // Check each letter, but at the uppercase level so all text is the same
+    // - 1 so that we dont count the newline in the vector
+    for (int i = 0; i < search.size() - 1; i++)
+    {
+        if (toupper(contact[i]) != toupper(search[i]))
+            return false;
+    }
+    
+    return true;
+} // vectorsAreSame()
+

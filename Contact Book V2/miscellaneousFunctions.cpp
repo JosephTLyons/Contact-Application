@@ -23,8 +23,7 @@ void rebuildContactBook(vector<personalInformation> &contactVect, const char *pa
     
     fileIn.open(path);
     
-    /* CHECK TO SEE IF FILE OPENS */
-    
+    // CHECK TO SEE IF FILE OPENS
     if (fileIn.fail())
     {
         cout << "Couldn't Open File\n";
@@ -35,20 +34,14 @@ void rebuildContactBook(vector<personalInformation> &contactVect, const char *pa
 
     for (int i = 0; contactVect.size() < amountOfContactsInFile; i++)
     {
-        /* DECRYPTION FOR VECTORS HAPPENS IN INSERTSTRINGIN... FUNCTIONS */
-
+        // Decryption for vectors happens in insertStringInVectorFromFile funcionts
         insertStringInVectorFromFile(temporary.firstNameVector, fileIn, encryptionMode);
-
         insertStringInVectorFromFile(temporary.lastNameVector, fileIn, encryptionMode);
-
         insertStringInVectorFromFile(temporary.addressVector, fileIn, encryptionMode);
-
         insertStringInVectorFromFile(temporary.phoneNumberVector, fileIn, encryptionMode);
-
         insertStringInVectorFromFile(temporary.dateOfBirthVector, fileIn, encryptionMode);
         
-        
-        // Read in ints
+        // Read in integers
         fileIn >> temporary.currentAge;
         fileIn >> temporary.monthBorn;
         fileIn >> temporary.dayBorn;
@@ -63,9 +56,9 @@ void rebuildContactBook(vector<personalInformation> &contactVect, const char *pa
             temporary.yearBorn = encryptDecryptInt(temporary.yearBorn);
         }
         
-        /* AUTOMATICALLY RECALCULATE CURRENT YEAR EVERY TIME LIST IS REBUILT */
-        
-        temporary.currentAge = calculateCurrentAge(temporary, temporary.monthBorn, temporary.dayBorn, temporary.yearBorn);
+        // AUTOMATICALLY RECALCULATE CURRENT YEAR EVERY TIME LIST IS REBUILT
+        temporary.currentAge = calculateCurrentAge(temporary, temporary.monthBorn,
+                                                   temporary.dayBorn, temporary.yearBorn);
         
         contactVect.push_back(temporary);
 
@@ -118,7 +111,7 @@ void createFolderAndSettingsFile(char *fullPath)//not cleaned up - make full pat
     strcat(fullPath, restOfPath);
 } // createFolderAndSettingsFile()
 
-bool checkIfFileExistsAndContainsInformation(const char *path)//shouldn't be declaring a new variable, should be passing it in, but that would call for a major rewrite of the menu function and all the function parameters//not cleaned up
+bool FileExistsAndContainsInformation(const char *path)//shouldn't be declaring a new variable, should be passing it in, but that would call for a major rewrite of the menu function and all the function parameters//not cleaned up
 {
     ifstream fileIn;
     
@@ -151,9 +144,9 @@ void emptyVectorsInStruct(personalInformation &temporaryStorage)//not cleaned up
 
 void deleteVectorMemoryAndClear(vector<char> &vect)
 {
-    /* GET BACK THE MEMORY THAT WAS ASSIGNED TO THESE VECTORS */
-    /* USING SWAP METHOD ON VECTORS AS DESCRIBED IN MY STACK EXCHANGE QUESTION BELOW */
-    /* http://stackoverflow.com/questions/39090554/questions-about-vectors-and-deleting-memory-associated-with-them?noredirect=1#comment65529507_39090554 */
+    // GET BACK THE MEMORY THAT WAS ASSIGNED TO THESE VECTORS
+    // USING SWAP METHOD ON VECTORS AS DESCRIBED IN MY STACK EXCHANGE QUESTION BELOW
+    // http://stackoverflow.com/questions/39090554/questions-about-vectors-and-deleting-memory-associated-with-them?noredirect=1#comment65529507_39090554
     
     vector<char>().swap(vect);
 } // deleteVectorMemoryAndClear()

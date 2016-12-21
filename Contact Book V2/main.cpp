@@ -14,27 +14,28 @@ int main()
     vector <personalInformation> contactVector;//holds all contacts
     static int mainMenuPauseCounter = 0;//pauses main menu and waits for user to press enter
     char fullPath[180] = {0};//holds the pathway to the .txt file that saves the information
-    int switchChoice;//
+    int switchChoice;
     int displaySpeed;
     int speedSelectionChoice = 2;//default medium speed setting / when program is first ran
     bool encryptionMode;
     //-------------------
     
-    /* CREATE THE LYONS' DEN LABS FOLDER AND TEXT FILE IN APPLICATOIN SUPPORT FOLDER IN LIBRARY */
-
+    // CREATE THE LYONS' DEN LABS FOLDER AND TEXT FILE IN APPLICATOIN SUPPORT FOLDER IN LIBRARY
     createFolderAndSettingsFile(fullPath);
     
-    /* CHECK TO SEE IF FILE EXISTS AND HAS INFORMATION IN IT, IF SO, REBUILD THE LIST */
-    
-    if(checkIfFileExistsAndContainsInformation(fullPath))
+    // CHECK TO SEE IF FILE EXISTS AND HAS INFORMATION IN IT, IF SO, REBUILD THE LIST
+    if(FileExistsAndContainsInformation(fullPath))
     {
-        rebuildContactBook(contactVector, fullPath, speedSelectionChoice, encryptionMode);//restore contacts
-        obtainSpeedSettingNumericalValues(displaySpeed, speedSelectionChoice);//restore user settings
+        // Restore contacts
+        rebuildContactBook(contactVector, fullPath, speedSelectionChoice, encryptionMode);
+        
+        // Restore user settings
+        obtainSpeedSettingNumericalValues(displaySpeed, speedSelectionChoice);
     }
     
     do
     {
-        //pauses the program before displaying the main menu again on second time and after
+        // Pauses the program before displaying the main menu again on second time and after
         if (mainMenuPauseCounter++ > 0)
         {
             cout << "Press enter to go back to main menu: ";
@@ -109,7 +110,6 @@ int main()
             {
                 cout << "Not a valid choice.\n";
                 main();
-                break;
             }
         }
     }

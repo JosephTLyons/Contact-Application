@@ -35,4 +35,11 @@ bool userWantsToDelete(const vector<char> &userChoice);
 void displaySettingsMenu(const vector<personalInformation> &contactVect,
         int &displaySpeed, int &speedSelectionChoice, bool &encryptionMode);
 
+void searchForContacts(const vector<personalInformation> &contactVect, const int &displaySpeed);
+
+bool searchContactsBasedOnCriteria(const personalInformation &contact,
+                                   const vector<char> criteriaToSearchFor);
+
+bool vectorsAreSame(const vector<char> &contact, const vector<char> &search);
+
 #endif /* mainMenuFunctions_hpp */

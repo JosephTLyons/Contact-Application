@@ -16,7 +16,6 @@
 		99A5C5F11DB87ABD003B822A /* sortingFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99A5C5EF1DB87ABD003B822A /* sortingFunctions.cpp */; };
 		99A5C5F41DB87B1D003B822A /* savingFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99A5C5F21DB87B1D003B822A /* savingFunctions.cpp */; };
 		99AF77E31CF9531F005B8FE5 /* main.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99AF77E21CF9531F005B8FE5 /* main.cpp */; };
-		99B9F2CB1E092F1C00B0C95C /* searchingFunctions.cpp in Sources */ = {isa = PBXBuildFile; fileRef = 99B9F2C91E092F1C00B0C95C /* searchingFunctions.cpp */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -52,8 +51,6 @@
 		99A5C5F31DB87B1D003B822A /* savingFunctions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = savingFunctions.hpp; sourceTree = "<group>"; };
 		99AF77DF1CF9531F005B8FE5 /* Contact Book V2 */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = "Contact Book V2"; sourceTree = BUILT_PRODUCTS_DIR; };
 		99AF77E21CF9531F005B8FE5 /* main.cpp */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.cpp.cpp; path = main.cpp; sourceTree = "<group>"; };
-		99B9F2C91E092F1C00B0C95C /* searchingFunctions.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = searchingFunctions.cpp; sourceTree = "<group>"; };
-		99B9F2CA1E092F1C00B0C95C /* searchingFunctions.hpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.h; path = searchingFunctions.hpp; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,8 +102,6 @@
 				99A5C5EF1DB87ABD003B822A /* sortingFunctions.cpp */,
 				99A5C5F31DB87B1D003B822A /* savingFunctions.hpp */,
 				99A5C5F21DB87B1D003B822A /* savingFunctions.cpp */,
-				99B9F2CA1E092F1C00B0C95C /* searchingFunctions.hpp */,
-				99B9F2C91E092F1C00B0C95C /* searchingFunctions.cpp */,
 			);
 			path = "Contact Book V2";
 			sourceTree = "<group>";
@@ -175,7 +170,6 @@
 				99A5C5E21DB875A3003B822A /* readAndWriteFunctions.cpp in Sources */,
 				99A5C5DF1DB8749F003B822A /* mainMenuFunctions.cpp in Sources */,
 				99A5C5F41DB87B1D003B822A /* savingFunctions.cpp in Sources */,
-				99B9F2CB1E092F1C00B0C95C /* searchingFunctions.cpp in Sources */,
 				99A5C5E81DB877F9003B822A /* dynamicBirthdayFunctions.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

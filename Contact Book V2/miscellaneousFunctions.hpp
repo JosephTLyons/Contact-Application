@@ -16,7 +16,7 @@ void readInUserSettings(int &speedSelectionChoice, bool &encryptionMode,
 
 void createFolderAndSettingsFile(char *fullPath);
 
-bool checkIfFileExistsAndContainsInformation(const char *path);
+bool FileExistsAndContainsInformation(const char *path);
 
 void emptyVectorsInStruct(personalInformation &TemporaryStorage);
 
