@@ -128,3 +128,21 @@ void obtainSpeedSettingNumericalValues(int &displaySpeed, const int &speedSelect
     
     //settings for displaying birthday reminders or not
 } // obtainSpeedSettingNumericalValues()
+
+bool lastNameFirstOrder()
+{
+    int userChoice;
+    
+    cout << "\nHow would you like to sort the contacts?\n";
+    cout << "(1) Sort by last name, then first name\n";
+    cout << "(2) Sort by first name, then last name\n\n";
+
+    cout << "Choice: ";
+    cin >> userChoice;
+    
+    if (userChoice == 1)
+        return true;
+    
+    else
+        return false;
+}

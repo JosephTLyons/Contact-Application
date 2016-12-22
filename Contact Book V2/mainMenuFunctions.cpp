@@ -9,6 +9,7 @@
 #include "readAndWriteFunctions.hpp"
 #include "dynamicBirthdayFunctions.hpp"
 #include "miscellaneousFunctions.hpp"
+#include "sortingFunctions.hpp"
 #include "userSettingFunctions.hpp"
 
 // Simply displays the options for the main menu
@@ -109,7 +110,7 @@ void daysUntilBirthday(const vector<personalInformation> &contactVect, const int
         cout << "\n*BIRTHDAY IS IN " << contactVect[vectorPos].birthdayIsInXDays << " DAYS*";
 } // daysUntilBirthday()
 
-void addContact(vector<personalInformation> &contactVect)//not cleaned up
+void addContact(vector<personalInformation> &contactVect, const bool &lastNameFirst)//not cleaned up
 {
     personalInformation temporary;//temporary holding spot for input, used to store in vector
     char userChoice;
@@ -123,7 +124,7 @@ void addContact(vector<personalInformation> &contactVect)//not cleaned up
         emptyVectorsInStruct(temporary);
         
         if (contactVect.size() > 1)//don't go into sort function if only one contact is in vector
-            sortContactVector(contactVect);
+            sortContactVector(contactVect, lastNameFirst);
         
         cout << "\nAdd another contact? Y/N: ";
         cin >> userChoice;
@@ -156,7 +157,8 @@ void getContactInfoFromUser(personalInformation &temporary)
     temporary.currentAge = birthDayInput(temporary);
 } // getContactInfoFromUser()
 
-void editExistingContact(vector<personalInformation> &contactVect, const int &displaySpeed)//not cleaned up
+void editExistingContact(vector<personalInformation> &contactVect, const int &displaySpeed,
+                         const bool &lastNameFirst)//not cleaned up
 {
     int contactNumberToEdit;
     char fieldToEdit = 0;
@@ -273,7 +275,7 @@ void editExistingContact(vector<personalInformation> &contactVect, const int &di
         cout << "\n\n======================\n\n";
     }
 
-    sortContactVector(contactVect);
+    sortContactVector(contactVect, lastNameFirst);
 } // editExistingContact
 
 void deleteContact(vector<personalInformation> &contactVect, const int &displaySpeed)//not cleaned up
@@ -304,7 +306,8 @@ void deleteContact(vector<personalInformation> &contactVect, const int &displayS
             cout << "\nAre you sure you want to delete ";
             
             //display name of contact being deleted
-            for (int i = 0; contactVect[contactNumberToDelete].firstNameVector[i] != '\n'; i++)            {
+            for (int i = 0; contactVect[contactNumberToDelete].firstNameVector[i] != '\n'; i++)
+            {
                 cout << contactVect[contactNumberToDelete].firstNameVector[i];
             }
             
@@ -373,8 +376,8 @@ bool userWantsToDelete(const vector<char> &userChoice)
         return false;
 } // userWantsToDelete()
 
-void displaySettingsMenu(const vector<personalInformation> &contactVect, int &displaySpeed,
-                         int &speedSelectionChoice, bool &encryptionMode)//not cleaned up
+void displaySettingsMenu(vector<personalInformation> &contactVect, int &displaySpeed,
+                         int &speedSelectionChoice, bool &encryptionMode, bool &lastNameFirst)//not cleaned up
 {
     int choice;
     
@@ -382,7 +385,8 @@ void displaySettingsMenu(const vector<personalInformation> &contactVect, int &di
     {
         cout <<   "(1) Display Scroll Speed";
         cout << "\n(2) Encryption";
-        cout << "\n(3) Quit and Save Settings";
+        cout << "\n(3) Sort Order";
+        cout << "\n(4) Quit and Save Settings";
         
         cout << "\n\nchoice: ";
         cin >> choice;
@@ -395,6 +399,11 @@ void displaySettingsMenu(const vector<personalInformation> &contactVect, int &di
                 
             case 2:
                 encryptionOnOffSetting(encryptionMode);
+                break;
+                
+            case 3:
+                lastNameFirst = lastNameFirstOrder();
+                sortContactVector(contactVect, lastNameFirst);
                 break;
                 
             default:

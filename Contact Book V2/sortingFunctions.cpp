@@ -2,7 +2,7 @@
 
 #include "sortingFunctions.hpp"
 
-void sortContactVector(vector<personalInformation> &contactVect)
+void sortContactVector(vector<personalInformation> &contactVect, const bool &lastNameFirst)
 {
     //my modified bubble sort code I found online//not cleaned up
     bool swapsMade = true;
@@ -11,42 +11,61 @@ void sortContactVector(vector<personalInformation> &contactVect)
     {
         swapsMade = false;
         
-        for (int i = 0; i < (contactVect.size() - 1); i++)
+        // Sort by last name first
+        if (lastNameFirst == true)
         {
-            if (!namesInOrder(contactVect[i].lastNameVector, contactVect[i + 1].lastNameVector,
-                              contactVect[i].firstNameVector, contactVect[i + 1].firstNameVector))
+            for (int i = 0; i < (contactVect.size() - 1); i++)
             {
-                swap(contactVect[i], contactVect[i + 1]);
-                
-                swapsMade = true;
+                if (!namesInOrder(contactVect[i].lastNameVector,  contactVect[i + 1].lastNameVector,
+                                  contactVect[i].firstNameVector, contactVect[i + 1].firstNameVector))
+                {
+                    swap(contactVect[i], contactVect[i + 1]);
+                    
+                    swapsMade = true;
+                }
+            }
+        }
+        
+        // Sort by first name first
+        else
+        {
+            for (int i = 0; i < (contactVect.size() - 1); i++)
+            {
+                if (!namesInOrder(contactVect[i].firstNameVector,  contactVect[i + 1].firstNameVector,
+                                  contactVect[i].lastNameVector, contactVect[i + 1].lastNameVector))
+                {
+                    swap(contactVect[i], contactVect[i + 1]);
+
+                    swapsMade = true;
+                }
             }
         }
     }
 } // sortContactVector()
 
-bool namesInOrder(const vector<char> &lastNameVect1, const vector<char> &lastNameVect2,
-                  const vector<char> &firstNameVect1, const vector<char> &firstNameVect2)//not cleaned up
+bool namesInOrder(const vector<char> &nameVect1, const vector<char> &nameVect2,
+                  const vector<char> &nameVectA, const vector<char> &nameVectB)//not cleaned up
 {
     //checks to see which last name comes first
-    for (int i = 0; lastNameVect1[i] && lastNameVect2[i]; ++i)//go until you get to the end of the larger name
+    for (int i = 0; nameVect1[i] && nameVect2[i]; ++i)//go until you get to the end of the larger name
     {
         // compare letters at uppercase value to check for order
-        if(toupper(lastNameVect1[i]) < toupper(lastNameVect2[i]))
+        if(toupper(nameVect1[i]) < toupper(nameVect2[i]))
             return true;
         
-        if(toupper(lastNameVect1[i]) > toupper(lastNameVect2[i]))
+        if(toupper(nameVect1[i]) > toupper(nameVect2[i]))
             return false;
     }
     
     //if both last names are the same, it then uses the first name
     
     // if both last names are the same, it then uses the first name
-    for (int i = 0; firstNameVect1[i] && firstNameVect2[i]; ++i)//go until you get to the end of the larger name
+    for (int i = 0; nameVectA[i] && nameVectB[i]; ++i)//go until you get to the end of the larger name
     {
-        if(toupper(firstNameVect1[i]) < toupper(firstNameVect2[i]))
+        if(toupper(nameVectA[i]) < toupper(nameVectB[i]))
             return true;
         
-        if(toupper(firstNameVect1[i]) > toupper(firstNameVect2[i]))
+        if(toupper(nameVectA[i]) > toupper(nameVectB[i]))
             return false;
     }
     

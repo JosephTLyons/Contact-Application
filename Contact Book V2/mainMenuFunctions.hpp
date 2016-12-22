@@ -20,11 +20,12 @@ void displayAge(const vector<personalInformation> &contactVect, const int &vecto
 
 void daysUntilBirthday(const vector<personalInformation> &contactVect, const int &vectorPos);
 
-void addContact(vector<personalInformation> &contactVect);
+void addContact(vector<personalInformation> &contactVect, const bool &lastNameFirst);
 
 void getContactInfoFromUser(personalInformation &temporary);
 
-void editExistingContact(vector<personalInformation> &contactVect, const int &displaySpeed);
+void editExistingContact(vector<personalInformation> &contactVect, const int &displaySpeed,
+                         const bool &lastNameFirst);
 
 void deleteContact(vector<personalInformation> &contactVect, const int &displaySpeed);
 
@@ -32,8 +33,8 @@ void deleteAllContacts(vector<personalInformation> &contactVect);
 
 bool userWantsToDelete(const vector<char> &userChoice);
 
-void displaySettingsMenu(const vector<personalInformation> &contactVect,
-        int &displaySpeed, int &speedSelectionChoice, bool &encryptionMode);
+void displaySettingsMenu(vector<personalInformation> &contactVect, int &displaySpeed,
+                         int &speedSelectionChoice, bool &encryptionMode, bool &lastNameFirst);
 
 void searchForContacts(const vector<personalInformation> &contactVect, const int &displaySpeed);
 

@@ -18,6 +18,7 @@ int main()
     int displaySpeed;
     int speedSelectionChoice = 2;//default medium speed setting / when program is first ran
     bool encryptionMode;
+    bool lastNameFirst = true; // by default, contacts are sorted last name first
     //-------------------
     
     // CREATE THE LYONS' DEN LABS FOLDER AND TEXT FILE IN APPLICATOIN SUPPORT FOLDER IN LIBRARY
@@ -61,14 +62,14 @@ int main()
                 
             case 2:
             {
-                addContact(contactVector);
+                addContact(contactVector, lastNameFirst);
                 saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
                 break;
             }
                 
             case 3:
             {
-                editExistingContact(contactVector, displaySpeed);
+                editExistingContact(contactVector, displaySpeed, lastNameFirst);
                 saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
                 break;
             }
@@ -95,7 +96,7 @@ int main()
                 
             case 7:
             {
-                displaySettingsMenu(contactVector, displaySpeed, speedSelectionChoice, encryptionMode);
+                displaySettingsMenu(contactVector, displaySpeed, speedSelectionChoice, encryptionMode, lastNameFirst);
                 saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
                 break;
             }

@@ -7,7 +7,9 @@
 
 /* SORTING FUNCTIONS */
 
-void sortContactVector(vector<personalInformation> &contactVect);
+void sortContactVector(vector<personalInformation> &contactVect, const bool &lastNameFirst);
+
+void cycleThroughContacts(vector<personalInformation> &contactVect, bool &swapsMade);
 
 bool namesInOrder(const vector<char> &LastNameVect1, const vector<char> &LastNameVect2,
         const vector<char> &FirstNameVect1, const vector<char> &FirstNameVect2);
