@@ -12,7 +12,11 @@ void rebuildContactBook(vector<personalInformation> &contactVect, const char *pa
                         int &speedSelectionChoice, bool &encryptionMode, bool &lastNameFirst);
 
 void readInUserSettings(int &speedSelectionChoice, bool &encryptionMode,
-                        int &amountOfContactsInFile, ifstream &fileIn, bool &lastNameFirst);
+                        int &amountOfContactsInFile, bool &lastNameFirst, ifstream &fileIn);
+
+bool getBoolSetting(ifstream &fileIn, int ignoreCount);
+
+int getIntSetting(ifstream &fileIn, int ignoreCount);
 
 void createFolderAndSettingsFile(char *fullPath);
 

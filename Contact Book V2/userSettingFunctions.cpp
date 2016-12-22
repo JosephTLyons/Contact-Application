@@ -143,7 +143,7 @@ bool lastNameFirstOrder(bool &lastNameFirst)
     
     else
         return false;
-}
+} // lastNameFirstOrder()
 
 void lastNameFirstOrderMenu(bool &lastNameFirst)
 {
@@ -167,4 +167,4 @@ void lastNameFirstOrderMenu(bool &lastNameFirst)
         cout << " [ ] ";
     
     cout << "Sort by first name, then last name\n\n";
-}
+} // lastNameFirstOrderMenu()

@@ -1,4 +1,4 @@
-
+#include <ctype.h>    //for isspace function in getIntSetting() function
 #include <fstream>    //for reading from and saving to files
 #include <iostream>   //for input / output
 #include <sys/stat.h> //for mkdir functions
@@ -31,7 +31,7 @@ void rebuildContactBook(vector<personalInformation> &contactVect, const char *pa
     }
 
     readInUserSettings(speedSelectionChoice, encryptionMode,
-                       amountOfContactsInFile, fileIn, lastNameFirst);
+                       amountOfContactsInFile, lastNameFirst, fileIn);
 
     for (int i = 0; contactVect.size() < amountOfContactsInFile; i++)
     {
@@ -76,29 +76,54 @@ void rebuildContactBook(vector<personalInformation> &contactVect, const char *pa
 }
 
 void readInUserSettings(int &speedSelectionChoice, bool &encryptionMode,
-                        int &amountOfContactsInFile, ifstream &fileIn, bool &lastNameFirst)
+                        int &amountOfContactsInFile, bool &lastNameFirst, ifstream &fileIn)
 {
-    fileIn.ignore(15);//ignore "Security Mode: " text
+    // 15 = ignore "Security Mode: "          text
+    encryptionMode         = getBoolSetting(fileIn, 15);
 
-    fileIn >> encryptionMode;
-
-    fileIn.ignore(24);//ignore "Speed Selection Choice: " text
-
-    fileIn >> speedSelectionChoice;
+    // 24 = ignore "Speed Selection Choice: " text
+    speedSelectionChoice   = getIntSetting(fileIn, 24);
     
-    fileIn.ignore(20);//ignore "Sort by Last Name: " text
+    // 19 = ignore "Sort by Last Name: "      text
+    lastNameFirst          = getBoolSetting(fileIn, 19);
+
+    // 20 = ignore "Number of Contacts: "     text
+    amountOfContactsInFile = getIntSetting(fileIn, 20);
     
-    lastNameFirst = fileIn.get() - 48;// convert from char to number
-
-    fileIn.ignore();// ignore single newline between numbers
-
-    fileIn.ignore(20);// ignore "Number of Contacts: " text
-
-    amountOfContactsInFile = fileIn.get() - 48;// convert from char to number
-
-    fileIn.ignore(2);// ignore two newlines after
+    fileIn.ignore();// ignore empty newline after settings
 
 } // rebuildContactBook()
+
+bool getBoolSetting(ifstream &fileIn, int ignoreCount)
+{
+    bool setting;
+    
+    fileIn.ignore(ignoreCount);//ignore text
+    
+    setting = fileIn.get() - 48; // convert character to number
+    
+    fileIn.ignore();// ignore single newline that isn't removed because using fileIn.get()
+    
+    return setting;
+} // getBoolSetting()
+
+int getIntSetting(ifstream &fileIn, int ignoreCount)
+{
+    int setting = 0;
+    
+    fileIn.ignore(ignoreCount);//ignore text
+    
+    // Extract full number from file as long as the next char isn't whitespace
+    while (!isspace(fileIn.peek()))
+    {
+        setting *= 10;
+        setting += fileIn.get() - 48; // convert character to number
+    }
+    
+    fileIn.ignore();// ignore single newline that isn't removed because using fileIn.get()
+    
+    return setting;
+} // getIntSetting()
 
 void createFolderAndSettingsFile(char *fullPath)//not cleaned up - make full path a string in order to adjust size dynamically?
 {

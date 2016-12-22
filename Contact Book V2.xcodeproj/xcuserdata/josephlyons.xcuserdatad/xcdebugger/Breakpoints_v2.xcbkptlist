@@ -10,42 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Contact Book V2/miscellaneousFunctions.cpp"
-            timestampString = "504076080.593006"
+            timestampString = "504089623.601834"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "77"
-            endingLineNumber = "77">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "Yes"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Contact Book V2/savingFunctions.cpp"
-            timestampString = "504076097.859978"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "33"
-            endingLineNumber = "33"
-            landmarkName = "saveContactBookAndSettings(const vector&lt;personalInformation&gt; &amp;contactVect, const char *path, const int &amp;speedSelectionChoice, const bool &amp;encryptionMode, const bool &amp;lastNameFirst)"
-            landmarkType = "9">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Contact Book V2/miscellaneousFunctions.cpp"
-            timestampString = "504077132.221191"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "90"
-            endingLineNumber = "90"
-            landmarkName = "readInUserSettings(int &amp;speedSelectionChoice, bool &amp;encryptionMode, int &amp;amountOfContactsInFile, ifstream &amp;fileIn, bool &amp;lastNameFirst)"
+            startingLineNumber = "82"
+            endingLineNumber = "82"
+            landmarkName = "readInUserSettings(int &amp;speedSelectionChoice, bool &amp;encryptionMode, int &amp;amountOfContactsInFile, bool &amp;lastNameFirst, ifstream &amp;fileIn)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
@@ -56,12 +26,60 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Contact Book V2/miscellaneousFunctions.cpp"
-            timestampString = "504077132.221191"
+            timestampString = "504089624.599518"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "89"
-            endingLineNumber = "89"
-            landmarkName = "readInUserSettings(int &amp;speedSelectionChoice, bool &amp;encryptionMode, int &amp;amountOfContactsInFile, ifstream &amp;fileIn, bool &amp;lastNameFirst)"
+            startingLineNumber = "85"
+            endingLineNumber = "85"
+            landmarkName = "readInUserSettings(int &amp;speedSelectionChoice, bool &amp;encryptionMode, int &amp;amountOfContactsInFile, bool &amp;lastNameFirst, ifstream &amp;fileIn)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Contact Book V2/miscellaneousFunctions.cpp"
+            timestampString = "504089625.64211"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "88"
+            endingLineNumber = "88"
+            landmarkName = "readInUserSettings(int &amp;speedSelectionChoice, bool &amp;encryptionMode, int &amp;amountOfContactsInFile, bool &amp;lastNameFirst, ifstream &amp;fileIn)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Contact Book V2/miscellaneousFunctions.cpp"
+            timestampString = "504089626.315541"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "91"
+            endingLineNumber = "91"
+            landmarkName = "readInUserSettings(int &amp;speedSelectionChoice, bool &amp;encryptionMode, int &amp;amountOfContactsInFile, bool &amp;lastNameFirst, ifstream &amp;fileIn)"
+            landmarkType = "9">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Contact Book V2/miscellaneousFunctions.cpp"
+            timestampString = "504089632.075507"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "93"
+            endingLineNumber = "93"
+            landmarkName = "readInUserSettings(int &amp;speedSelectionChoice, bool &amp;encryptionMode, int &amp;amountOfContactsInFile, bool &amp;lastNameFirst, ifstream &amp;fileIn)"
             landmarkType = "9">
          </BreakpointContent>
       </BreakpointProxy>
