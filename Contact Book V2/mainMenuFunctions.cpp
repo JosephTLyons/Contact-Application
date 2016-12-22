@@ -402,7 +402,7 @@ void displaySettingsMenu(vector<personalInformation> &contactVect, int &displayS
                 break;
                 
             case 3:
-                lastNameFirst = lastNameFirstOrder();
+                lastNameFirst = lastNameFirstOrder(lastNameFirst);
                 sortContactVector(contactVect, lastNameFirst);
                 break;
                 
@@ -410,7 +410,7 @@ void displaySettingsMenu(vector<personalInformation> &contactVect, int &displayS
                 break;
         }
     }
-    while (choice >= 1 && choice <= 2);
+    while (choice >= 1 && choice <= 3);
     
     cout << endl;
 } // displaySettingsMenu()

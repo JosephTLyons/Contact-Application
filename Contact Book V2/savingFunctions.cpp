@@ -9,8 +9,9 @@
 
 using namespace std;
 
-void saveContactBookAndSettings(const vector<personalInformation> &contactVect, const char *path,
-                                const int &speedSelectionChoice, const bool &encryptionMode)//not cleaned up
+void saveContactBookAndSettings(const vector<personalInformation> &contactVect,
+                                const char *path, const int &speedSelectionChoice,
+                                const bool &encryptionMode, const bool &lastNameFirst)//not cleaned up
 {
     ofstream fileOut;
     
@@ -28,6 +29,10 @@ void saveContactBookAndSettings(const vector<personalInformation> &contactVect, 
     fileOut << "Speed Selection Choice: ";
     
     fileOut << speedSelectionChoice << endl;
+    
+    fileOut << "Sort by Last Name: ";
+    
+    fileOut << lastNameFirst << endl;
     
     // SAVE NUMBER OF CONTACTS TO .TXT FILE SO WE KNOW
     // HOW MANY WE ARE READING IN IN THE REBUILD FUNCTION

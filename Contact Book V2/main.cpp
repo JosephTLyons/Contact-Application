@@ -21,14 +21,14 @@ int main()
     bool lastNameFirst = true; // by default, contacts are sorted last name first
     //-------------------
     
-    // CREATE THE LYONS' DEN LABS FOLDER AND TEXT FILE IN APPLICATOIN SUPPORT FOLDER IN LIBRARY
+    // CREATE THE LYONS' DEN LABS FOLDER AND TEXT FILE IN APPLICATION SUPPORT FOLDER IN LIBRARY
     createFolderAndSettingsFile(fullPath);
     
     // CHECK TO SEE IF FILE EXISTS AND HAS INFORMATION IN IT, IF SO, REBUILD THE LIST
     if(FileExistsAndContainsInformation(fullPath))
     {
         // Restore contacts
-        rebuildContactBook(contactVector, fullPath, speedSelectionChoice, encryptionMode);
+        rebuildContactBook(contactVector, fullPath, speedSelectionChoice, encryptionMode, lastNameFirst);
         
         // Restore user settings
         obtainSpeedSettingNumericalValues(displaySpeed, speedSelectionChoice);
@@ -63,14 +63,16 @@ int main()
             case 2:
             {
                 addContact(contactVector, lastNameFirst);
-                saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
+                saveContactBookAndSettings(contactVector, fullPath,
+                                           speedSelectionChoice, encryptionMode, lastNameFirst);
                 break;
             }
                 
             case 3:
             {
                 editExistingContact(contactVector, displaySpeed, lastNameFirst);
-                saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
+                saveContactBookAndSettings(contactVector, fullPath,
+                                           speedSelectionChoice, encryptionMode, lastNameFirst);
                 break;
             }
                 
@@ -83,21 +85,24 @@ int main()
             case 5:
             {
                 deleteContact(contactVector, displaySpeed);
-                saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
+                saveContactBookAndSettings(contactVector, fullPath,
+                                           speedSelectionChoice, encryptionMode, lastNameFirst);
                 break;
             }
                 
             case 6:
             {
                 deleteAllContacts(contactVector);
-                saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
+                saveContactBookAndSettings(contactVector, fullPath,
+                                           speedSelectionChoice, encryptionMode, lastNameFirst);
                 break;
             }
                 
             case 7:
             {
                 displaySettingsMenu(contactVector, displaySpeed, speedSelectionChoice, encryptionMode, lastNameFirst);
-                saveContactBookAndSettings(contactVector, fullPath, speedSelectionChoice, encryptionMode);
+                saveContactBookAndSettings(contactVector, fullPath,
+                                           speedSelectionChoice, encryptionMode, lastNameFirst);
                 break;
             }
                 

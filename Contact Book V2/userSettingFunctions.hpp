@@ -16,6 +16,8 @@ void scrollSpeedSettingsAndUserInput(const vector<personalInformation> &contactV
 
 void obtainSpeedSettingNumericalValues(int &displaySpeed, const int &speedSelectionChoice);
 
-bool lastNameFirstOrder();
+bool lastNameFirstOrder(bool &lastNameFirst);
+
+void lastNameFirstOrderMenu(bool &lastNameFirst);
 
 #endif /* userSettingFunctions_hpp */

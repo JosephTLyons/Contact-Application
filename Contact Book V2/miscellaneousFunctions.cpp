@@ -14,7 +14,7 @@
 using namespace std;
 
 void rebuildContactBook(vector<personalInformation> &contactVect, const char *path,
-                        int &speedSelectionChoice, bool &encryptionMode)//not cleaned up
+                        int &speedSelectionChoice, bool &encryptionMode, bool &lastNameFirst)//not cleaned up
 {
     personalInformation temporary;
     int amountOfContactsInFile;
@@ -30,7 +30,8 @@ void rebuildContactBook(vector<personalInformation> &contactVect, const char *pa
         return;
     }
 
-    readInUserSettings(speedSelectionChoice, encryptionMode, amountOfContactsInFile, fileIn);
+    readInUserSettings(speedSelectionChoice, encryptionMode,
+                       amountOfContactsInFile, fileIn, lastNameFirst);
 
     for (int i = 0; contactVect.size() < amountOfContactsInFile; i++)
     {
@@ -69,13 +70,13 @@ void rebuildContactBook(vector<personalInformation> &contactVect, const char *pa
     
     /* SAVED CONTACTS AFTER READING IN CASE AGES WERE UPDATED AFTER RE-CALCULATING CURRENT AGE */
 
-    saveContactBookAndSettings(contactVect, path, speedSelectionChoice, encryptionMode);
+    saveContactBookAndSettings(contactVect, path, speedSelectionChoice, encryptionMode, lastNameFirst);
     
     fileIn.close();
 }
 
 void readInUserSettings(int &speedSelectionChoice, bool &encryptionMode,
-                        int &amountOfContactsInFile, ifstream &fileIn)
+                        int &amountOfContactsInFile, ifstream &fileIn, bool &lastNameFirst)
 {
     fileIn.ignore(15);//ignore "Security Mode: " text
 
@@ -84,6 +85,10 @@ void readInUserSettings(int &speedSelectionChoice, bool &encryptionMode,
     fileIn.ignore(24);//ignore "Speed Selection Choice: " text
 
     fileIn >> speedSelectionChoice;
+    
+    fileIn.ignore(20);//ignore "Sort by Last Name: " text
+    
+    lastNameFirst = fileIn.get() - 48;// convert from char to number
 
     fileIn.ignore();// ignore single newline between numbers
 

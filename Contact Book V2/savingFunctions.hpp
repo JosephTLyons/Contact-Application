@@ -9,8 +9,8 @@
 /* FUNCTIONS FOR SAVING */
 
 void saveContactBookAndSettings(const vector<personalInformation> &contactVect,
-        const char *path, const int &speedSelectionChoice,
-        const bool &encryptionMode);
+                                const char *path, const int &speedSelectionChoice,
+                                const bool &encryptionMode, const bool &lastNameFirst);
 
 void printContactToFile(const bool &encryptionMode, int contactNumber,
                         const vector<personalInformation> &contactVect, ofstream &fileOut);

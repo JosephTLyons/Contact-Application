@@ -9,10 +9,10 @@
 /* MISCELLANEOUS FUNCTIONS */
 
 void rebuildContactBook(vector<personalInformation> &contactVect, const char *path,
-        int &speedSelectionChoice, bool &encryptionMode);
+                        int &speedSelectionChoice, bool &encryptionMode, bool &lastNameFirst);
 
 void readInUserSettings(int &speedSelectionChoice, bool &encryptionMode,
-                        int &amountOfContactsInFile, ifstream &fileIn);
+                        int &amountOfContactsInFile, ifstream &fileIn, bool &lastNameFirst);
 
 void createFolderAndSettingsFile(char *fullPath);
 
