@@ -198,8 +198,8 @@ int calculateDayNumberFromMonthAndDay(const int &birthMonth, const int &birthDay
 void storeDateOfBirthInVector(personalInformation &tempPersonalInfoHolder)//not cleaned up
 {
     const char *monthNames[12] = {"January",   "February", "March",    "April",
-        "May",       "June",     "July",     "August",
-        "September", "October",  "November", "December"};
+                                  "May",       "June",     "July",     "August",
+                                  "September", "October",  "November", "December"};
     
     /* PLACING DATA MEMBERS INTO TEMPORARY VARIABLES BECAUSE THE VALUES OF THE VARIABLES WILL BE CHANGED */
     /* DONT WANT TO CHANGE THE DATA MEMBERS THOUGH */

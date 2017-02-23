@@ -4,7 +4,7 @@
 
 void sortContactVector(vector<personalInformation> &contactVect, const bool &lastNameFirst)
 {
-    //my modified bubble sort code I found online//not cleaned up
+    // A bubble sort I found online and modified - not cleaned up
     bool swapsMade = true;
     
     while(swapsMade)

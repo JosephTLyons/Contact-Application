@@ -20,14 +20,12 @@ struct personalInformation
     short int birthdayIsInXDays;
     
     // constructor
-    personalInformation()
-    {
-        monthBorn         = 0;
-        dayBorn           = 0;
-        yearBorn          = 0;
-        currentAge        = 0;
-        birthdayIsInXDays = 0;
-    }
+    personalInformation() : monthBorn(0),
+                            dayBorn(0),
+                            yearBorn(0),
+                            currentAge(0),
+                            birthdayIsInXDays(0)
+    {}
 };
 
 #endif /* personalinformation_hpp */
