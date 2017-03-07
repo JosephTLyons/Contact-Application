@@ -21,7 +21,6 @@ void saveContactBookAndSettings(const vector<personalInformation> &contactVect,
     if (fileOut.fail())
         cout << "Couldn't Open File\n";
     
-    
     fileOut << "Security Mode: ";
     
     fileOut << encryptionMode << endl;

@@ -57,9 +57,7 @@ bool namesInOrder(const vector<char> &nameVect1, const vector<char> &nameVect2,
             return false;
     }
     
-    //if both last names are the same, it then uses the first name
-    
-    // if both last names are the same, it then uses the first name
+    // if both names are the same, it then uses the other part of the name
     for (int i = 0; nameVectA[i] && nameVectB[i]; ++i)//go until you get to the end of the larger name
     {
         if(toupper(nameVectA[i]) < toupper(nameVectB[i]))

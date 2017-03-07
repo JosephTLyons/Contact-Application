@@ -53,7 +53,7 @@ void printDividingLine()
 void printSingleContact(const vector<personalInformation> &contactVect,
                         const int &vectorPos, const int &displaySpeed)
 {
-    cout << "Contact Number: " << vectorPos+1;
+    cout << "Contact Number: " << vectorPos + 1;
     
     displayVectors(contactVect, vectorPos);
 
